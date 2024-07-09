@@ -14,7 +14,7 @@ class UserRole(models.Model):
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
 
     def __str__(self):
-        return self.role
+        return self.user.username
 
 
 class Company(models.Model):
@@ -40,4 +40,4 @@ class Package(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        self.name
+        return self.name
