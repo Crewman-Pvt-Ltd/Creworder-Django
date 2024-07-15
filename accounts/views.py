@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import pdb;
 
 from .models import User, Company, Package, UserRole
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer
@@ -36,7 +37,13 @@ class UserPermissionsView(APIView):
 
     def get(self, request):
         user = request.user
+        # pdb.set_trace()
         role = user.role.role
+        permissions = {
+            'can_create_company': user.role.role == 'superadmin',
+            'can_create_package': user.role.role == 'superadmin',
+            'can_manage_services': user.role.role in ['admin', 'agent']
+        }
         # company = user.role.company
         # if company:
         #     package = company.package
@@ -48,5 +55,6 @@ class UserPermissionsView(APIView):
         return Response({
             "role": role,
             # "company": company.id if company else None,
-            "modules": module_data
+            "modules": module_data,
+            "permissions": permissions
         })
