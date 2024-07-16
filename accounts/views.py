@@ -1,10 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import pdb;
+from rest_framework import status,generics
+import pdb
 
 from .models import User, Company, Package, UserRole
-from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer
+from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer,UserRegistrationSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -58,3 +59,11 @@ class UserPermissionsView(APIView):
             "modules": module_data,
             "permissions": permissions
         })
+class UserRegistrationView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
