@@ -89,14 +89,11 @@ class Order_Table(models.Model):
         characters = string.ascii_uppercase + string.ascii_lowercase + string.digits
         random_suffix = ''.join(random.choice(characters) for _ in range(length))
         return prefix + random_suffix
-
-    def __str__(self):
-        return self.id
     
 
 class OrderDetail(models.Model):
     id = models.AutoField(primary_key=True)
-    order_id = models.ForeignKey(Order_Table, on_delete=models.PROTECT)
+    order_id = models.ForeignKey(Order_Table, on_delete=models.CASCADE,related_name='order_details')
     product_id = models.CharField(max_length=200, default='0')
     product_name = models.CharField(max_length=255, default='0')
     product_qty = models.IntegerField()
