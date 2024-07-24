@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import pdb
 
-from .models import User, Company, Package, UserRole
-from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer
+from .models import User, Company, Package, UserRole, UserProfile
+from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, UserProfileSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -32,12 +32,22 @@ class UserRoleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class UserPermissionsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
-        # pdb.set_trace()
+        user_data = UserSerializer(user, many=False).data
+        profile = UserProfileSerializer(user.profile, many=False).data
+        role = UserRoleSerializer(user.role, many=False).data
+        return Response({"user": user_data, "profile": profile, "role": role})
+        pdb.set_trace()
         role = user.role.role
         permissions = {
             'can_create_company': user.role.role == 'superadmin',
