@@ -45,15 +45,17 @@ class UserPermissionsView(APIView):
         user = request.user
         user_data = UserSerializer(user, many=False).data
         profile = UserProfileSerializer(user.profile, many=False).data
-        role = UserRoleSerializer(user.role, many=False).data
-        return Response({"user": user_data, "profile": profile, "role": role})
-        pdb.set_trace()
+        user_data['profile'] = profile
+        # role = UserRoleSerializer(user.role, many=False).data
+        # return Response({"user": user_data, "profile": profile, "role": role})
         role = user.role.role
         permissions = {
             'can_create_company': user.role.role == 'superadmin',
             'can_create_package': user.role.role == 'superadmin',
             'can_manage_services': user.role.role in ['admin', 'agent']
         }
+
+        response_data = {"user": user_data, "role": role, "permissions": permissions}
         # company = user.role.company
         # if company:
         #     package = company.package
@@ -62,9 +64,13 @@ class UserPermissionsView(APIView):
         # else:
         module_data = []
 
-        return Response({
-            "role": role,
-            # "company": company.id if company else None,
-            "modules": module_data,
-            "permissions": permissions
-        })
+        # return Response({
+        #     "user": user_data,
+        #     "role": role,
+        #     # "company": company.id if company else None,
+        #     # "modules": module_data,
+        #     "permissions": permissions,
+        #
+        # })
+
+        return Response(response_data)
