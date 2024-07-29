@@ -11,6 +11,5 @@ router.register(r'user-profile', UserProfileViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('user-permissions', UserPermissionsView.as_view(), name="user-permissions"),
     path('user-permissions/', UserPermissionsView.as_view(), name="user-permissions")
 ]
