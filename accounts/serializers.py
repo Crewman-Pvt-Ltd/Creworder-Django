@@ -1,7 +1,9 @@
 import pdb
 
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile
+from .models import User, Company, Package, UserRole, UserProfile, Notice
+import string
+import random
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -35,6 +37,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class NoticeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notice
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
     role = UserRoleSerializer()
@@ -47,6 +55,9 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop("profile")
         role_data = validated_data.pop("role")
-        user = User.objects.create_user(**validated_data)
+
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        user = User.objects.create_user(password=password, **validated_data)
+
         UserRole.objects.create(user=user, **role_data)
         UserProfile.objects.create(user=user, **profile_data)

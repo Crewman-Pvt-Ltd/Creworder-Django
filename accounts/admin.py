@@ -4,8 +4,10 @@ from .models import Company
 from .models import Package
 from .models import UserRole
 from .models import UserProfile
+from .models import Notice
 
 admin.site.register(Company)
 admin.site.register(Package)
 admin.site.register(UserRole)
 admin.site.register(UserProfile)
+admin.site.register(Notice)

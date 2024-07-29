@@ -26,6 +26,10 @@ class Package(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @staticmethod
+    def has_read_permission(request):
+        return False
+
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
             raise PermissionDenied("Only superadmins can create packages.")
@@ -36,7 +40,6 @@ class Package(models.Model):
 
 
 class Company(models.Model):
-
     class Meta:
         verbose_name_plural = "companies"
 
@@ -129,3 +132,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+
+class Notice(models.Model):
+    title = models.CharField(max_length=255, blank=False, null=False)
+    description = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.title

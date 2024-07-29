@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import pdb
 
-from .models import User, Company, Package, UserRole, UserProfile
-from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, UserProfileSerializer
-from rest_framework.parsers import JSONParser
+from .models import User, Company, Package, UserRole, UserProfile, Notice
+from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
+    UserProfileSerializer, NoticeSerializer
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -20,10 +21,11 @@ class UserViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(data=serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
-    parser_class = JSONParser
+    parser_classes = [JSONParser, FormParser, MultiPartParser]
     permission_classes = [IsAuthenticated]
 
 
@@ -41,6 +43,12 @@ class UserRoleViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class NoticeViewset(viewsets.ModelViewSet):
+    queryset = Notice.objects.all()
+    serializer_class = NoticeSerializer
     permission_classes = [IsAuthenticated]
 
 
