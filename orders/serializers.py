@@ -6,6 +6,11 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderTableSerializer(serializers.ModelSerializer):
+    order_details = OrderDetailSerializer(many=True, read_only=True)
+
     class Meta:
         model = Order_Table
-        fields = '__all__'
+        fields = '__all__'  # Or specify the fields you want to include
+    # class Meta:
+    #     model = Order_Table
+    #     fields = '__all__'
