@@ -14,12 +14,18 @@ class getChatDetail(APIView):
     def get(self, request):
         from_user = request.query_params.get('from_user')
         to_user = request.query_params.get('to_user')
-        if from_user is None:
-            return Response({"Success": False, "Message": "Please pass from_user"}, status=status.HTTP_400_BAD_REQUEST)
-        if to_user is None:
-            return Response({"Success": False, "Message": "Please pass to_user"}, status=status.HTTP_400_BAD_REQUEST)
+        group_id = request.query_params.get('group_id')
+        if group_id is None:
+            if from_user is None:
+                return Response({"Success": False, "Message": "Please pass from_user"}, status=status.HTTP_400_BAD_REQUEST)
+            if to_user is None:
+                return Response({"Success": False, "Message": "Please pass to_user"}, status=status.HTTP_400_BAD_REQUEST)
 
-        chatSessionId = ChatSession.objects.filter(name=f"{from_user}_{to_user}").first() or ChatSession.objects.filter(name=f"{to_user}_{from_user}").first()
+        if group_id: 
+            chatSessionId = ChatSession.objects.filter(name=f"{group_id}").first()
+        else:
+            chatSessionId = ChatSession.objects.filter(name=f"{from_user}_{to_user}").first() or ChatSession.objects.filter(name=f"{to_user}_{from_user}").first()
+
         if chatSessionId is None:
             return Response({"Success": False, "Message": f"Data not exist.!" }, status=status.HTTP_400_BAD_REQUEST)
         
@@ -37,15 +43,25 @@ class createChat(APIView):
     def post(self, request):
         from_user = request.data.get('from_user')
         to_user = request.data.get('to_user')
-        session = Chat.objects.filter(from_user=from_user, to_user=to_user).first() or Chat.objects.filter(from_user=to_user, to_user=from_user).first()
+        chat_type=request.data.get('chat_type')
+        session =None
+        if chat_type is None:
+            session = Chat.objects.filter(from_user=from_user, to_user=to_user).first() or Chat.objects.filter(from_user=to_user, to_user=from_user).first()
         if session:
             session_id = session.chat_session_id
         else:
-            session = ChatSession.objects.filter(name=f"{from_user}_{to_user}").first() or ChatSession.objects.filter(name=f"{to_user}_{from_user}").first()
+            if chat_type=='group_chat':
+                session = ChatSession.objects.filter(name=f"{to_user}").first()
+            else:
+                session = ChatSession.objects.filter(name=f"{from_user}_{to_user}").first() or ChatSession.objects.filter(name=f"{to_user}_{from_user}").first()
+
             if session:
                 session_id = session.id
             else:
-                new_session = ChatSession.objects.create(name=f"{from_user}_{to_user}")
+                if chat_type=='group_chat':
+                   new_session = ChatSession.objects.create(name=f"{to_user}")
+                else:
+                   new_session = ChatSession.objects.create(name=f"{from_user}_{to_user}")
                 session_id = new_session.id
 
         serializer = ChatSerializer(data={**request.data, 'chat_session': session_id})
