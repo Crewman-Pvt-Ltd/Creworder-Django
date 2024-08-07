@@ -1,5 +1,5 @@
 import hashlib
-import pdb
+# import pdb
 import random
 import string
 
@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
-from django.utils import timezone
+# from django.utils import timezone
 
 
 class Package(models.Model):
@@ -25,10 +25,6 @@ class Package(models.Model):
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    @staticmethod
-    def has_read_permission(request):
-        return False
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -142,3 +138,25 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Branch(models.Model):
+    branch_name = models.CharField(max_length=80, blank=True, null=True)
+    branch_id = models.CharField(max_length=255, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def generate_branch_id(self):
+        prefix = self.company.company_id
+        characters = string.digits
+        random_suffix = ''.join(random.choice(characters) for _ in range(5))
+        return prefix + random_suffix
+
+    def save(self, *args, **kwargs):
+        if not self.branch_id:
+            self.branch_id = self.generate_branch_id()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.branch_id
