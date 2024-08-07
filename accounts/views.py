@@ -46,7 +46,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
-class NoticeViewset(viewsets.ModelViewSet):
+class NoticeViewSet(viewsets.ModelViewSet):
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
     permission_classes = [IsAuthenticated]
