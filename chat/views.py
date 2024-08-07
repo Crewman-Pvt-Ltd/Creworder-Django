@@ -3,12 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Chat
-from .serializers import ChatSerializer
+from .serializers import ChatSerializer,ChatGroupDetailsSerializer,ChatGroupSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Chat, ChatSession
-from .serializers import ChatSerializer
+from .models import Chat, ChatSession,Group,GroupDetails
 
 class getChatDetail(APIView):
     serializer_class = ChatSerializer
@@ -68,4 +67,38 @@ class chat_count(APIView):
             return Response({"Success": True, "chat_count": chat_count, "SessionID": session_id}, status=status.HTTP_201_CREATED)
         else:
             return Response({"Success": False, "Errors": "Session not able"}, status=status.HTTP_400_BAD_REQUEST)
+        
+class GetGroups(APIView):
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+        if not user_id:
+            return Response({"Success": False, "Errors": "user_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        group_details = GroupDetails.objects.filter(Group_member_id=user_id).select_related('Group').prefetch_related('Group_member')
+        if group_details.exists():
+            data = []
+            unique_groups = group_details.values('Group_id').distinct()
+            for group in unique_groups:
+                group_id = group['Group_id']
+                group_info = Group.objects.get(id=group_id)
+                member_count = GroupDetails.objects.filter(Group_id=group_id).count()
+                members_details = GroupDetails.objects.filter(Group_id=group_id).select_related('Group_member')
+                members = []
+                for detail in members_details:
+                    members.append({
+                        'member_id': detail.Group_member.id,
+                        'member_name': detail.Group_member.username,
+                        'group_id': detail.Group_id,
+                        'member_status': detail.Group_member_status
+                    })
+                data.append({
+                    'group_id': group_info.id,
+                    'group_name': group_info.group_name,
+                    'member_count': member_count,
+                    'members': members 
+                })
+            return Response({"Success": True, "Groups": data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Success": False, "Errors": f"No groups found for user_id {user_id}"}, status=status.HTTP_404_NOT_FOUND)
+
+
 

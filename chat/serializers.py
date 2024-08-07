@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Chat,ChatSession
+from .models import Chat,ChatSession,Group,GroupDetails
 class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
@@ -10,3 +10,12 @@ class ChatSesstionSerializer(serializers.ModelSerializer):
         model = ChatSession
         fields = '__all__'
 
+class ChatGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+class ChatGroupDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupDetails
+        fields = '__all__'  # or specify the fields you want to include
