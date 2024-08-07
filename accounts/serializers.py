@@ -31,10 +31,22 @@ class UserRoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserRoleCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserRole
+        exclude = ['user']
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+
+
+class UserProfileCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        exclude = ['user']
 
 
 class NoticeSerializer(serializers.ModelSerializer):
@@ -44,12 +56,13 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer()
-    role = UserRoleSerializer()
+    profile = UserProfileCreateSerializer()
+    role = UserRoleCreateSerializer()
 
     class Meta:
         model = User
-        fields = ['id','username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'is_staff', 'profile', 'role']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'is_staff',
+                  'profile', 'role']
 
     def create(self, validated_data):
         profile_data = validated_data.pop("profile")
@@ -60,3 +73,5 @@ class UserSerializer(serializers.ModelSerializer):
 
         UserRole.objects.create(user=user, **role_data)
         UserProfile.objects.create(user=user, **profile_data)
+
+        return user
