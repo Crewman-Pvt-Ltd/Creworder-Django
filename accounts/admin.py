@@ -5,9 +5,11 @@ from .models import Package
 from .models import UserRole
 from .models import UserProfile
 from .models import Notice
+from .models import Branch
 
 admin.site.register(Company)
 admin.site.register(Package)
 admin.site.register(UserRole)
 admin.site.register(UserProfile)
 admin.site.register(Notice)
+admin.site.register(Branch)

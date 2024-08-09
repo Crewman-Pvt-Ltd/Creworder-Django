@@ -9,6 +9,8 @@ from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
+
+
 # from django.utils import timezone
 
 
@@ -61,6 +63,8 @@ class Company(models.Model):
         if not self.company_id:
             self.company_id = self.generate_company_id()
         super().save(*args, **kwargs)
+        if not self.branches.exists():
+            Branch.objects.create(name="Default Branch", company=self, address=self.company_address)
 
     def generate_company_id(self):
         while True:
@@ -73,6 +77,33 @@ class Company(models.Model):
         return self.name
 
 
+class Branch(models.Model):
+
+    class Meta:
+        verbose_name_plural = "Branches"
+
+    name = models.CharField(max_length=80, blank=False, null=False)
+    branch_id = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=False, null=False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="branches")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def generate_branch_id(self):
+        prefix = self.company.company_id
+        characters = string.digits
+        random_suffix = ''.join(random.choice(characters) for _ in range(5))
+        return prefix + random_suffix
+
+    def save(self, *args, **kwargs):
+        if not self.branch_id:
+            self.branch_id = self.generate_branch_id()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.branch_id} ({self.company.name})'
+
+
 class UserRole(models.Model):
     ROLE_CHOICES = [
         ('superadmin', 'Super Admin'),
@@ -82,7 +113,6 @@ class UserRole(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='role')
     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
@@ -107,6 +137,8 @@ class UserProfile(models.Model):
     address = models.TextField(null=True, blank=True)
     employee_id = models.CharField(max_length=50, unique=True, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
 
     def save(self, *args, **kwargs):
         if not self.employee_id:
@@ -138,25 +170,3 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Branch(models.Model):
-    branch_name = models.CharField(max_length=80, blank=True, null=True)
-    branch_id = models.CharField(max_length=255, blank=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def generate_branch_id(self):
-        prefix = self.company.company_id
-        characters = string.digits
-        random_suffix = ''.join(random.choice(characters) for _ in range(5))
-        return prefix + random_suffix
-
-    def save(self, *args, **kwargs):
-        if not self.branch_id:
-            self.branch_id = self.generate_branch_id()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.branch_id

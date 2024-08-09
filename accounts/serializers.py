@@ -1,21 +1,29 @@
 import pdb
 
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile, Notice
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch
 import string
 import random
 
 
+class BranchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = ['name', 'address']
+
+
 class CompanySerializer(serializers.ModelSerializer):
     total_user_count = serializers.SerializerMethodField()
+    branches = BranchSerializer(many=True, read_only=True)
 
     class Meta:
         model = Company
         fields = ['id', 'name', 'company_email', 'company_phone', 'company_website', 'company_address', 'status',
-                  'created_at', 'updated_at', 'company_id', 'company_image', 'payment_mode', 'total_user_count']
+                  'created_at', 'updated_at', 'company_id', 'company_image', 'package', 'payment_mode',
+                  'total_user_count', 'branches']
 
     def get_total_user_count(self, obj):
-        count = UserRole.objects.filter(company_id=obj.id).count()
+        count = UserProfile.objects.filter(company_id=obj.id).count()
         return count
 
 
