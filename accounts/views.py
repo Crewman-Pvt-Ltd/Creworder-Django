@@ -3,9 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import pdb
 
-from .models import User, Company, Package, UserRole, UserProfile, Notice
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
-    UserProfileSerializer, NoticeSerializer
+    UserProfileSerializer, NoticeSerializer, BranchSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 
@@ -29,9 +29,16 @@ class CompanyViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
+class BranchViewSet(viewsets.ModelViewSet):
+    queryset = Branch.objects.all()
+    serializer_class = BranchSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class UserRoleViewSet(viewsets.ModelViewSet):
