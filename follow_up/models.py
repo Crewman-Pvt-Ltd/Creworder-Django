@@ -6,7 +6,6 @@ phone_regex = RegexValidator(
     regex=r'^\+?1?\d{9,15}$',
     message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
 )
-
 class FollowUp(models.Model):
     FOLLOW_STATUS_CHOICES = [
         (0, 'Pending'),
@@ -32,3 +31,16 @@ class FollowUp(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+
+
+class Notepad(models.Model):
+    id = models.AutoField(primary_key=True)
+    authID = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'notepad_table'
+    def __str__(self):
+        return f"Note {self.sr} by {self.authID}"
