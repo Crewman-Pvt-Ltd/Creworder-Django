@@ -14,7 +14,6 @@ from rest_framework.permissions import IsAuthenticated
 
 class CreateFollowUp(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             follow_up = createFollowUp(request.data)
