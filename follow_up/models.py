@@ -43,4 +43,4 @@ class Notepad(models.Model):
     class Meta:
         db_table = 'notepad_table'
     def __str__(self):
-        return f"Note {self.sr} by {self.authID}"
+        return f"Note {self.id} by {self.authID}"
