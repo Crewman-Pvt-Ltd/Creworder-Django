@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'orders',
     'product',
     'chat',
+    'follow_up',
+    'cloud_telephony',
 ]
 
 MIDDLEWARE = [

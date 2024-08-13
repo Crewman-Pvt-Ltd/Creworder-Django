@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import FollowUp
-from .serializers import FollowUpSerializer
+from .serializers import FollowUpSerializer,NotepadSerializer
+from services.follow_up.notepad_service import createOrUpdateNotepad,getNotepadByAuthid
 from services.follow_up.follow_up_service import (
     createFollowUp,
     getFollowUpsbyuser,
@@ -10,7 +11,6 @@ from services.follow_up.follow_up_service import (
     updateFollowUp,
 )
 from rest_framework.permissions import IsAuthenticated
-
 
 class CreateFollowUp(APIView):
     permission_classes = [IsAuthenticated]
@@ -88,5 +88,45 @@ class FollowUpUpdate(APIView):
                     "Success": False,
                     "Error": "Follow-up not found or invalid data provided.",
                 },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+class NotepadCreateOrUpdate(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        auth_id = request.data.get('authID')
+        note = request.data.get('note')
+
+        if not auth_id or not note:
+            return Response(
+                {"Success": False, "Error": "authID and note are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        notepad, updated = createOrUpdateNotepad(auth_id, note)
+
+        if updated:
+            return Response(
+                {"Success": True, "Message": "Notepad updated successfully.", "Notepad": NotepadSerializer(notepad).data},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"Success": True, "Message": "Notepad created successfully.", "Notepad": NotepadSerializer(notepad).data},
+                status=status.HTTP_201_CREATED,
+            )
+        
+class NotepadDetail(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, auth_id):
+        notepad = getNotepadByAuthid(auth_id)
+        
+        if notepad:
+            return Response(
+                {"Success": True, "Notepad": NotepadSerializer(notepad).data},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"Success": False, "Error": "No notepad entry found for the given authID."},
                 status=status.HTTP_404_NOT_FOUND,
             )
