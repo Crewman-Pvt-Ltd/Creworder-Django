@@ -75,7 +75,6 @@ class FollowUpUpdate(APIView):
 
     def put(self, request, follow_up_id):
         follow_up = updateFollowUp(follow_up_id, request.data)
-
         if follow_up:
             return Response(
                 {"Success": True, "FollowUp": FollowUpSerializer(follow_up).data},
