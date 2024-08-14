@@ -150,7 +150,7 @@ class UserProfile(models.Model):
         if self.user.role.role == "superadmin":
             prefix = "SUPER"
         elif self.user.role.role == "admin" or self.user.role.role == "agent":
-            prefix = str(self.user.role.company.company_id).upper()
+            prefix = str(self.user.profile.company.company_id).upper()
 
         length = 15 - len(prefix)
         characters = string.digits

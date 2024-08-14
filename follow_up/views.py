@@ -14,7 +14,6 @@ from rest_framework.permissions import IsAuthenticated
 
 class CreateFollowUp(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             follow_up = createFollowUp(request.data)
@@ -76,7 +75,6 @@ class FollowUpUpdate(APIView):
 
     def put(self, request, follow_up_id):
         follow_up = updateFollowUp(follow_up_id, request.data)
-
         if follow_up:
             return Response(
                 {"Success": True, "FollowUp": FollowUpSerializer(follow_up).data},
