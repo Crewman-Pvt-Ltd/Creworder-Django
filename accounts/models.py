@@ -44,10 +44,10 @@ class Company(models.Model):
     payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('half', 'Half Yearly')]
 
     name = models.CharField(max_length=100, blank=False)
-    company_email = models.EmailField(max_length=100, blank=False, unique=True, null=False, default="abc@gmail.com")
-    company_phone = PhoneNumberField(null=False, unique=True, blank=False, default="123456789")
-    company_website = models.CharField(max_length=100, blank=False, null=False, default="abc@gmail.com")
-    company_address = models.CharField(max_length=200, blank=False, null=False, default="company address")
+    company_email = models.EmailField(max_length=100, blank=False, unique=True, null=False)
+    company_phone = PhoneNumberField(null=False, unique=True, blank=False)
+    company_website = models.CharField(max_length=100, blank=False, null=False)
+    company_address = models.CharField(max_length=200, blank=False, null=False)
     package = models.ForeignKey(Package, on_delete=models.CASCADE, default=1)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     status = models.BooleanField(default=True)
@@ -128,7 +128,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     status = models.BooleanField(default=True)
     gender = models.CharField(max_length=2, choices=gender_choices, default="m")
-    contact_no = PhoneNumberField(null=False, unique=True, blank=False, default="12345678")
+    contact_no = PhoneNumberField(null=False, unique=True, blank=False)
     marital_status = models.CharField(max_length=20, choices=[('married', "Married"), ('unmarried', "Unmarried")],
                                       default="unmarried")
     date_of_joining = models.DateTimeField(auto_now_add=True)
