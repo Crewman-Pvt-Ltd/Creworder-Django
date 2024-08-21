@@ -5,9 +5,9 @@ import pdb
 
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
-    UserProfileSerializer, NoticeSerializer, BranchSerializer
+    UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -95,3 +95,24 @@ class UserPermissionsView(APIView):
         # })
 
         return Response(response_data)
+
+
+class AdminSelfSignUp(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        user_data = request.data.get('user')
+        
+        user_serializer = UserSignupSerializer(data=user_data)
+        if user_serializer.is_valid():
+            user = user_serializer.save()
+
+            user.role.role = 'admin'
+            user.role.save()
+
+            return Response({
+                'user': user_serializer.data,
+                'message': 'Signup Successful.'
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
