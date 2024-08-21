@@ -86,29 +86,29 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    role = UserRoleCreateSerializer()
-    company = serializers.CharField(write_only=True)
+    company = CompanySerializer()
+    contact_no = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'email', 'role', 'company']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'email', 'company', 'contact_no']
 
     def create(self, validated_data):
-        role_data = validated_data.pop("role")
-        company_name = validated_data.pop("company")
+        company_data = validated_data.pop("company")
+        contact_no = validated_data.pop("contact_no")
 
         # password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
         # print(password)
 
         package = Package.objects.get(id=3)
-        company, created = Company.objects.get_or_create(name=company_name, package=package)
+        company = Company.objects.create(package=package, **company_data)
 
         user = User.objects.create_user(**validated_data)
-        UserRole.objects.create(user=user, **role_data)
+        UserRole.objects.create(user=user, role='admin')
 
         UserProfile.objects.create(
             user=user,
-            contact_no="0000000000",
+            contact_no=contact_no,
             gender="m",
             status=True,
             marital_status="unmarried",

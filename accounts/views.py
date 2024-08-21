@@ -105,13 +105,10 @@ class AdminSelfSignUp(APIView):
         
         user_serializer = UserSignupSerializer(data=user_data)
         if user_serializer.is_valid():
-            user = user_serializer.save()
 
-            user.role.role = 'admin'
-            user.role.save()
+            user_serializer.save()
 
             return Response({
-                'user': user_serializer.data,
                 'message': 'Signup Successful.'
             }, status=status.HTTP_201_CREATED)
 
