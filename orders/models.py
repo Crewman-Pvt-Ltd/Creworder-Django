@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from product.models import Product
 from django.core.exceptions import PermissionDenied
+from accounts.models import Company, Branch
 
 
 class Payment_Type(models.Model):
@@ -104,6 +105,27 @@ class OrderDetail(models.Model):
         db_table = 'order_details'
     def __str__(self):
         return self.order_id
+    
 
-
+class CategoryModel(models.Model):
+    STATUS = [
+        (0, "Inactive"),
+        (1, "Active"),
+    ]
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255,unique=True)
+    description = models.CharField(max_length=200)
+    image = models.ImageField(
+        upload_to="category_images/", null=True, blank=True
+    )
+    status=models.IntegerField(choices=STATUS)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'category_table'
+    def __str__(self):
+        return f"category {self.id} by {self.name}"
 
