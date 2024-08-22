@@ -85,7 +85,6 @@ class CloudTelephoneyChannelUpdate(APIView):
 
 class CloudTelephoneyChannelList(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         try:
             data = getCloudTelephoneyChannel(request.user.id)

@@ -6,4 +6,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('orders/', views.OrderAPIView.as_view(), name='order-list-create'),
     path('orders/<int:pk>/', views.OrderAPIView.as_view(), name='order-detail'),
+    path('category/', views.CategoryView.as_view(), name='category-create'),
+    path('category/<int:pk>', views.CategoryView.as_view(), name='update-create'),
 ]
