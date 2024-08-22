@@ -1,15 +1,20 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Order_Table, OrderDetail, CategoryModel
-from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySerializer
+from .models import Order_Table, OrderDetail, CategoryModel,ProductModel
+from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySerializer,ProductSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-import pdb
 from services.category.category_service import (
     createCategory,
     updateCategory,
     deleteCategory,
-    getCategory
+    getCategory,
+)
+from services.products.products_service import (
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getProduct,
 )
 
 
@@ -178,11 +183,91 @@ class CategoryView(APIView):
                 {"Success": False, "Error": "Not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
     def get(self, request):
         try:
             data = getCategory(request.user.id)
             serializer = CategorySerializer(data, many=True)
+            return Response(
+                {"Success": True, "Data": serializer.data},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"Success": False, "Error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class ProductView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            createCategoryResponse = createProduct(request.data, request.user.id)
+            return Response(
+                {
+                    "Success": True,
+                    "data": ProductSerializer(createCategoryResponse).data,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except ValueError as e:
+            return Response(
+                {"Success": False, "Errors": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    def put(self, request, pk):
+        try:
+            updatedData = updateProduct(pk, request.data)
+            if updatedData:
+                return Response(
+                    {
+                        "Success": True,
+                        "data": ProductSerializer(updatedData).data,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(
+                    {
+                        "Success": False,
+                        "Error": "Product not found or invalid data provided.",
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+        except ProductModel.DoesNotExist:
+            return Response(
+                {
+                    "Success": False,
+                    "Error": "Category not found.",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except ValueError as e:
+            return Response(
+                {"Success": False, "Errors": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    def delete(self, request, pk):
+        success = deleteProduct(pk)
+        if success:
+            return Response(
+                {"Success": True, "Message": "Deleted successfully."},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"Success": False, "Error": "Not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    def get(self, request):
+        try:
+            data = getProduct(request.user.id)
+            serializer = ProductSerializer(data, many=True)
             return Response(
                 {"Success": True, "Data": serializer.data},
                 status=status.HTTP_200_OK,
