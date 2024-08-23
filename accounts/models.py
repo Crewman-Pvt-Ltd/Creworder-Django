@@ -27,6 +27,8 @@ class Package(models.Model):
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    max_admin = models.IntegerField(blank=True, null=True)
+    setup_fees = models.IntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -56,6 +58,7 @@ class Company(models.Model):
     company_id = models.CharField(max_length=50, blank=True, null=True)
     company_image = models.ImageField(upload_to='company_images/', blank=True, null=True)
     payment_mode = models.CharField(max_length=20, blank=True, null=True, choices=payment_freq)
+    next_payment_date = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -78,7 +81,6 @@ class Company(models.Model):
 
 
 class Branch(models.Model):
-
     class Meta:
         verbose_name_plural = "Branches"
 
@@ -139,6 +141,8 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
+    professional_email = models.EmailField(null=True, blank=True)
+    enrolment_id = models.CharField(max_length=50, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.employee_id:
@@ -166,7 +170,36 @@ class Notice(models.Model):
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
+    users = models.ManyToManyField(User, related_name='notices')
 
     def __str__(self):
         return self.title
+
+
+class FormEnquiry(models.Model):
+    name = models.CharField(max_length=70, blank=False, null=False)
+    phone = PhoneNumberField(null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    message = models.TextField(blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class SupportTicket(models.Model):
+    priority_choices = [
+        ('urgent', 'Urgent'),
+        ('high', 'High'),
+        ('low', 'Low'),
+        ('medium', 'Medium')
+    ]
+    company = models.ForeignKey(Company, blank=False, null=False, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=200, null=False, blank=False)
+    description = models.TextField(blank=False, null=False)
+    status = models.BooleanField(null=False, blank=False, default=True)
+    agent = models.ForeignKey(User, blank=False, null=False, related_name="support_tickets", on_delete=models.PROTECT)
+    type = models.CharField(max_length=20, choices=[('ques', 'Question'), ('problem', 'Problem'),
+                                                    ('gen_query', 'General Query')], blank=False, null=False)
+    priority = models.CharField(max_length=15, blank=True, null=True, choices=priority_choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

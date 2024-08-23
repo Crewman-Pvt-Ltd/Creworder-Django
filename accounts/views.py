@@ -3,9 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import pdb
 
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
-    UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer
+    UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
+    SupportTicketSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -102,10 +103,10 @@ class AdminSelfSignUp(APIView):
 
     def post(self, request):
         user_data = request.data.get('user')
-        
-        user_serializer = UserSignupSerializer(data=user_data)
-        if user_serializer.is_valid():
 
+        user_serializer = UserSignupSerializer(data=user_data)
+
+        if user_serializer.is_valid():
             user_serializer.save()
 
             return Response({
@@ -113,3 +114,13 @@ class AdminSelfSignUp(APIView):
             }, status=status.HTTP_201_CREATED)
 
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FormEnquiryViewSet(viewsets.ModelViewSet):
+    queryset = FormEnquiry.objects.all()
+    serializer_class = FormEnquirySerializer
+
+
+class SupportTicketViewSet(viewsets.ModelViewSet):
+    queryset = SupportTicket.objects.all()
+    serializer_class = SupportTicketSerializer
