@@ -1,7 +1,7 @@
 import pdb
 
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket
 import string
 import random
 
@@ -30,6 +30,12 @@ class CompanySerializer(serializers.ModelSerializer):
 class PackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Package
+        fields = '__all__'
+
+
+class FormEnquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormEnquiry
         fields = '__all__'
 
 
@@ -116,3 +122,9 @@ class UserSignupSerializer(serializers.ModelSerializer):
         )
 
         return user
+
+
+class SupportTicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportTicket
+        fields = '__all__'
