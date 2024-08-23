@@ -1,7 +1,6 @@
 import random,string
 from django.contrib.auth.models import User
 from django.db import models
-from product.models import Product
 from django.core.exceptions import PermissionDenied
 from accounts.models import Company, Branch
 
@@ -128,4 +127,28 @@ class CategoryModel(models.Model):
         db_table = 'category_table'
     def __str__(self):
         return f"category {self.id} by {self.name}"
+
+class ProductModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    product_id = models.CharField(max_length=100, unique=True,null=True, blank=True)
+    product_name = models.CharField(max_length=255)
+    product_sku = models.CharField(max_length=255)
+    product_quantity = models.IntegerField()
+    product_price = models.CharField(max_length=100)
+    product_hsn_number = models.CharField(max_length=200)
+    product_gst_percent = models.IntegerField(choices=[(0, '0%'),(5, '5%'), (12, '12%'), (18, '18%'), (28, '28%')])
+    product_image = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
+    product_description = models.TextField()
+    product_availability = models.IntegerField(choices=[(0, 'InStock'), (1, 'OutOfStock')])
+    product_status = models.IntegerField(choices=[(0, 'Pending'), (1, 'Active'), (2, 'Suspended'), (3, 'Deleted')])
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product_created = models.DateTimeField(auto_now_add=True)
+    product_updated = models.DateTimeField(auto_now=True, null=True)
+    class Meta:
+        db_table = 'products_table'
+    def __str__(self):
+        return f"products {self.id} by {self.product_name}"
 

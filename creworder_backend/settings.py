@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'orders',
-    'product',
     'chat',
     'follow_up',
     'cloud_telephony',
