@@ -9,7 +9,7 @@ from accounts.serializers import UserProfileSerializer
 
 
 def createProduct(data, userid):
-    productid = ''.join(random.choices(string.ascii_uppercase +string.digits, k=6))
+    productid = "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
     "PR" + str(productid)
     userData = UserProfile.objects.filter(user_id=userid).first()
     serializer = UserProfileSerializer(userData)
@@ -24,13 +24,12 @@ def createProduct(data, userid):
         return savedata
     else:
         raise ValueError(serializer.errors)
-    
+
+
 def updateProduct(id, data):
     try:
         updatedData = ProductModel.objects.get(id=id)
-        serializer = ProductSerializer(
-            updatedData, data=data, partial=True
-        )
+        serializer = ProductSerializer(updatedData, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return serializer.instance
@@ -38,7 +37,8 @@ def updateProduct(id, data):
             raise ValueError(serializer.errors)
     except ObjectDoesNotExist:
         return None
-    
+
+
 def deleteProduct(id):
     try:
         data = ProductModel.objects.get(id=id)
@@ -47,16 +47,24 @@ def deleteProduct(id):
     except ObjectDoesNotExist:
         return False
 
-def getProduct(user_id):
+
+def getProduct(user_id, id=None):
     try:
         tableData = ""
         if user_id is not None:
             userData = UserProfile.objects.filter(user_id=user_id).first()
             serializer = UserProfileSerializer(userData)
             serialized_data = serializer.data
-            tableData = ProductModel.objects.filter(
-                branch=serialized_data["branch"], company=serialized_data["company"]
-            )
+            if id:
+                tableData = ProductModel.objects.filter(
+                    branch=serialized_data["branch"],
+                    company=serialized_data["company"],
+                    id=id,
+                )
+            else:
+                tableData = ProductModel.objects.filter(
+                    branch=serialized_data["branch"], company=serialized_data["company"]
+                )
         return tableData
     except ObjectDoesNotExist:
         return False

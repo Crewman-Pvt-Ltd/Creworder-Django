@@ -3,7 +3,9 @@ from rest_framework.response import Response
 from .models import Order_Table, OrderDetail, CategoryModel,ProductModel
 from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySerializer,ProductSerializer
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+import pdb
 from services.category.category_service import (
     createCategory,
     updateCategory,
@@ -201,7 +203,6 @@ class CategoryView(APIView):
 
 class ProductView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             createCategoryResponse = createProduct(request.data, request.user.id)
@@ -264,9 +265,9 @@ class ProductView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-    def get(self, request):
+    def get(self, request, pk):
         try:
-            data = getProduct(request.user.id)
+            data = getProduct(request.user.id,pk)
             serializer = ProductSerializer(data, many=True)
             return Response(
                 {"Success": True, "Data": serializer.data},
@@ -277,3 +278,11 @@ class ProductView(APIView):
                 {"Success": False, "Error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
+class ProductListCreateAPIView(generics.ListCreateAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductSerializer
+
+class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductSerializer

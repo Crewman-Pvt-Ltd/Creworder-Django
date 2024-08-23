@@ -9,5 +9,8 @@ urlpatterns = [
     path('category/', views.CategoryView.as_view(), name='category-create'),
     path('category/<int:pk>', views.CategoryView.as_view(), name='update-create'),
     path('product/', views.ProductView.as_view(), name='product-create'),
+    path('getproduct/<int:pk>', views.ProductView.as_view(), name='product-create'),
     path('product/<int:pk>', views.ProductView.as_view(), name='product-update-delete'),
+    path('products/<int:pk>/', views.ProductDetailAPIView.as_view(), name='product-detail'),
+    path('products/', views.ProductListCreateAPIView.as_view(), name='product-detail'),
 ]
