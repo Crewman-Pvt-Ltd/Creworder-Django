@@ -18,7 +18,7 @@ from services.products.products_service import (
     deleteProduct,
     getProduct,
 )
-from services.orders.order_service import createOrders,updateOrders,deleteOrder
+from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails
 
 
 class OrderAPIView(APIView):
@@ -44,18 +44,18 @@ class OrderAPIView(APIView):
 
 
     def get(self, request, pk=None):
-        if pk:
-            try:
-                order = Order_Table.objects.get(pk=pk)
-                serializer = OrderTableSerializer(order)
-            except Order_Table.DoesNotExist:
-                return Response(
-                    {"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND
-                )
-        else:
-            orders = Order_Table.objects.all()
-            serializer = OrderTableSerializer(orders, many=True)
-        return Response(serializer.data)
+        try:
+            data = getOrderDetails(request.user.id,pk)
+            return Response(
+                {"Success": True, "Data": data},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"Success": False, "Error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
     
     def delete(self, request, pk):
         success = deleteOrder(pk)
@@ -102,7 +102,10 @@ class OrderAPIView(APIView):
                 {"Success": False, "Errors": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
+        
+class OrderDetailView(generics.RetrieveAPIView):
+    queryset = Order_Table.objects.all()
+    serializer_class = OrderTableSerializer
 
 
 class CategoryView(APIView):
