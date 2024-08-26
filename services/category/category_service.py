@@ -46,7 +46,7 @@ def getCategory(user_id):
     try:
         tableData = ""
         if id is not None:
-            userData = UserProfile.objects.filter(user_id=id).first()
+            userData = UserProfile.objects.filter(user_id=user_id).first()
             serializer = UserProfileSerializer(userData)
             serialized_data = serializer.data
             tableData = CategoryModel.objects.filter(
