@@ -18,9 +18,31 @@ from services.products.products_service import (
     deleteProduct,
     getProduct,
 )
+from services.orders.order_service import createOrders,updateOrders,deleteOrder
 
 
 class OrderAPIView(APIView):
+    # Order Create Function
+    def post(self, request, *args, **kwargs):
+        try:
+            orderSerializer = OrderTableSerializer(data=request.data)
+            if orderSerializer.is_valid():
+                createOrdersResponse = createOrders(request.data, request.user.id)
+                return Response(
+                    {
+                        "Success": True,
+                        "data": OrderTableSerializer(createOrdersResponse).data,
+                    },
+                    status=status.HTTP_201_CREATED,
+                )
+            return Response(orderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            return Response(
+                {"Success": False, "Errors": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
     def get(self, request, pk=None):
         if pk:
             try:
@@ -34,96 +56,57 @@ class OrderAPIView(APIView):
             orders = Order_Table.objects.all()
             serializer = OrderTableSerializer(orders, many=True)
         return Response(serializer.data)
-
-    # Order Create Function
-    def post(self, request, *args, **kwargs):
-        if (
-            "product_details" not in request.data
-            or request.data["product_details"] != None
-        ):
-            productData = request.data["product_details"]
-            request.data["product_details"] = "Product Datails exist"
-        serializer = OrderTableSerializer(data=request.data)
-        if serializer.is_valid():
-            OrderData = serializer.save()
-            for product in productData:
-                product["order_id"] = OrderData.id
-                productSerializer = OrderDetailSerializer(data=product)
-                if productSerializer.is_valid():
-                    productSerializer.save()
-                else:
-                    order_instance = Order_Table.objects.get(pk=OrderData.id)
-                    order_instance.delete()
-                    return Response(
-                        productSerializer.errors, status=status.HTTP_201_CREATED
-                    )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # Order Function Delete Function
-    def delete(self, request, pk, *args, **kwargs):
-        try:
-            order_instance = Order_Table.objects.get(pk=pk)
-            order_instance.delete()
+    
+    def delete(self, request, pk):
+        success = deleteOrder(pk)
+        if success:
             return Response(
-                {"message": "Order deleted successfully"},
+                {"Success": True, "Message": "Deleted successfully."},
                 status=status.HTTP_204_NO_CONTENT,
             )
-        except Order_Table.DoesNotExist:
+        else:
             return Response(
-                {"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND
+                {"Success": False, "Error": "Not found."},
+                status=status.HTTP_404_NOT_FOUND,
             )
-
-    def put(self, request, pk=None, *args, **kwargs):
-        if not pk:
+        
+    def put(self, request, pk):
+        try:
+            updatedData = updateOrders(pk, request.data)
+            if updatedData:
+                return Response(
+                    {
+                        "Success": True,
+                        "data": OrderTableSerializer(updatedData).data,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(
+                    {
+                        "Success": False,
+                        "Error": "Order not found or invalid data provided.",
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+        except CategoryModel.DoesNotExist:
             return Response(
-                {"error": "Order ID is required for update"},
+                {
+                    "Success": False,
+                    "Error": "Order not found.",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except ValueError as e:
+            return Response(
+                {"Success": False, "Errors": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        try:
-            order_instance = Order_Table.objects.get(pk=pk)
-        except Order_Table.DoesNotExist:
-            return Response(
-                {"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-        if (
-            "product_details" in request.data
-            and request.data["product_details"] is not None
-        ):
-            productData = request.data["product_details"]
-            request.data["product_details"] = "Product Details exist"
-        else:
-            productData = []
-        serializer = OrderTableSerializer(order_instance, data=request.data)
-        if serializer.is_valid():
-            OrderData = serializer.save()
-            for product in productData:
-                if "id" in product:
-                    try:
-                        product_instance = OrderDetail.objects.get(pk=product["id"])
-                        productSerializer = OrderDetailSerializer(
-                            product_instance, data=product
-                        )
-                    except OrderDetail.DoesNotExist:
-                        productSerializer = OrderDetailSerializer(data=product)
-                else:
-                    product["order_id"] = OrderData.id
-                    productSerializer = OrderDetailSerializer(data=product)
-
-                if productSerializer.is_valid():
-                    productSerializer.save()
-                else:
-                    return Response(
-                        productSerializer.errors, status=status.HTTP_400_BAD_REQUEST
-                    )
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CategoryView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             createCategoryResponse = createCategory(request.data, request.user.id)
@@ -286,3 +269,11 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
+
+class CategoryListCreateAPIView(generics.ListCreateAPIView):
+    queryset = CategoryModel.objects.all()
+    serializer_class = CategorySerializer
+
+class CategorytDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CategoryModel.objects.all()
+    serializer_class = CategorySerializer
