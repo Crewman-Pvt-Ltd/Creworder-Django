@@ -13,4 +13,6 @@ urlpatterns = [
     path('product/<int:pk>', views.ProductView.as_view(), name='product-update-delete'),
     path('products/<int:pk>/', views.ProductDetailAPIView.as_view(), name='product-detail'),
     path('products/', views.ProductListCreateAPIView.as_view(), name='product-detail'),
+    path('getCategory/<int:pk>', views.CategorytDetailAPIView.as_view(), name='category-detail'),
+    path('getCategory/', views.CategoryListCreateAPIView.as_view(), name='category-detail'),
 ]
