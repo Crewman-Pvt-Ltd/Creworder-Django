@@ -1,0 +1,7 @@
+2024-08-28 16:44:27,056 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder/services/orders/order_service.py", line 76, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+

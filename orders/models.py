@@ -147,8 +147,7 @@ class OrderDetail(models.Model):
     product_name = models.CharField(max_length=255, default='0')
     product_qty = models.IntegerField()
     product_price = models.FloatField()
-    product_total = models.FloatField()
-    order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
+    product_total_price = models.FloatField()
     class Meta:
         db_table = 'orders_details_table'
     def __str__(self):

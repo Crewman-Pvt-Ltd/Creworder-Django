@@ -102,11 +102,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         company_data = validated_data.pop("company")
         contact_no = validated_data.pop("contact_no")
-
-        # password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-        # print(password)
-
-        package = Package.objects.get(id=3)
+        package = Package.objects.get(id=1)
         company = Company.objects.create(package=package, **company_data)
 
         user = User.objects.create_user(**validated_data)

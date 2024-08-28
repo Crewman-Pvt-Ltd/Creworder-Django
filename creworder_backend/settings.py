@@ -162,5 +162,37 @@ MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+from logging.handlers import RotatingFileHandler
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'rotating_file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.handlers.RotatingFileHandler',
+#             'filename': os.path.join(BASE_DIR, 'django_debug.log'),
+#             'maxBytes': 1024 * 1024 * 5,  
+#             'backupCount': 3,
+#         },
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['rotating_file', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#         'myapp': {
+#             'handlers': ['rotating_file', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
