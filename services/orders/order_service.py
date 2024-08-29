@@ -1,18 +1,41 @@
 import os
 import random,string
 from rest_framework import status
-from orders.models import Order_Table, OrderDetail
+from orders.models import Order_Table, OrderDetail,ProductModel
 from rest_framework.response import Response
 from orders.serializers import (
     OrderDetailSerializer,
     OrderTableSerializer,
-    OrderLogSerializer
+    OrderLogSerializer,
+    ProductSerializer
 )
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import UserProfile
 from accounts.serializers import UserProfileSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import NotFound
+from phonenumbers.phonenumberutil import country_code_for_region,region_code_for_number,parse
+from phonenumbers import NumberParseException
+import pycountry
+from utils.custom_logger import get_logger
+logger = get_logger(os.path.abspath(__file__).split("/")[-1][:-3])
+def check_country_code_exists(number):
+    try:
+        parsed_number = parse(number, None)
+        country_code = parsed_number.country_code
+        region_code = region_code_for_number(parsed_number)
+        if region_code:
+            country = pycountry.countries.get(alpha_2=region_code)
+            if country:
+                country_name = country.name
+                return True, country_code, region_code, country_name
+            else:
+                return False, None, None, None
+        else:
+            return False, None, None, None
+    except NumberParseException:
+        return False, None, None, None
+
 
 def orderLogInsert(data):
         orderLogSerializer = OrderLogSerializer(data=data)
@@ -20,8 +43,70 @@ def orderLogInsert(data):
             orderInsert = orderLogSerializer.save()
         else:
             raise ValueError(orderLogSerializer.errors)
+        
+def createOrderDetailsJson(data):
+    grossTotalAmount=0
+    for product in data["product_details"]:
+        try:
+            products = ProductModel.objects.filter(id=product['product']).first()
+            productSerializerData = ProductSerializer(products)
+            productData = productSerializerData.data
+            product['product_name']=productData['product_name']
+            product['product_price']=productData['product_price']
+            product['product_total_price']=float(productData['product_price']) * int(product['product_qty'])
+            grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
+        except:
+            print("error")
+    data['gross_amount']=grossTotalAmount
+    data['total_amount']=float(grossTotalAmount)-float(data['discount'])-float(data['prepaid_amount'])
+
+    return data
+
+def updateOrderDetailsJson(data,id):
+    grossTotalAmount=0
+    orderDetailsData = OrderDetail.objects.filter(order=id)
+    orderDetailsData.delete()
+    discount=0
+    prepaid_amount=0
+    if 'discount' not in data or 'prepaid_amount' not in data:
+        orderData = Order_Table.objects.filter(id=id).first()
+        orderSerializerData = OrderTableSerializer(orderData)
+        orderData = orderSerializerData.data
+        discount=orderData['discount']
+        prepaid_amount=orderData['prepaid_amount']
+    else:
+        discount=data['discount']
+        prepaid_amount=['prepaid_amount']
+    for product in data["product_details"]:
+        try:
+            products = ProductModel.objects.filter(id=product['product']).first()
+            productSerializerData = ProductSerializer(products)
+            productData = productSerializerData.data
+            product['product_name']=productData['product_name']
+            product['product_price']=productData['product_price']
+            product['product_total_price']=float(productData['product_price']) * int(product['product_qty']) 
+            grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
+        except:
+            print("error")
+    data['gross_amount']=grossTotalAmount
+    data['total_amount']=float(grossTotalAmount)-float(discount)-float(prepaid_amount)
+    return data
 
 def createOrders(data,user_id):
+    has_country_code, country_code, region_code, country_name = check_country_code_exists(data['customer_phone'])
+    if has_country_code:
+        if data['customer_country'].lower()!=country_name.lower():
+            raise ValueError("country code or country name not match.")
+    else:
+        raise ValueError("Phone number does not contain a valid country code.")
+
+    if int(data['repeat_order'])!=1:
+        repeatMobileNumber = Order_Table.objects.filter(customer_phone=data['customer_phone']).first()
+        if repeatMobileNumber:
+            raise ValueError("Phone number exists")
+        
+    data=createOrderDetailsJson(data)
+
     orderId = "".join(random.choices(string.ascii_uppercase + string.digits, k=7))
     userData = UserProfile.objects.filter(user_id=user_id).first()
     serializer = UserProfileSerializer(userData)
@@ -34,6 +119,9 @@ def createOrders(data,user_id):
     if orderSerializer.is_valid():
         orderSaveResponce = orderSerializer.save()
         for product in data["product_details"]:
+            products = ProductModel.objects.filter(id=product['product']).first()
+            productSerializerData = ProductSerializer(products)
+            productData = productSerializerData.data
             product['order']=orderSaveResponce.id
         orderDetailsSerializer = OrderDetailSerializer(data=data["product_details"],many=True)
         if orderDetailsSerializer.is_valid():
@@ -50,6 +138,8 @@ def createOrders(data,user_id):
 
 def updateOrders(id, data):
     try:
+        if 'product_details' in data:
+            data=updateOrderDetailsJson(data,id)
         updatedData = Order_Table.objects.get(id=id)
         serializer = OrderTableSerializer(updatedData, data=data, partial=True)
         if serializer.is_valid():
@@ -94,7 +184,6 @@ def getOrderDetails(usrid,id=None):
                 orderDetailsData = OrderDetail.objects.filter(order=row['id'])
                 orderDetailsTableData = OrderDetailSerializer(orderDetailsData, many=True)
                 row['product_details']=orderDetailsTableData.data
-
         return orderTableData.data
     except ObjectDoesNotExist:
         return False
