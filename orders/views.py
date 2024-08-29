@@ -1,3 +1,5 @@
+import pdb
+
 from rest_framework import status
 from rest_framework.response import Response
 from .models import Order_Table, OrderDetail, CategoryModel,ProductModel
@@ -172,9 +174,9 @@ class CategoryView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-    def get(self, request):
+    def get(self, request, pk=None):
         try:
-            data = getCategory(request.user.id)
+            data = getCategory(request.user.id, pk)
             serializer = CategorySerializer(data, many=True)
             return Response(
                 {"Success": True, "Data": serializer.data},

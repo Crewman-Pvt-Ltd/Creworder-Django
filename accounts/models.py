@@ -13,6 +13,13 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # from django.utils import timezone
 
+class Module(models.Model):
+    name = models.CharField(max_length=60, null=False, blank=False, unique=True)
+    description = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
 
 class Package(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -29,6 +36,7 @@ class Package(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     max_admin = models.IntegerField(blank=True, null=True)
     setup_fees = models.IntegerField(blank=True, null=True)
+    modules = models.ManyToManyField(Module, related_name='packages')
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -42,8 +50,14 @@ class Package(models.Model):
 class Company(models.Model):
     class Meta:
         verbose_name_plural = "companies"
+        permissions = (
+            ('can_view_own_company', 'Can view own company'),
+            ('can_edit_own_company', 'Can edit own company'),
+            ('can_delete_own_company', 'Can delete own company'),
+            ('can_manage_own_company', 'Can manage own company'),
+        )
 
-    payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('half', 'Half Yearly')]
+    payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('annual', 'Annually')]
 
     name = models.CharField(max_length=100, blank=False)
     company_email = models.EmailField(max_length=100, blank=False, unique=True, null=False)
@@ -143,6 +157,7 @@ class UserProfile(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
     professional_email = models.EmailField(null=True, blank=True)
     enrolment_id = models.CharField(max_length=50, null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.employee_id:
@@ -186,6 +201,13 @@ class FormEnquiry(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class SupportTicketStatus(models.IntegerChoices):
+    open = 0, "Open"
+    pending = 1, "Pending"
+    resolved = 2, "Resolved"
+    closed = 3, "Closed"
+
+
 class SupportTicket(models.Model):
     priority_choices = [
         ('urgent', 'Urgent'),
@@ -196,7 +218,7 @@ class SupportTicket(models.Model):
     company = models.ForeignKey(Company, blank=False, null=False, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField(blank=False, null=False)
-    status = models.BooleanField(null=False, blank=False, default=True)
+    status = models.IntegerField(null=False, blank=False, default=SupportTicketStatus.open, choices=SupportTicketStatus.choices)
     agent = models.ForeignKey(User, blank=False, null=False, related_name="support_tickets", on_delete=models.PROTECT)
     type = models.CharField(max_length=20, choices=[('ques', 'Question'), ('problem', 'Problem'),
                                                     ('gen_query', 'General Query')], blank=False, null=False)

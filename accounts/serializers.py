@@ -1,7 +1,7 @@
 import pdb
 
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module
 import string
 import random
 
@@ -12,19 +12,30 @@ class BranchSerializer(serializers.ModelSerializer):
         fields = ['name', 'address']
 
 
+class ModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = '__all__'
+
+
 class CompanySerializer(serializers.ModelSerializer):
     total_user_count = serializers.SerializerMethodField()
+    package_name = serializers.SerializerMethodField()
     branches = BranchSerializer(many=True, read_only=True)
 
     class Meta:
         model = Company
         fields = ['id', 'name', 'company_email', 'company_phone', 'company_website', 'company_address', 'status',
-                  'created_at', 'updated_at', 'company_id', 'company_image', 'package', 'payment_mode',
+                  'created_at', 'updated_at', 'company_id', 'company_image', 'package_name', 'package', 'payment_mode',
                   'total_user_count', 'branches']
 
     def get_total_user_count(self, obj):
         count = UserProfile.objects.filter(company_id=obj.id).count()
         return count
+
+    def get_package_name(self, obj):
+        name = obj.package.name
+        return name
 
 
 class PackageSerializer(serializers.ModelSerializer):

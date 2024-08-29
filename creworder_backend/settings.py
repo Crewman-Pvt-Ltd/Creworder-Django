@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'guardian',
     'corsheaders',
     'accounts',
     'orders',
@@ -75,6 +76,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend'
 )
 
 REST_FRAMEWORK = {
