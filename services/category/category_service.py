@@ -1,4 +1,6 @@
 import os
+import pdb
+
 from orders.models import CategoryModel
 from accounts.models import UserProfile
 from orders.serializers import CategorySerializer
@@ -19,7 +21,8 @@ def createCategory(data, userid):
         return cloud_telephony_channel
     else:
         raise ValueError(serializer.errors)
-    
+
+
 def updateCategory(id, data):
     try:
         updatedData = CategoryModel.objects.get(id=id)
@@ -33,7 +36,8 @@ def updateCategory(id, data):
             raise ValueError(serializer.errors)
     except ObjectDoesNotExist:
         return None
-    
+
+
 def deleteCategory(id):
     try:
         data = CategoryModel.objects.get(id=id)
@@ -42,16 +46,22 @@ def deleteCategory(id):
     except ObjectDoesNotExist:
         return False
 
-def getCategory(user_id):
+
+def getCategory(user_id, pk):
     try:
         tableData = ""
-        if id is not None:
+        if user_id is not None:
             userData = UserProfile.objects.filter(user_id=user_id).first()
             serializer = UserProfileSerializer(userData)
             serialized_data = serializer.data
             tableData = CategoryModel.objects.filter(
                 branch=serialized_data["branch"], company=serialized_data["company"]
             )
+
+            if pk is not None:
+                tableData = CategoryModel.objects.filter(
+                    branch=serialized_data["branch"], company=serialized_data["company"], id=pk
+                )
 
         return tableData
     except ObjectDoesNotExist:

@@ -1,14 +1,16 @@
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
+from guardian.shortcuts import get_objects_for_user
 import pdb
 
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
-    SupportTicketSerializer
+    SupportTicketSerializer, ModuleSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,19 +29,33 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     parser_classes = [JSONParser, FormParser, MultiPartParser]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        queryset = get_objects_for_user(user, 'accounts.view_company', klass=Company)
+
+        if user.has_perm('accounts.can_view_own_company'):
+            own_queryset = Company.objects.filter(created_by=user)
+            queryset = queryset | own_queryset
+
+        if not queryset.exists():
+            raise PermissionDenied("You do not have permission to view any companies.")
+
+        return queryset
 
 
 class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
 
 
 class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
 
 
 class UserRoleViewSet(viewsets.ModelViewSet):
@@ -65,19 +81,17 @@ class UserPermissionsView(APIView):
 
     def get(self, request):
         user = request.user
+        guardian_permissions = user.get_all_permissions()
         user_data = UserSerializer(user, many=False).data
         profile = UserProfileSerializer(user.profile, many=False).data
         user_data['profile'] = profile
-        # role = UserRoleSerializer(user.role, many=False).data
-        # return Response({"user": user_data, "profile": profile, "role": role})
         role = user.role.role
-        permissions = {
-            'can_create_company': user.role.role == 'superadmin',
-            'can_create_package': user.role.role == 'superadmin',
-            'can_manage_services': user.role.role in ['admin', 'agent']
-        }
-
-        response_data = {"user": user_data, "role": role, "permissions": permissions}
+        # permissions = {
+        #     'can_create_company': user.role.role == 'superadmin',
+        #     'can_create_package': user.role.role == 'superadmin',
+        #     'can_manage_services': user.role.role in ['admin', 'agent']
+        # }
+        response_data = {"user": user_data, "role": role, "permissions": guardian_permissions}
         # company = user.role.company
         # if company:
         #     package = company.package
@@ -124,3 +138,8 @@ class FormEnquiryViewSet(viewsets.ModelViewSet):
 class SupportTicketViewSet(viewsets.ModelViewSet):
     queryset = SupportTicket.objects.all()
     serializer_class = SupportTicketSerializer
+
+
+class ModuleViewSet(viewsets.ModelViewSet):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
