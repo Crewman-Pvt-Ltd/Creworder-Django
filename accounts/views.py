@@ -24,6 +24,18 @@ class UserViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(data=serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def get_queryset(self):
+        user = self.request.user
+        queryset = User.objects.all()
+        if user.role.role == "superadmin":
+            queryset = User.objects.filter(role__role=user.role.role)
+        elif user.role.role == "admin" or user.role.role == "agent":
+            company = user.profile.company
+            branch_id = user.profile.branch
+            queryset = User.objects.filter(company__branches=branch_id)
+            pdb.set_trace()
+        return queryset
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
@@ -110,6 +122,15 @@ class UserPermissionsView(APIView):
         # })
 
         return Response(response_data)
+
+
+class ActiveUsers(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        profile = UserProfile.objects.get(user=user)
+        role = UserRole.objects.get(user=user)
 
 
 class AdminSelfSignUp(APIView):
