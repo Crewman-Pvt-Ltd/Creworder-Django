@@ -134,6 +134,13 @@ class UserRole(models.Model):
         return self.user.username
 
 
+class UserStatus(models.IntegerChoices):
+    inactive = 0, "Inactive"
+    active = 1, "Active"
+    suspended = 2, "Suspended"
+    deleted = 3, "Deleted"
+
+
 class UserProfile(models.Model):
     gender_choices = [
         ('m', 'Male'),
@@ -142,7 +149,7 @@ class UserProfile(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    status = models.BooleanField(default=True)
+    status = models.IntegerField(choices=UserStatus.choices, default=UserStatus.active)
     gender = models.CharField(max_length=2, choices=gender_choices, default="m")
     contact_no = PhoneNumberField(null=False, unique=True, blank=False)
     marital_status = models.CharField(max_length=20, choices=[('married', "Married"), ('unmarried', "Unmarried")],
@@ -218,7 +225,8 @@ class SupportTicket(models.Model):
     company = models.ForeignKey(Company, blank=False, null=False, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField(blank=False, null=False)
-    status = models.IntegerField(null=False, blank=False, default=SupportTicketStatus.open, choices=SupportTicketStatus.choices)
+    status = models.IntegerField(null=False, blank=False, default=SupportTicketStatus.open,
+                                 choices=SupportTicketStatus.choices)
     agent = models.ForeignKey(User, blank=False, null=False, related_name="support_tickets", on_delete=models.PROTECT)
     type = models.CharField(max_length=20, choices=[('ques', 'Question'), ('problem', 'Problem'),
                                                     ('gen_query', 'General Query')], blank=False, null=False)
