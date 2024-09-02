@@ -18,6 +18,8 @@ from rest_framework.exceptions import NotFound
 from phonenumbers.phonenumberutil import country_code_for_region,region_code_for_number,parse
 from phonenumbers import NumberParseException
 from utils.custom_logger import get_logger
+from django.db.models import Q
+from datetime import datetime,time
 logger = get_logger(os.path.abspath(__file__).split("/")[-1][:-3])
 def check_country_code_exists(number):
     try:
@@ -187,3 +189,34 @@ def getOrderDetails(usrid,id=None):
         return orderTableData.data
     except ObjectDoesNotExist:
         return False
+        
+def exportOrders(user_id, data):
+    userData = UserProfile.objects.filter(user_id=user_id).first()
+    if not userData:
+        return {"error": "User not found"}
+    serializer = UserProfileSerializer(userData)
+    userSerializedData = serializer.data
+    date_range = data.get('data_range', '').split(' - ')
+    if len(date_range) != 2:
+        return {"error": "Invalid date range format"}
+    try:
+        start_date = datetime.strptime(date_range[0], '%m/%d/%Y')
+        end_date = datetime.strptime(date_range[1], '%m/%d/%Y')
+        start_datetime = datetime.combine(start_date, time.min)
+        end_datetime = datetime.combine(end_date, time.max)
+    except ValueError as e:
+        return {"error": f"Invalid date format: {str(e)}"}
+    if data.get('date_type') == 'created_at':
+        date_filter = Q(created_at__range=(start_datetime, end_datetime))
+    else:
+        date_filter = Q(updated_at__range=(start_datetime, end_datetime))
+    tableData = Order_Table.objects.filter(
+        branch=userSerializedData.get("branch"),
+        company=userSerializedData.get("company"),
+        order_status=data.get('status')
+    ).filter(date_filter)
+    orderTableData = OrderTableSerializer(tableData, many=True)
+    
+    # Serialize the data
+    orderTableData = OrderTableSerializer(tableData, many=True)
+    return orderTableData.data

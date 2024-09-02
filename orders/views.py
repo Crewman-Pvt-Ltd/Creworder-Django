@@ -21,7 +21,7 @@ from services.products.products_service import (
     deleteProduct,
     getProduct,
 )
-from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails
+from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders
 logger = get_logger('ordersView')
 class OrderAPIView(APIView):
     def post(self, request, *args, **kwargs):
@@ -282,3 +282,10 @@ class CategoryListCreateAPIView(generics.ListCreateAPIView):
 class CategorytDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CategoryModel.objects.all()
     serializer_class = CategorySerializer
+
+class orderExport(APIView):
+    def post(self, request, *args, **kwargs):
+        if "data_range" not in request.data or request.data['data_range']=='' or "date_type" not in request.data or request.data['date_type']=='' or "status" not in request.data or request.data['status']=='':
+            return Response({"success":False,"massage":"data_range ,date_type and status all fields are mandatory and not pass empty"},status=status.HTTP_400_BAD_REQUEST)
+        data = exportOrders(request.user.id,request.data)
+        return Response({"success": True, "Data":data},status=status.HTTP_200_OK)
