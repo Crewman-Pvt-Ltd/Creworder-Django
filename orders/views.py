@@ -74,7 +74,7 @@ class OrderAPIView(APIView):
         
     def put(self, request, pk):
         try:
-            updatedData = updateOrders(pk, request.data)
+            updatedData = updateOrders(pk, request.data,request.user.id)
             if updatedData:
                 return Response(
                     {

@@ -2,7 +2,7 @@ import os
 import pycountry
 import random,string
 from rest_framework import status
-from orders.models import Order_Table, OrderDetail,ProductModel
+from orders.models import Order_Table, OrderDetail,ProductModel,OrderLogModel
 from rest_framework.response import Response
 from orders.serializers import (
     OrderDetailSerializer,
@@ -40,11 +40,13 @@ def check_country_code_exists(number):
 
 
 def orderLogInsert(data):
-        orderLogSerializer = OrderLogSerializer(data=data)
-        if orderLogSerializer.is_valid():
-            orderInsert = orderLogSerializer.save()
-        else:
-            raise ValueError(orderLogSerializer.errors)
+        logData = OrderLogModel.objects.filter(order=data['order'],order_status=data['order_status']).first()
+        if logData is None:
+            orderLogSerializer = OrderLogSerializer(data=data)
+            if orderLogSerializer.is_valid():
+                orderInsert = orderLogSerializer.save()
+            else:
+                raise ValueError(orderLogSerializer.errors)
         
 def createOrderDetailsJson(data):
     grossTotalAmount=0
@@ -85,6 +87,7 @@ def updateOrderDetailsJson(data,id):
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data
             product['product_name']=productData['product_name']
+            product['order']=id
             product['product_price']=productData['product_price']
             product['product_total_price']=float(productData['product_price']) * int(product['product_qty']) 
             grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
@@ -138,7 +141,7 @@ def createOrders(data,user_id):
         raise ValueError(orderSerializer.errors)
     
 
-def updateOrders(id, data):
+def updateOrders(id, data,user_id):
     try:
         if 'product_details' in data:
             data=updateOrderDetailsJson(data,id)
@@ -146,6 +149,11 @@ def updateOrders(id, data):
         serializer = OrderTableSerializer(updatedData, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            orderDetailsSerializer = OrderDetailSerializer(data=data["product_details"],many=True)
+            if orderDetailsSerializer.is_valid():
+                orderDetailsSaveResponce = orderDetailsSerializer.save()
+            if 'order_status' in data:
+                orderLogInsert({"order":id,"order_status":data["order_status"],"action_by":user_id,"remark":"order updated"})
             return serializer.instance
         else:
             raise ValueError(serializer.errors)
