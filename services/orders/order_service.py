@@ -214,17 +214,17 @@ def exportOrders(user_id, data):
         end_datetime = datetime.combine(end_date, time.max)
     except ValueError as e:
         return {"error": f"Invalid date format: {str(e)}"}
+    
     if data.get('date_type') == 'created_at':
         date_filter = Q(created_at__range=(start_datetime, end_datetime))
     else:
         date_filter = Q(updated_at__range=(start_datetime, end_datetime))
-    tableData = Order_Table.objects.filter(
-        branch=userSerializedData.get("branch"),
-        company=userSerializedData.get("company"),
-        order_status=data.get('status')
-    ).filter(date_filter)
-    orderTableData = OrderTableSerializer(tableData, many=True)
-    
-    # Serialize the data
+
+    filters = Q(branch=userSerializedData.get("branch")) & Q(company=userSerializedData.get("company"))
+    filters &= date_filter
+    if data.get('status') != 0:
+        filters &= Q(order_status=data.get('status'))
+
+    tableData = Order_Table.objects.filter(filters)
     orderTableData = OrderTableSerializer(tableData, many=True)
     return orderTableData.data

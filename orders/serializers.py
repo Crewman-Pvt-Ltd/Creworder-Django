@@ -25,18 +25,20 @@ class OrderTableSerializer(serializers.ModelSerializer):
     order_created_by_username = serializers.SerializerMethodField()
     last_action_by_name = serializers.SerializerMethodField()
     last_upated_at = serializers.SerializerMethodField()
-    payment_mod = serializers.SerializerMethodField()
+    payment_mode = serializers.SerializerMethodField()
+    order_status_title = serializers.SerializerMethodField()
     class Meta:
         model = Order_Table
         fields = '__all__'  
 
     def get_order_created_by_username(self, auth):
         return auth.order_created_by.username if auth.order_created_by else None
-    
+    def get_order_status_title(self, data):
+        return data.order_status.name if data.order_status else None
     def get_last_action_by_name(self, obj):
         recent_log = OrderLogModel.objects.filter(order=obj).order_by('-updated_at').first()
         return OrderLogSerializer(recent_log).data['action_by_username'] if recent_log else None
-    def get_payment_mod(self, obj):
+    def get_payment_mode(self, obj):
         return obj.payment_type.name if obj.payment_type else None
     def get_last_upated_at(self, obj):
         recent_log = OrderLogModel.objects.filter(order=obj).order_by('-updated_at').first()
