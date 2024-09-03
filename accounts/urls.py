@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet, UserPermissionsView, UserProfileViewSet, \
-    NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, ActiveUsers
+    NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, GetSpecificUsers
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet) 
@@ -19,5 +19,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('user-permissions/', UserPermissionsView.as_view(), name="user-permissions"),
     path('self-signup/', AdminSelfSignUp.as_view(), name="self-signup"),
-    path('active-users/', ActiveUsers.as_view(), name="active-users")
+    path('specific-users/', GetSpecificUsers.as_view(), name="specific-users")
 ]
