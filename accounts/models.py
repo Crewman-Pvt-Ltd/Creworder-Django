@@ -227,9 +227,24 @@ class SupportTicket(models.Model):
     description = models.TextField(blank=False, null=False)
     status = models.IntegerField(null=False, blank=False, default=SupportTicketStatus.open,
                                  choices=SupportTicketStatus.choices)
+    ticket_id = models.CharField(max_length=80, null=True, blank=True)
     agent = models.ForeignKey(User, blank=False, null=False, related_name="support_tickets", on_delete=models.PROTECT)
     type = models.CharField(max_length=20, choices=[('ques', 'Question'), ('problem', 'Problem'),
                                                     ('gen_query', 'General Query')], blank=False, null=False)
     priority = models.CharField(max_length=15, blank=True, null=True, choices=priority_choices)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.ticket_id:
+            self.ticket_id = self.generate_ticket_id()
+        super().save(*args, **kwargs)
+
+    def generate_ticket_id(self):
+        characters = string.ascii_uppercase + string.digits
+        ticket_id = ''.join(random.choice(characters) for _ in range(10))
+
+        while SupportTicket.objects.filter(ticket_id=ticket_id).exists():
+            ticket_id = ''.join(random.choice(characters) for _ in range(10))
+
+        return ticket_id

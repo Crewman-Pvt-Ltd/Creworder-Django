@@ -9,7 +9,7 @@ import random
 class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
-        fields = ['name', 'address']
+        fields = ['name', 'address', 'company']
 
 
 class ModuleSerializer(serializers.ModelSerializer):
@@ -100,6 +100,30 @@ class UserSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user, **profile_data)
 
         return user
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+
+        instance.username = validated_data.get('username', instance.username)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+        instance.save()
+
+        if profile_data:
+            profile = instance.profile
+            profile.gender = profile_data.get('gender', profile.gender)
+            profile.contact_no = profile_data.get('contact_no', profile.contact_no)
+            profile.marital_status = profile_data.get('marital_status', profile.marital_status)
+            profile.daily_order_target = profile_data.get('daily_order_target', profile.daily_order_target)
+            profile.reporting = profile_data.get('reporting', profile.reporting)
+            profile.address = profile_data.get('address', profile.address)
+            profile.date_of_birth = profile_data.get('date_of_birth', profile.date_of_birth)
+            profile.professional_email = profile_data.get('professional_email', profile.professional_email)
+            profile.save()
+
+        return instance
 
 
 class UserSignupSerializer(serializers.ModelSerializer):

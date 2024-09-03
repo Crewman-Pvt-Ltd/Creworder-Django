@@ -24,16 +24,26 @@ class UserViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(data=serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
     def get_queryset(self):
         user = self.request.user
         queryset = User.objects.all()
         if user.role.role == "superadmin":
             queryset = User.objects.filter(role__role=user.role.role)
         elif user.role.role == "admin" or user.role.role == "agent":
-            company = user.profile.company
-            branch_id = user.profile.branch
-            queryset = User.objects.filter(company__branches=branch_id)
-            pdb.set_trace()
+            branch = user.profile.branch
+            queryset = User.objects.filter(profile__branch=branch)
         return queryset
 
 
@@ -62,6 +72,15 @@ class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer
     permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role.role == "admin" or user.role.role == "agent":
+            company = user.profile.company
+            queryset = Branch.objects.filter(company=company)
+        else:
+            queryset = Branch.objects.all()
+        return queryset
 
 
 class PackageViewSet(viewsets.ModelViewSet):
@@ -124,13 +143,20 @@ class UserPermissionsView(APIView):
         return Response(response_data)
 
 
-class ActiveUsers(APIView):
+class GetSpecificUsers(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
-        profile = UserProfile.objects.get(user=user)
-        role = UserRole.objects.get(user=user)
+
+        if user.role.role == "superadmin":
+            users = User.objects.filter(role__role="admin")
+        elif user.role.role == "admin":
+            company = user.profile.company
+            users = User.objects.filter(profile__company=company)
+        users_data = UserSerializer(users, many=True)
+        # pdb.set_trace()
+        return Response({"results": users_data.data})
 
 
 class AdminSelfSignUp(APIView):
