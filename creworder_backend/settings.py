@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'chat',
     'follow_up',
     'cloud_telephony',
+    'lead_management',
 ]
 
 MIDDLEWARE = [

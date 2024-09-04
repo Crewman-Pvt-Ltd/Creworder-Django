@@ -1,7 +1,8 @@
 import os
+import pycountry
 import random,string
 from rest_framework import status
-from orders.models import Order_Table, OrderDetail,ProductModel
+from orders.models import Order_Table, OrderDetail,ProductModel,OrderLogModel
 from rest_framework.response import Response
 from orders.serializers import (
     OrderDetailSerializer,
@@ -16,8 +17,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import NotFound
 from phonenumbers.phonenumberutil import country_code_for_region,region_code_for_number,parse
 from phonenumbers import NumberParseException
-import pycountry
 from utils.custom_logger import get_logger
+from django.db.models import Q
+from datetime import datetime,time
 logger = get_logger(os.path.abspath(__file__).split("/")[-1][:-3])
 def check_country_code_exists(number):
     try:
@@ -38,11 +40,13 @@ def check_country_code_exists(number):
 
 
 def orderLogInsert(data):
-        orderLogSerializer = OrderLogSerializer(data=data)
-        if orderLogSerializer.is_valid():
-            orderInsert = orderLogSerializer.save()
-        else:
-            raise ValueError(orderLogSerializer.errors)
+        logData = OrderLogModel.objects.filter(order=data['order'],order_status=data['order_status']).first()
+        if logData is None:
+            orderLogSerializer = OrderLogSerializer(data=data)
+            if orderLogSerializer.is_valid():
+                orderInsert = orderLogSerializer.save()
+            else:
+                raise ValueError(orderLogSerializer.errors)
         
 def createOrderDetailsJson(data):
     grossTotalAmount=0
@@ -83,6 +87,7 @@ def updateOrderDetailsJson(data,id):
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data
             product['product_name']=productData['product_name']
+            product['order']=id
             product['product_price']=productData['product_price']
             product['product_total_price']=float(productData['product_price']) * int(product['product_qty']) 
             grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
@@ -136,7 +141,7 @@ def createOrders(data,user_id):
         raise ValueError(orderSerializer.errors)
     
 
-def updateOrders(id, data):
+def updateOrders(id, data,user_id):
     try:
         if 'product_details' in data:
             data=updateOrderDetailsJson(data,id)
@@ -144,6 +149,11 @@ def updateOrders(id, data):
         serializer = OrderTableSerializer(updatedData, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            orderDetailsSerializer = OrderDetailSerializer(data=data["product_details"],many=True)
+            if orderDetailsSerializer.is_valid():
+                orderDetailsSaveResponce = orderDetailsSerializer.save()
+            if 'order_status' in data:
+                orderLogInsert({"order":id,"order_status":data["order_status"],"action_by":user_id,"remark":"order updated"})
             return serializer.instance
         else:
             raise ValueError(serializer.errors)
@@ -187,3 +197,34 @@ def getOrderDetails(usrid,id=None):
         return orderTableData.data
     except ObjectDoesNotExist:
         return False
+        
+def exportOrders(user_id, data):
+    userData = UserProfile.objects.filter(user_id=user_id).first()
+    if not userData:
+        return {"error": "User not found"}
+    serializer = UserProfileSerializer(userData)
+    userSerializedData = serializer.data
+    date_range = data.get('data_range', '').split(' - ')
+    if len(date_range) != 2:
+        return {"error": "Invalid date range format"}
+    try:
+        start_date = datetime.strptime(date_range[0], '%m/%d/%Y')
+        end_date = datetime.strptime(date_range[1], '%m/%d/%Y')
+        start_datetime = datetime.combine(start_date, time.min)
+        end_datetime = datetime.combine(end_date, time.max)
+    except ValueError as e:
+        return {"error": f"Invalid date format: {str(e)}"}
+    
+    if data.get('date_type') == 'created_at':
+        date_filter = Q(created_at__range=(start_datetime, end_datetime))
+    else:
+        date_filter = Q(updated_at__range=(start_datetime, end_datetime))
+
+    filters = Q(branch=userSerializedData.get("branch")) & Q(company=userSerializedData.get("company"))
+    filters &= date_filter
+    if data.get('status') != 0:
+        filters &= Q(order_status=data.get('status'))
+
+    tableData = Order_Table.objects.filter(filters)
+    orderTableData = OrderTableSerializer(tableData, many=True)
+    return orderTableData.data
