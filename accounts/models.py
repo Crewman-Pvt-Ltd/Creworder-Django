@@ -85,7 +85,6 @@ class Company(models.Model):
     bank_ifsc_code = models.CharField(max_length=40, null=True, blank=True)
     support_email = models.EmailField(max_length=100, null=True, blank=True)
 
-
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
             raise PermissionDenied("Only superadmins can create companies.")
@@ -269,3 +268,78 @@ class SupportTicket(models.Model):
 
     def __str__(self):
         return self.ticket_id
+
+
+class Department(models.Model):
+    name = models.CharField(max_length=200, null=False, blank=False, unique=True)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="departments")
+
+    def __str__(self):
+        return self.name
+
+
+class Designation(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False, unique=True)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=False, blank=False, related_name="designations")
+
+    def __str__(self):
+        return self.name
+
+
+class Leave(models.Model):
+    duration_choices = [
+        ('full', 'Full Day'),
+        ('first', 'First Half'),
+        ('second', 'Second Half')
+    ]
+
+    type_choices = [
+        ('casual', 'Casual'),
+        ('sick', 'Sick'),
+        ('earned', 'Earned')
+    ]
+
+    status_choices = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved')
+    ]
+
+    user = models.ForeignKey(User, related_name="leaves", on_delete=models.CASCADE, null=False, blank=False)
+    duration = models.CharField(max_length=30, null=True, blank=True, choices=duration_choices)
+    type = models.CharField(max_length=30, null=False, blank=False, choices=type_choices)
+    status = models.CharField(max_length=30, null=False, blank=False, choices=status_choices)
+    reason = models.CharField(max_length=500, null=False, blank=False)
+    date = models.DateField(null=True, blank=True)
+    attachment = models.ImageField(upload_to='leave_attachments/', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.reason}'
+
+
+class Holiday(models.Model):
+    occasion = models.CharField(max_length=100, null=False, blank=False)
+    date = models.DateField(null=False, blank=False)
+    department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.PROTECT)
+    designation = models.ForeignKey(Designation, null=False, blank=False, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f'{self.occasion} - {self.date}'
+
+
+class Award(models.Model):
+    title = models.CharField(max_length=120, null=False, blank=False, unique=True)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=False, blank=False, related_name="awards")
+    summary = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.title} - {self.branch.branch_id}'
+
+
+class Appreciation(models.Model):
+    award = models.ForeignKey(Award, on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(User, related_name="appreciations", null=False, blank=False, on_delete=models.CASCADE)
+    date_given = models.DateField(null=False, blank=False)
+    summary = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.award.title} - {self.user.username}'

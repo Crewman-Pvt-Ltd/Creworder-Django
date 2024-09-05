@@ -1,7 +1,8 @@
 import pdb
 
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
+    Department, Designation, Leave, Holiday, Award, Appreciation
 import string
 import random
 
@@ -93,8 +94,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop("profile")
         role_data = validated_data.pop("role")
+        pdb.set_trace()
 
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        print(password)
         user = User.objects.create_user(password=password, **validated_data)
 
         UserRole.objects.create(user=user, **role_data)
@@ -104,6 +107,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
+        pdb.set_trace()
 
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -114,14 +118,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         if profile_data:
             profile = instance.profile
-            profile.gender = profile_data.get('gender', profile.gender)
-            profile.contact_no = profile_data.get('contact_no', profile.contact_no)
-            profile.marital_status = profile_data.get('marital_status', profile.marital_status)
-            profile.daily_order_target = profile_data.get('daily_order_target', profile.daily_order_target)
-            profile.reporting = profile_data.get('reporting', profile.reporting)
-            profile.address = profile_data.get('address', profile.address)
-            profile.date_of_birth = profile_data.get('date_of_birth', profile.date_of_birth)
-            profile.professional_email = profile_data.get('professional_email', profile.professional_email)
+            pdb.set_trace()
+            for attr, value in profile_data.items():
+                setattr(profile, attr, value)
             profile.save()
 
         return instance
@@ -159,4 +158,40 @@ class UserSignupSerializer(serializers.ModelSerializer):
 class SupportTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = SupportTicket
+        fields = '__all__'
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+
+class DesignationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Designation
+        fields = '__all__'
+
+
+class LeaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Leave
+        fields = '__all__'
+
+
+class HolidaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Holiday
+        fields = '__all__'
+
+
+class AwardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Award
+        fields = '__all__'
+
+
+class AppreciationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appreciation
         fields = '__all__'
