@@ -9,6 +9,12 @@ from .models import Branch
 from .models import Module
 from .models import FormEnquiry
 from .models import SupportTicket
+from .models import Department
+from .models import Designation
+from .models import Leave
+from .models import Holiday
+from .models import Award
+from .models import Appreciation
 
 admin.site.register(Company)
 admin.site.register(Package)
@@ -19,4 +25,10 @@ admin.site.register(Branch)
 admin.site.register(Module)
 admin.site.register(FormEnquiry)
 admin.site.register(SupportTicket)
+admin.site.register(Department)
+admin.site.register(Designation)
+admin.site.register(Leave)
+admin.site.register(Holiday)
+admin.site.register(Award)
+admin.site.register(Appreciation)
 

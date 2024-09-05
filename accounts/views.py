@@ -5,10 +5,12 @@ from rest_framework.exceptions import PermissionDenied
 from guardian.shortcuts import get_objects_for_user
 import pdb
 
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module
+from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
+    Department, Designation, Leave, Holiday, Award, Appreciation
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
-    SupportTicketSerializer, ModuleSerializer
+    SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
+    HolidaySerializer, AwardSerializer, AppreciationSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 
@@ -31,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
         serializer.save()
@@ -43,7 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
             queryset = User.objects.filter(role__role=user.role.role)
         elif user.role.role == "admin" or user.role.role == "agent":
             branch = user.profile.branch
-            queryset = User.objects.filter(profile__branch=branch)
+            queryset = User.objects.filter(profile__branch=branch).exclude(id=user.id)
         return queryset
 
 
@@ -106,6 +108,11 @@ class NoticeViewSet(viewsets.ModelViewSet):
     serializer_class = NoticeSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Notice.objects.filter(created_by=user)
+        return queryset
+
 
 class UserPermissionsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -117,29 +124,7 @@ class UserPermissionsView(APIView):
         profile = UserProfileSerializer(user.profile, many=False).data
         user_data['profile'] = profile
         role = user.role.role
-        # permissions = {
-        #     'can_create_company': user.role.role == 'superadmin',
-        #     'can_create_package': user.role.role == 'superadmin',
-        #     'can_manage_services': user.role.role in ['admin', 'agent']
-        # }
         response_data = {"user": user_data, "role": role, "permissions": guardian_permissions}
-        # company = user.role.company
-        # if company:
-        #     package = company.package
-        #     modules = package.modules.all()
-        #     module_data = [{"id": module.id, "name": module.name} for module in modules]
-        # else:
-        module_data = []
-
-        # return Response({
-        #     "user": user_data,
-        #     "role": role,
-        #     # "company": company.id if company else None,
-        #     # "modules": module_data,
-        #     "permissions": permissions,
-        #
-        # })
-
         return Response(response_data)
 
 
@@ -190,3 +175,49 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
 class ModuleViewSet(viewsets.ModelViewSet):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
+
+
+class GetNoticesForUser(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = user.notices.all()
+        serialized_data = NoticeSerializer(data, many=True).data
+        return Response({"results": serialized_data})
+
+
+class DepartmentViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DesignationViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Designation.objects.all()
+    serializer_class = DesignationSerializer
+
+
+class LeaveViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Leave.objects.all()
+    serializer_class = LeaveSerializer
+
+
+class HolidayViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Holiday.objects.all()
+    serializer_class = HolidaySerializer
+
+
+class AwardViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Award.objects.all()
+    serializer_class = AwardSerializer
+
+
+class AppreciationViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Appreciation.objects.all()
+    serializer_class = AppreciationSerializer
