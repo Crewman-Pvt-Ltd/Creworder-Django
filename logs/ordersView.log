@@ -5,3 +5,59 @@
     raise ValueError("Phone number exists")
 ValueError: Phone number exists
 
+2024-09-04 18:23:57,184 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 116, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-04 18:30:21,178 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 116, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-04 18:36:07,844 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 116, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-05 11:38:21,881 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 118, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-05 13:45:25,292 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 117, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-05 13:50:55,318 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 117, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-05 14:23:50,133 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 120, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+
+2024-09-05 14:23:55,478 - ordersView - ERROR - Traceback (most recent call last):
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 31, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 120, in createOrders
+    raise ValueError("Phone number exists")
+ValueError: Phone number exists
+

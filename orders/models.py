@@ -131,6 +131,8 @@ class Order_Table(models.Model):
     service_provider = models.CharField(max_length=50, null=True, blank=True)
     call_id = models.CharField(max_length=50, null=True, blank=True)
     course_order = models.IntegerField(default=0)
+    product_qty = models.IntegerField(default=0)
+    shipping_charges = models.IntegerField(default=0)
     course_order_repeated = models.IntegerField(default=0)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, default=1)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)  
@@ -146,8 +148,11 @@ class OrderDetail(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT,default=1)
     product_name = models.CharField(max_length=255, default='0')
     product_qty = models.IntegerField()
-    product_price = models.FloatField()
-    product_total_price = models.FloatField()
+    product_mrp = models.FloatField(null=True, blank=True)
+    product_price = models.FloatField(null=True, blank=True)
+    gst_amount = models.FloatField(null=True, blank=True)
+    taxeble_amount = models.FloatField(null=True, blank=True)
+    product_total_price = models.FloatField(null=True, blank=True)
     class Meta:
         db_table = 'orders_details_table'
     def __str__(self):
