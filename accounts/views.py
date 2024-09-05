@@ -153,7 +153,7 @@ class GetSpecificUsers(APIView):
             users = User.objects.filter(role__role="admin")
         elif user.role.role == "admin":
             company = user.profile.company
-            users = User.objects.filter(profile__company=company)
+            users = User.objects.filter(profile__company=company).exclude(id=user.id)
         users_data = UserSerializer(users, many=True)
         # pdb.set_trace()
         return Response({"results": users_data.data})

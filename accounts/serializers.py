@@ -27,7 +27,8 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = ['id', 'name', 'company_email', 'company_phone', 'company_website', 'company_address', 'status',
                   'created_at', 'updated_at', 'company_id', 'company_image', 'package_name', 'package', 'payment_mode',
-                  'total_user_count', 'branches']
+                  'total_user_count', 'branches', 'gst', 'pan', 'cin', 'fssai', 'bank_account_no', 'bank_account_type',
+                  'bank_name', 'bank_branch_name', 'bank_ifsc_code', 'support_email']
 
     def get_total_user_count(self, obj):
         count = UserProfile.objects.filter(company_id=obj.id).count()

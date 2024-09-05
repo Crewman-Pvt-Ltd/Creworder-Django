@@ -7,6 +7,8 @@ from .models import UserProfile
 from .models import Notice
 from .models import Branch
 from .models import Module
+from .models import FormEnquiry
+from .models import SupportTicket
 
 admin.site.register(Company)
 admin.site.register(Package)
@@ -15,3 +17,6 @@ admin.site.register(UserProfile)
 admin.site.register(Notice)
 admin.site.register(Branch)
 admin.site.register(Module)
+admin.site.register(FormEnquiry)
+admin.site.register(SupportTicket)
+

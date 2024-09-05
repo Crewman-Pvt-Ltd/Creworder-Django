@@ -58,6 +58,7 @@ class Company(models.Model):
         )
 
     payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('annual', 'Annually')]
+    account_type_choices = [('current', 'Current Account'), ('savings', 'Savings Account')]
 
     name = models.CharField(max_length=100, blank=False)
     company_email = models.EmailField(max_length=100, blank=False, unique=True, null=False)
@@ -73,6 +74,17 @@ class Company(models.Model):
     company_image = models.ImageField(upload_to='company_images/', blank=True, null=True)
     payment_mode = models.CharField(max_length=20, blank=True, null=True, choices=payment_freq)
     next_payment_date = models.DateTimeField(null=True, blank=True)
+    gst = models.CharField(max_length=60, null=True, blank=True)
+    pan = models.CharField(max_length=60, null=True, blank=True)
+    cin = models.CharField(max_length=60, null=True, blank=True)
+    fssai = models.CharField(max_length=60, null=True, blank=True)
+    bank_account_no = models.IntegerField(null=True, blank=True)
+    bank_account_type = models.CharField(max_length=20, null=True, blank=True, choices=account_type_choices)
+    bank_name = models.CharField(max_length=120, null=True, blank=True)
+    bank_branch_name = models.CharField(max_length=120, null=True, blank=True)
+    bank_ifsc_code = models.CharField(max_length=40, null=True, blank=True)
+    support_email = models.EmailField(max_length=100, null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -176,9 +188,9 @@ class UserProfile(models.Model):
         if self.user.role.role == "superadmin":
             prefix = "SUPER"
         elif self.user.role.role == "admin" or self.user.role.role == "agent":
-            prefix = str(self.user.profile.company.company_id).upper()
+            prefix = str(self.user.profile.company.company_id).upper()[:4]
 
-        length = 15 - len(prefix)
+        length = 8 - len(prefix)
         characters = string.digits
         random_suffix = ''.join(random.choice(characters) for _ in range(length))
         return prefix + random_suffix
@@ -200,12 +212,18 @@ class Notice(models.Model):
 
 
 class FormEnquiry(models.Model):
+    class Meta:
+        verbose_name_plural = "Form Enquiries"
+
     name = models.CharField(max_length=70, blank=False, null=False)
     phone = PhoneNumberField(null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
     message = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.id
 
 
 class SupportTicketStatus(models.IntegerChoices):
@@ -248,3 +266,6 @@ class SupportTicket(models.Model):
             ticket_id = ''.join(random.choice(characters) for _ in range(10))
 
         return ticket_id
+
+    def __str__(self):
+        return self.ticket_id
