@@ -2,7 +2,7 @@ import pdb
 
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
 import string
 import random
 
@@ -194,4 +194,16 @@ class AwardSerializer(serializers.ModelSerializer):
 class AppreciationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appreciation
+        fields = '__all__'
+
+
+class ShiftSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shift
+        fields = '__all__'
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
         fields = '__all__'
