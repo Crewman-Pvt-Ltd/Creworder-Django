@@ -32,8 +32,8 @@ class Package(models.Model):
     max_employees = models.IntegerField(blank=False, null=False, default=5)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     max_admin = models.IntegerField(blank=True, null=True)
     setup_fees = models.IntegerField(blank=True, null=True)
     modules = models.ManyToManyField(Module, related_name='packages')
@@ -68,12 +68,12 @@ class Company(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE, default=1)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     company_id = models.CharField(max_length=50, blank=True, null=True)
     company_image = models.ImageField(upload_to='company_images/', blank=True, null=True)
     payment_mode = models.CharField(max_length=20, blank=True, null=True, choices=payment_freq)
-    next_payment_date = models.DateTimeField(null=True, blank=True)
+    next_payment_date = models.DateField(null=True, blank=True)
     gst = models.CharField(max_length=60, null=True, blank=True)
     pan = models.CharField(max_length=60, null=True, blank=True)
     cin = models.CharField(max_length=60, null=True, blank=True)
@@ -113,8 +113,8 @@ class Branch(models.Model):
     branch_id = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=255, blank=False, null=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="branches")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     def generate_branch_id(self):
         prefix = self.company.company_id
@@ -159,13 +159,20 @@ class UserProfile(models.Model):
         ('t', 'Transgender')
     ]
 
+    employment_choices = [
+        ('full', 'Full Time'),
+        ('part', 'Part Time'),
+        ('trainee', 'Trainee'),
+        ('intern', 'Internship')
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     status = models.IntegerField(choices=UserStatus.choices, default=UserStatus.active)
     gender = models.CharField(max_length=2, choices=gender_choices, default="m")
     contact_no = PhoneNumberField(null=False, unique=True, blank=False)
     marital_status = models.CharField(max_length=20, choices=[('married', "Married"), ('unmarried', "Unmarried")],
                                       default="unmarried")
-    date_of_joining = models.DateTimeField(auto_now_add=True)
+    date_of_joining = models.DateField(auto_now_add=True)
     daily_order_target = models.IntegerField(blank=True, null=True)
     reporting = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     address = models.TextField(null=True, blank=True)
@@ -176,6 +183,12 @@ class UserProfile(models.Model):
     professional_email = models.EmailField(null=True, blank=True)
     enrolment_id = models.CharField(max_length=50, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+    department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name="department_wise_users",
+                                   null=True, blank=True)
+    designation = models.ForeignKey('Designation', on_delete=models.PROTECT, related_name='designation_wise_users',
+                                    null=True, blank=True)
+    login_allowed = models.BooleanField(default=False)
+    employment_type = models.CharField(max_length=30, null=True, blank=True, choices=employment_choices)
 
     def save(self, *args, **kwargs):
         if not self.employee_id:
@@ -201,8 +214,8 @@ class UserProfile(models.Model):
 class Notice(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     description = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     created_by = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
     users = models.ManyToManyField(User, related_name='notices')
 
@@ -218,8 +231,8 @@ class FormEnquiry(models.Model):
     phone = PhoneNumberField(null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
     message = models.TextField(blank=False, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.id
@@ -249,8 +262,8 @@ class SupportTicket(models.Model):
     type = models.CharField(max_length=20, choices=[('ques', 'Question'), ('problem', 'Problem'),
                                                     ('gen_query', 'General Query')], blank=False, null=False)
     priority = models.CharField(max_length=15, blank=True, null=True, choices=priority_choices)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if not self.ticket_id:
@@ -321,6 +334,7 @@ class Holiday(models.Model):
     date = models.DateField(null=False, blank=False)
     department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.PROTECT)
     designation = models.ForeignKey(Designation, null=False, blank=False, on_delete=models.PROTECT)
+    branch = models.ForeignKey(Branch, null=True, blank=True, related_name="holidays", on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.occasion} - {self.date}'
@@ -343,3 +357,30 @@ class Appreciation(models.Model):
 
     def __str__(self):
         return f'{self.award.title} - {self.user.username}'
+
+
+class Shift(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    branch = models.ForeignKey(Branch, null=False, blank=False, related_name="shifts", on_delete=models.CASCADE)
+    start_time = models.TimeField(null=False, blank=False)
+    end_time = models.TimeField(null=False, blank=False)
+
+    def __str__(self):
+        return f'{self.name} - {self.branch.branch_id}'
+
+
+class Attendance(models.Model):
+    working_choices = [
+        ('home', 'Home'),
+        ('office', 'Office'),
+        ('other', 'Other')
+    ]
+
+    date = models.DateField(null=False, blank=False)
+    user = models.ForeignKey(User, related_name="attendances", null=False, blank=False, on_delete=models.CASCADE)
+    clock_in = models.TimeField(null=False, blank=False)
+    clock_out = models.TimeField(null=False, blank=False)
+    working_from = models.CharField(max_length=80, null=False, blank=False, choices=working_choices, default="office")
+
+    def __str__(self):
+        return f'{self.user.username} - {self.date}'

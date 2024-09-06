@@ -6,11 +6,11 @@ from guardian.shortcuts import get_objects_for_user
 import pdb
 
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
-    HolidaySerializer, AwardSerializer, AppreciationSerializer
+    HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 
@@ -221,3 +221,28 @@ class AppreciationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Appreciation.objects.all()
     serializer_class = AppreciationSerializer
+
+
+class ShiftViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+
+
+class AttendanceViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer
+
+
+class Testing(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        # attendances = user.attendances.all()
+        # queryset = AttendanceSerializer(attendances, many=True).data
+        appreciations = user.appreciations.all()
+        queryset = AppreciationSerializer(appreciations, many=True).data
+        pdb.set_trace()
+        return Response({"results": queryset})

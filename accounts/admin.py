@@ -15,6 +15,8 @@ from .models import Leave
 from .models import Holiday
 from .models import Award
 from .models import Appreciation
+from .models import Shift
+from .models import Attendance
 
 admin.site.register(Company)
 admin.site.register(Package)
@@ -31,4 +33,6 @@ admin.site.register(Leave)
 admin.site.register(Holiday)
 admin.site.register(Award)
 admin.site.register(Appreciation)
+admin.site.register(Shift)
+admin.site.register(Attendance)
 
