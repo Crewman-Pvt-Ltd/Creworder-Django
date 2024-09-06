@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'follow_up',
     'cloud_telephony',
     'lead_management',
+    'shipment',
 ]
 
 MIDDLEWARE = [
