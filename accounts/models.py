@@ -354,6 +354,7 @@ class Appreciation(models.Model):
     user = models.ForeignKey(User, related_name="appreciations", null=False, blank=False, on_delete=models.CASCADE)
     date_given = models.DateField(null=False, blank=False)
     summary = models.CharField(max_length=500, null=True, blank=True)
+    award_image = models.ImageField(upload_to='award_images/', blank=True, null=True)
 
     def __str__(self):
         return f'{self.award.title} - {self.user.username}'
@@ -377,6 +378,7 @@ class Attendance(models.Model):
     ]
 
     date = models.DateField(null=False, blank=False)
+    shift = models.ForeignKey(Shift, on_delete=models.PROTECT, related_name="shift_wise_attendances", null=True)
     user = models.ForeignKey(User, related_name="attendances", null=False, blank=False, on_delete=models.CASCADE)
     clock_in = models.TimeField(null=False, blank=False)
     clock_out = models.TimeField(null=False, blank=False)

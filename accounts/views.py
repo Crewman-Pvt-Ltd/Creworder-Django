@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from guardian.shortcuts import get_objects_for_user
 import pdb
+from datetime import datetime
+import random
 
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
@@ -233,6 +235,43 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
+
+
+class GetUsernameSuggestions(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def generate_username_suggestions(self, firstname, lastname, date_of_birth):
+        base_username = (firstname[::-1] + lastname[:random.randint(1, 5)] + date_of_birth.strftime('%Y')).lower()
+        base_username = base_username[:20]
+
+        existing_usernames = set(
+            User.objects.filter(username__startswith=base_username)
+            .values_list('username', flat=True)
+        )
+
+        suggestions = []
+        for i in range(1, 30):
+            suggestion = base_username[:15] + str(random.randint(100, 999))
+            if suggestion not in existing_usernames and len(suggestions) < 5:
+                suggestions.append(suggestion)
+            if len(suggestions) == 5:
+                break
+
+        return suggestions
+
+    def post(self, request):
+        firstname = request.data.get('firstname', '')
+        lastname = request.data.get('lastname', '')
+        date_of_birth = request.data.get('date_of_birth', '')
+
+        try:
+            dob = datetime.strptime(date_of_birth, '%Y-%m-%d')
+        except ValueError:
+            return Response({"error": "Invalid date_of_birth format. Use 'YYYY-MM-DD'."}, status=400)
+
+        suggestions = self.generate_username_suggestions(firstname, lastname, dob)
+
+        return Response({"results": suggestions})
 
 
 class Testing(APIView):
