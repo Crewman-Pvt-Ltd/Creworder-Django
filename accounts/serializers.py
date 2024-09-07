@@ -10,7 +10,7 @@ import random
 class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
-        fields = ['name', 'address', 'company']
+        fields = ['name', 'address', 'company', 'id']
 
 
 class ModuleSerializer(serializers.ModelSerializer):
