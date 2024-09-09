@@ -301,12 +301,6 @@ class Designation(models.Model):
 
 
 class Leave(models.Model):
-    permissions = (
-            ('can_view_own_company', 'Can view own company'),
-            ('can_edit_own_company', 'Can edit own company'),
-            ('can_delete_own_company', 'Can delete own company'),
-            ('can_manage_own_company', 'Can manage own company'),
-        )
     duration_choices = [
         ('full', 'Full Day'),
         ('first', 'First Half'),
@@ -321,7 +315,8 @@ class Leave(models.Model):
 
     status_choices = [
         ('pending', 'Pending'),
-        ('approved', 'Approved')
+        ('approved', 'Approved'),
+        ('disapprove','Disapprove')
     ]
 
     user = models.ForeignKey(User, related_name="leaves", on_delete=models.CASCADE, null=False, blank=False)

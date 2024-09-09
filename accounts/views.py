@@ -18,7 +18,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPe
 from django.db.models import Q, Count
 from datetime import datetime, time
 from dj_rest_auth.views import LoginView
-from .permissions import CanChangeCompanyStatusPermission
+from .permissions import CanChangeCompanyStatusPermission,CanLeaveApproveAndDisapprove
 
 
 class IPRestrictedLoginView(LoginView):
@@ -264,10 +264,20 @@ class DesignationViewSet(viewsets.ModelViewSet):
 
 
 class LeaveViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
     queryset = Leave.objects.all()
     serializer_class = LeaveSerializer
 
+    @action(detail=True, methods=['put'],permission_classes=[CanLeaveApproveAndDisapprove])
+    def leave_action(self, request, pk=None):
+        leave = self.get_object()
+        if 'status' not in request.data:
+            raise ValidationError({"detail": "The status field is required."})
+        leave_status = request.data['status']
+        leave.status = leave_status
+        leave.save()
+
+        return Response({"detail": "Status changed successfully."}, status=status.HTTP_200_OK)
 
 class HolidayViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
