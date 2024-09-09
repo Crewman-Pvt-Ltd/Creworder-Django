@@ -17,6 +17,7 @@ from .models import Award
 from .models import Appreciation
 from .models import Shift
 from .models import Attendance
+from .models import AllowedIP
 
 admin.site.register(Company)
 admin.site.register(Package)
@@ -35,4 +36,5 @@ admin.site.register(Award)
 admin.site.register(Appreciation)
 admin.site.register(Shift)
 admin.site.register(Attendance)
+admin.site.register(AllowedIP)
 

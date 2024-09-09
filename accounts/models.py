@@ -55,6 +55,7 @@ class Company(models.Model):
             ('can_edit_own_company', 'Can edit own company'),
             ('can_delete_own_company', 'Can delete own company'),
             ('can_manage_own_company', 'Can manage own company'),
+            ('can_change_company_status', 'Can change company status')
         )
 
     payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('annual', 'Annually')]
@@ -396,6 +397,15 @@ class Attendance(models.Model):
     clock_in = models.TimeField(null=False, blank=False)
     clock_out = models.TimeField(null=False, blank=False)
     working_from = models.CharField(max_length=80, null=False, blank=False, choices=working_choices, default="office")
-    attendance=models.CharField(choices=attendance,max_length=80,default="A",null=False, blank=False,)
+    attendance = models.CharField(choices=attendance, max_length=80, default="A", null=False, blank=False, )
+
     def __str__(self):
         return f'{self.user.username} - {self.date}'
+
+
+class AllowedIP(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="allowed_ip")
+    ip_address = models.GenericIPAddressField()
+
+    def __str__(self):
+        return f"{self.ip_address} for {self.branch.branch_id}"

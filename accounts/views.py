@@ -8,15 +8,52 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
-from django.db.models import Q,Count
+from django.db.models import Q, Count
 from datetime import datetime, time
+from dj_rest_auth.views import LoginView
+from .permissions import CanChangeCompanyStatusPermission
+
+
+class IPRestrictedLoginView(LoginView):
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+
+        if username:
+            try:
+                user = User.objects.get(username=username)
+                branch = user.profile.branch
+
+                ip_address = self.get_client_ip(request)
+                pdb.set_trace()
+
+                # Check if the IP address is allowed for the user's branch
+                if not AllowedIP.objects.filter(branch=branch, ip_address=ip_address).exists():
+                    return Response({'error': 'Login from this IP address is not allowed'},
+                                    status=status.HTTP_403_FORBIDDEN)
+
+            except User.DoesNotExist:
+                # Proceed with the standard response, the user may not exist
+                pass
+
+        # Call the original login logic after IP is validated
+        return super().post(request, *args, **kwargs)
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -72,9 +109,8 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[CanChangeCompanyStatusPermission])
     def change_status(self, request, pk=None):
-
         company = self.get_object()
         if 'status' not in request.data:
             raise ValidationError({"detail": "The status field is required."})
@@ -262,8 +298,10 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
 
+
 class AttendanceView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         date_range = request.data['date_range'].split(' - ')
         if len(date_range) != 2:
@@ -277,7 +315,7 @@ class AttendanceView(APIView):
             start_datetime = datetime.combine(start_date, time.min)
             end_datetime = datetime.combine(end_date, time.max)
             date_filter = Q(date__range=(start_datetime, end_datetime))
-            tableData = Attendance.objects.filter(date_filter,user=request.user.id)
+            tableData = Attendance.objects.filter(date_filter, user=request.user.id)
             attendance_counts = tableData.values('user__username').annotate(
                 total_absent=Count('id', filter=Q(attendance='A')),
                 total_present=Count('id', filter=Q(attendance='P'))
@@ -303,6 +341,7 @@ class AttendanceView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
 class GetUsernameSuggestions(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -312,7 +351,7 @@ class GetUsernameSuggestions(APIView):
 
         existing_usernames = set(
             User.objects.filter(username__startswith=base_username)
-            .values_list('username', flat=True)
+                .values_list('username', flat=True)
         )
 
         suggestions = []
