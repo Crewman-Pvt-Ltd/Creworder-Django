@@ -15,5 +15,6 @@ urlpatterns = [
     path('products/', views.ProductListCreateAPIView.as_view(), name='product-detail'),
     path('getCategory/<int:pk>', views.CategorytDetailAPIView.as_view(), name='category-detail'),
     path('getCategory/', views.CategoryListCreateAPIView.as_view(), name='category-detail'),
-    path('export-order/', views.orderExport.as_view(), name='category-detail'),
+    path('export-order/', views.orderExport.as_view(), name='export-order'),
+    path('invoice-deatails/', views.invoiceDetails.as_view(), name='invoice-deatails'),
 ]

@@ -8,7 +8,8 @@ from orders.serializers import (
     OrderDetailSerializer,
     OrderTableSerializer,
     OrderLogSerializer,
-    ProductSerializer
+    ProductSerializer,
+    InvoiceSerializer
 )
 from django.core.exceptions import ObjectDoesNotExist
 from accounts.models import UserProfile
@@ -50,20 +51,27 @@ def orderLogInsert(data):
         
 def createOrderDetailsJson(data):
     grossTotalAmount=0
+    product_qty=0
     for product in data["product_details"]:
         try:
             products = ProductModel.objects.filter(id=product['product']).first()
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data
+            total_product_amount=int(productData['product_price']) * int(product['product_qty'])
+            product_actual_price=int(total_product_amount) / (1 + (int(productData['product_gst_percent']) / 100))
             product['product_name']=productData['product_name']
-            product['product_price']=productData['product_price']
-            product['product_total_price']=float(productData['product_price']) * int(product['product_qty'])
+            product['product_price']=int(product_actual_price)
+            product['product_total_price']=int(int(total_product_amount) / (1 + (int(productData['product_gst_percent']) / 100)))
+            product['product_mrp']=int(total_product_amount)
+            product['gst_amount']=int(total_product_amount)-int(product_actual_price)
+            product['taxeble_amount']=int(total_product_amount)-int(product_actual_price)
             grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
+            product_qty+=int(product['product_qty'])
         except:
             print("error")
     data['gross_amount']=grossTotalAmount
+    data['product_qty']=product_qty
     data['total_amount']=float(grossTotalAmount)-float(data['discount'])-float(data['prepaid_amount'])
-
     return data
 
 def updateOrderDetailsJson(data,id):
@@ -72,6 +80,7 @@ def updateOrderDetailsJson(data,id):
     orderDetailsData.delete()
     discount=0
     prepaid_amount=0
+    product_qty=0
     if 'discount' not in data or 'prepaid_amount' not in data:
         orderData = Order_Table.objects.filter(id=id).first()
         orderSerializerData = OrderTableSerializer(orderData)
@@ -86,14 +95,21 @@ def updateOrderDetailsJson(data,id):
             products = ProductModel.objects.filter(id=product['product']).first()
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data
-            product['product_name']=productData['product_name']
+            total_product_amount=int(productData['product_price']) * int(product['product_qty'])
+            product_actual_price=int(total_product_amount) / (1 + (int(productData['product_gst_percent']) / 100))
             product['order']=id
-            product['product_price']=productData['product_price']
-            product['product_total_price']=float(productData['product_price']) * int(product['product_qty']) 
+            product['product_name']=productData['product_name']
+            product['product_price']=int(product_actual_price)
+            product['product_total_price']=int(int(total_product_amount) / (1 + (int(productData['product_gst_percent']) / 100)))
+            product['product_mrp']=int(total_product_amount)
+            product['gst_amount']=int(total_product_amount)-int(product_actual_price)
+            product['taxeble_amount']=int(total_product_amount)-int(product_actual_price)
             grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
+            product_qty+=int(product['product_qty'])
         except:
             print("error")
     data['gross_amount']=grossTotalAmount
+    data['product_qty']=product_qty
     data['total_amount']=float(grossTotalAmount)-float(discount)-float(prepaid_amount)
     return data
 
@@ -227,4 +243,10 @@ def exportOrders(user_id, data):
 
     tableData = Order_Table.objects.filter(filters)
     orderTableData = OrderTableSerializer(tableData, many=True)
+    return orderTableData.data
+
+
+def ivoiceDeatail(user_id, data):
+    tableData = Order_Table.objects.filter(order_id__in=data['invoices'])
+    orderTableData = InvoiceSerializer(tableData, many=True)
     return orderTableData.data
