@@ -300,6 +300,12 @@ class Designation(models.Model):
 
 
 class Leave(models.Model):
+    permissions = (
+            ('can_view_own_company', 'Can view own company'),
+            ('can_edit_own_company', 'Can edit own company'),
+            ('can_delete_own_company', 'Can delete own company'),
+            ('can_manage_own_company', 'Can manage own company'),
+        )
     duration_choices = [
         ('full', 'Full Day'),
         ('first', 'First Half'),
@@ -324,6 +330,10 @@ class Leave(models.Model):
     reason = models.CharField(max_length=500, null=False, blank=False)
     date = models.DateField(null=True, blank=True)
     attachment = models.ImageField(upload_to='leave_attachments/', blank=True, null=True)
+    class Meta:
+        permissions = (
+            ('can_approve_disapprove_leave', 'Can approve disapprove leave'),
+        )
 
     def __str__(self):
         return f'{self.user.username} - {self.reason}'
