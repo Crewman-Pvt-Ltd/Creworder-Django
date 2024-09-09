@@ -1,12 +1,15 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet, UserPermissionsView, UserProfileViewSet, \
-    NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, GetSpecificUsers, \
+from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet, UserPermissionsView, \
+    UserProfileViewSet, \
+    NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, \
+    GetSpecificUsers, \
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
-    AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions,AttendanceView
+    AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
+    IPRestrictedLoginView
 
 router = DefaultRouter()
-router.register(r'users', UserViewSet) 
+router.register(r'users', UserViewSet)
 router.register(r'companies', CompanyViewSet)
 router.register(r'packages', PackageViewSet)
 router.register(r'user-roles', UserRoleViewSet)
@@ -27,11 +30,12 @@ router.register(r'attendances', AttendanceViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    # path('login/', IPRestrictedLoginView.as_view(), name='login'),
     path('user-permissions/', UserPermissionsView.as_view(), name="user-permissions"),
     path('self-signup/', AdminSelfSignUp.as_view(), name="self-signup"),
     path('specific-users/', GetSpecificUsers.as_view(), name="specific-users"),
     path('user-notices/', GetNoticesForUser.as_view(), name="user-notices"),
     path('username-suggestions/', GetUsernameSuggestions.as_view(), name="username-suggestions"),
-    path('get-attendance/',AttendanceView.as_view(),name='get-attendance'),
+    path('get-attendance/', AttendanceView.as_view(), name='get-attendance'),
     path('testing/', Testing.as_view(), name="testing")
 ]
