@@ -88,17 +88,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'is_staff',
-                  'profile', 'role']
+        fields = ['id', 'username', 'password',  'first_name', 'last_name', 'email', 'last_login', 'date_joined',
+                  'is_staff', 'profile', 'role']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def create(self, validated_data):
         profile_data = validated_data.pop("profile")
         role_data = validated_data.pop("role")
-        pdb.set_trace()
+        # pdb.set_trace()
+        # password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        # print(password)
 
-        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-        print(password)
-        user = User.objects.create_user(password=password, **validated_data)
+        user = User.objects.create_user(**validated_data)
 
         UserRole.objects.create(user=user, **role_data)
         UserProfile.objects.create(user=user, **profile_data)
@@ -107,7 +110,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
-        pdb.set_trace()
+
+        # pdb.set_trace()
 
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)

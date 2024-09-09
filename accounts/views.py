@@ -1,12 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from guardian.shortcuts import get_objects_for_user
 import pdb
 from datetime import datetime
 import random
-
+from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
@@ -70,6 +70,21 @@ class CompanyViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("You do not have permission to view any companies.")
 
         return queryset
+
+    @action(detail=True, methods=['post'])
+    def change_status(self, request, pk=None):
+
+        company = self.get_object()
+        if 'status' not in request.data:
+            raise ValidationError({"detail": "The status field is required."})
+        else:
+            company_status = request.data['status']
+            if company_status not in [True, False]:
+                raise ValidationError({"detail": "The value provided is not a valid choice."})
+            company.status = company_status
+            company.save()
+
+        return Response({"detail": 'Status changed successfully.'})
 
 
 class BranchViewSet(viewsets.ModelViewSet):
@@ -143,6 +158,7 @@ class GetSpecificUsers(APIView):
             users = User.objects.filter(profile__company=company).exclude(id=user.id)
         users_data = UserSerializer(users, many=True)
         # pdb.set_trace()
+
         return Response({"results": users_data.data})
 
 
@@ -200,6 +216,15 @@ class DesignationViewSet(viewsets.ModelViewSet):
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.role.role == "admin" or user.role.role == "agent":
+            branch = user.profile.branch
+            queryset = Designation.objects.filter(branch=branch)
+        else:
+            queryset = Branch.objects.all()
+        return queryset
+
 
 class LeaveViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -241,7 +266,7 @@ class GetUsernameSuggestions(APIView):
     permission_classes = [IsAuthenticated]
 
     def generate_username_suggestions(self, firstname, lastname, date_of_birth):
-        base_username = (firstname[::-1] + lastname[:random.randint(1, 5)] + date_of_birth.strftime('%Y')).lower()
+        base_username = (firstname + lastname[:random.randint(1, 5)] + date_of_birth.strftime('%Y')).lower()
         base_username = base_username[:20]
 
         existing_usernames = set(

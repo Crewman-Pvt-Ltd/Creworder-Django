@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('accounts', '0016_alter_formenquiry_options'),
+        ('accounts', '0018_appreciation_award_image_attendance_shift'),
     ]
 
     operations = [
