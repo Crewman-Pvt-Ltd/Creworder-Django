@@ -15,7 +15,8 @@ from .serializers import UserSerializer, CompanySerializer, PackageSerializer, U
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
-
+from django.db.models import Q,Count
+from datetime import datetime, time
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -261,6 +262,46 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
 
+class AttendanceView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        date_range = request.data['date_range'].split(' - ')
+        if len(date_range) != 2:
+            return Response(
+                {"Success": False, "Error": "Invalid date range format. Expected format: MM/DD/YYYY - MM/DD/YYYY"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            start_date = datetime.strptime(date_range[0], '%m/%d/%Y')
+            end_date = datetime.strptime(date_range[1], '%m/%d/%Y')
+            start_datetime = datetime.combine(start_date, time.min)
+            end_datetime = datetime.combine(end_date, time.max)
+            date_filter = Q(date__range=(start_datetime, end_datetime))
+            tableData = Attendance.objects.filter(date_filter,user=request.user.id)
+            attendance_counts = tableData.values('user__username').annotate(
+                total_absent=Count('id', filter=Q(attendance='A')),
+                total_present=Count('id', filter=Q(attendance='P'))
+            )
+            orderTableData = AttendanceSerializer(tableData, many=True).data
+            return Response(
+                {
+                    "Success": True,
+                    "Data": orderTableData,
+                    "Attendance Counts": list(attendance_counts),
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except ValueError:
+            return Response(
+                {"Success": False, "Error": "Invalid date format. Expected MM/DD/YYYY"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {"Success": False, "Error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class GetUsernameSuggestions(APIView):
     permission_classes = [IsAuthenticated]

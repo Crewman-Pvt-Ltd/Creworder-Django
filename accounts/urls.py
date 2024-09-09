@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet, UserPermissionsView, UserProfileViewSet, \
     NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, GetSpecificUsers, \
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
-    AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions
+    AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions,AttendanceView
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet) 
@@ -32,5 +32,6 @@ urlpatterns = [
     path('specific-users/', GetSpecificUsers.as_view(), name="specific-users"),
     path('user-notices/', GetNoticesForUser.as_view(), name="user-notices"),
     path('username-suggestions/', GetUsernameSuggestions.as_view(), name="username-suggestions"),
+    path('get-attendance/',AttendanceView.as_view(),name='get-attendance'),
     path('testing/', Testing.as_view(), name="testing")
 ]

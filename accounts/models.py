@@ -376,13 +376,16 @@ class Attendance(models.Model):
         ('office', 'Office'),
         ('other', 'Other')
     ]
-
+    attendance = [
+        ('A', 'A'),
+        ('P', 'P'),
+    ]
     date = models.DateField(null=False, blank=False)
     shift = models.ForeignKey(Shift, on_delete=models.PROTECT, related_name="shift_wise_attendances", null=True)
     user = models.ForeignKey(User, related_name="attendances", null=False, blank=False, on_delete=models.CASCADE)
     clock_in = models.TimeField(null=False, blank=False)
     clock_out = models.TimeField(null=False, blank=False)
     working_from = models.CharField(max_length=80, null=False, blank=False, choices=working_choices, default="office")
-
+    attendance=models.CharField(choices=attendance,max_length=80,default="A",null=False, blank=False,)
     def __str__(self):
         return f'{self.user.username} - {self.date}'
