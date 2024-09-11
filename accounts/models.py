@@ -16,7 +16,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Module(models.Model):
     name = models.CharField(max_length=60, null=False, blank=False, unique=True)
     description = models.CharField(max_length=500, null=True, blank=True)
-
     def __str__(self):
         return self.name
 
@@ -374,6 +373,42 @@ class Shift(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.branch.branch_id}'
+    
+
+class ShiftRoster(models.Model):
+    user = models.ForeignKey(User, null=False, blank=False, related_name="shift_rosters", on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, null=False, blank=False, related_name="shift_rosters", on_delete=models.CASCADE)
+
+    monday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="monday_shift_rosters", on_delete=models.PROTECT)
+    monday_shift_remark = models.TextField(null=True, blank=True)
+    
+    tuesday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="tuesday_shift_rosters", on_delete=models.PROTECT)
+    tuesday_shift_remark = models.TextField(null=True, blank=True)
+    
+    wednesday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="wednesday_shift_rosters", on_delete=models.PROTECT)
+    wednesday_shift_remark = models.TextField(null=True, blank=True)
+    
+    thursday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="thursday_shift_rosters", on_delete=models.PROTECT)
+    thursday_shift_remark = models.TextField(null=True, blank=True)
+    
+    friday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="friday_shift_rosters", on_delete=models.PROTECT)
+    friday_shift_remark = models.TextField(null=True, blank=True)
+    
+    saturday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="saturday_shift_rosters", on_delete=models.PROTECT)
+    saturday_shift_remark = models.TextField(null=True, blank=True)
+    
+    sunday_shift = models.ForeignKey(Shift, null=True, blank=True, related_name="sunday_shift_rosters", on_delete=models.PROTECT)
+    sunday_shift_remark = models.TextField(null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'shift_roster_table'
+
+    def __str__(self):
+        return f'{self.user.username} - {self.branch.branch_id}'
+
 
 
 class Attendance(models.Model):

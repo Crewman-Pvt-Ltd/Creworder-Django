@@ -6,7 +6,7 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet,
     GetSpecificUsers, \
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
-    IPRestrictedLoginView
+    IPRestrictedLoginView,ShiftRosterViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -26,6 +26,7 @@ router.register(r'holidays', HolidayViewSet)
 router.register(r'awards', AwardViewSet)
 router.register(r'appreciations', AppreciationViewSet)
 router.register(r'shifts', ShiftViewSet)
+router.register(r'shiftroster', ShiftRosterViewSet, basename='shiftroster')
 router.register(r'attendances', AttendanceViewSet)
 
 urlpatterns = [
