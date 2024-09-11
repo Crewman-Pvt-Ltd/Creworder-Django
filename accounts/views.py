@@ -8,11 +8,11 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
-    HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer
+    HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -24,7 +24,6 @@ from .permissions import CanChangeCompanyStatusPermission,CanLeaveApproveAndDisa
 class IPRestrictedLoginView(LoginView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
-
         if username:
             try:
                 user = User.objects.get(username=username)
@@ -302,6 +301,37 @@ class ShiftViewSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
 
+class ShiftRosterViewSet(viewsets.ModelViewSet):
+    queryset = ShiftRoster.objects.all()
+    serializer_class = ShiftRosterSerializer
+    permission_classes = [IsAuthenticated]
+    def create(self, request, *args, **kwargs):
+        serializer = ShiftRosterSerializer(data=request.data)
+        if serializer.is_valid():
+            shiftRosterExistOrNot = ShiftRoster.objects.filter(user=request.data['user'], branch=request.data['branch']).first()
+            if shiftRosterExistOrNot:
+                serializer = self.get_serializer(shiftRosterExistOrNot, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, *args, **kwargs):
+        userData = UserProfile.objects.filter(user_id=request.user.id).first()
+        serializer = UserProfileSerializer(userData)
+        serialized_data = serializer.data
+        branch=serialized_data['branch']
+        queryset = self.get_queryset()
+        if branch:
+            queryset = queryset.filter(branch=branch)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AttendanceViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -313,7 +343,6 @@ class AttendanceView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        
         print(request.data)
         date_range = request.query_params['date_range'].split(' - ')
         if len(date_range) != 2:

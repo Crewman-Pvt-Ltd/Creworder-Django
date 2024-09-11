@@ -2,7 +2,7 @@ import pdb
 
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster
 import string
 import random
 
@@ -206,14 +206,51 @@ class ShiftSerializer(serializers.ModelSerializer):
         model = Shift
         fields = '__all__'
 
+class ShiftRosterSerializer(serializers.ModelSerializer):
+    monday_shift_name=serializers.SerializerMethodField()
+    tuesday_shift_name=serializers.SerializerMethodField()
+    wednesday_shift_name=serializers.SerializerMethodField()
+    thursday_shift_name=serializers.SerializerMethodField()
+    friday_shift_name=serializers.SerializerMethodField()
+    saturday_shift_name=serializers.SerializerMethodField()
+    sunday_shift_name=serializers.SerializerMethodField()
+    class Meta:
+        model = ShiftRoster
+        fields = '__all__'
+    def get_monday_shift_name(self,data):
+        if data.monday_shift:
+            return ShiftSerializer(data.monday_shift).data
+        return None
+    def get_tuesday_shift_name(self,data):
+        if data.tuesday_shift:
+            return ShiftSerializer(data.tuesday_shift).data
+        return None
+    def get_wednesday_shift_name(self,data):
+        if data.wednesday_shift:
+            return ShiftSerializer(data.wednesday_shift).data
+        return None
+    def get_thursday_shift_name(self,data):
+        if data.thursday_shift:
+            return ShiftSerializer(data.thursday_shift).data
+        return None
+    def get_friday_shift_name(self,data):
+        if data.friday_shift:
+            return ShiftSerializer(data.friday_shift).data
+        return None
+    def get_saturday_shift_name(self,data):
+        if data.saturday_shift:
+            return ShiftSerializer(data.saturday_shift).data
+        return None
+    def get_sunday_shift_name(self,data):
+        if data.sunday_shift:
+            return ShiftSerializer(data.sunday_shift).data
+        return None
+
 
 class AttendanceSerializer(serializers.ModelSerializer):
     shift_name = serializers.CharField(source='shift.name')
     shift_start_time = serializers.CharField(source='shift.start_time')
     shift_end_time = serializers.CharField(source='shift.end_time')
-    # shift_name=serializers.ModelSerializer()
-    # shift_start_time=serializers.ModelSerializer()
-    # shift_end_time=serializers.ModelSerializer()
     
     class Meta:
         model = Attendance

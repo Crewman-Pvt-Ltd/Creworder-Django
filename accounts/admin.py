@@ -18,6 +18,7 @@ from .models import Appreciation
 from .models import Shift
 from .models import Attendance
 from .models import AllowedIP
+from .models import ShiftRoster
 
 admin.site.register(Company)
 admin.site.register(Package)
@@ -37,4 +38,6 @@ admin.site.register(Appreciation)
 admin.site.register(Shift)
 admin.site.register(Attendance)
 admin.site.register(AllowedIP)
+admin.site.register(ShiftRoster)
+
 
