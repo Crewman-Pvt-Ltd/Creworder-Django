@@ -208,6 +208,22 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 
 class AttendanceSerializer(serializers.ModelSerializer):
+    shift_name = serializers.CharField(source='shift.name')
+    shift_start_time = serializers.CharField(source='shift.start_time')
+    shift_end_time = serializers.CharField(source='shift.end_time')
+    # shift_name=serializers.ModelSerializer()
+    # shift_start_time=serializers.ModelSerializer()
+    # shift_end_time=serializers.ModelSerializer()
+    
     class Meta:
         model = Attendance
         fields = '__all__'
+
+    def get_shift_name(self, data):
+        return data.shift.name if data.shift else None
+    def get_shift_start_time(self, data):
+        return data.shift.start_time if data.shift else None
+    def get_end_time(self, data):
+        return data.shift.end_time if data.shift else None
+
+    
