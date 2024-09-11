@@ -313,7 +313,9 @@ class AttendanceView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        date_range = request.data['date_range'].split(' - ')
+        
+        print(request.data)
+        date_range = request.query_params['date_range'].split(' - ')
         if len(date_range) != 2:
             return Response(
                 {"Success": False, "Error": "Invalid date range format. Expected format: MM/DD/YYYY - MM/DD/YYYY"},
@@ -325,17 +327,74 @@ class AttendanceView(APIView):
             start_datetime = datetime.combine(start_date, time.min)
             end_datetime = datetime.combine(end_date, time.max)
             date_filter = Q(date__range=(start_datetime, end_datetime))
-            tableData = Attendance.objects.filter(date_filter, user=request.user.id)
-            attendance_counts = tableData.values('user__username').annotate(
+            tableData = Attendance.objects.filter(date_filter)
+            attendance_counts = tableData.values('user__id','user__username').annotate(
                 total_absent=Count('id', filter=Q(attendance='A')),
                 total_present=Count('id', filter=Q(attendance='P'))
             )
             orderTableData = AttendanceSerializer(tableData, many=True).data
+            user_by_data={}
+            for row in orderTableData:
+                present_title='Absent'
+                if row['user'] not in user_by_data:
+                    user_by_data[row['user']]=[]
+
+                start_time = datetime.strptime(row['shift_start_time'], "%H:%M:%S")
+                end_time = datetime.strptime(row['shift_end_time'], "%H:%M:%S")
+                time_difference = end_time - start_time
+                hours = time_difference.total_seconds() / 3600
+                clock_in_time_str = row.get('clock_in', '')
+                clock_out_time_str = row.get('clock_out', '')
+
+                T1 = datetime.strptime(row['shift_start_time'], "%H:%M:%S")
+                T2 = datetime.strptime(row['clock_in'], "%H:%M:%S")
+                time_difference = T2 - T1
+                difference_in_minutes = time_difference.total_seconds() / 60
+                if not clock_out_time_str:
+                    present_title = 'Not_Clock_Out'
+                else:
+                    user_start_time = datetime.strptime(clock_in_time_str, "%H:%M:%S")
+                    user_end_time = datetime.strptime(clock_out_time_str, "%H:%M:%S")
+                    user_time_difference = user_end_time - user_start_time
+                    working_hours = user_time_difference.total_seconds() / 3600
+                    if difference_in_minutes > 11:
+                        present_title = 'Late'
+                    elif working_hours >= hours and row['attendance'] !='A':
+                        present_title = 'Full_Day'
+                    elif working_hours >= hours / 2 and row['attendance'] !='A':
+                        present_title = 'Half_Day'
+                    elif working_hours >= hours / 4 and row['attendance'] !='A':
+                        present_title = 'Short_Day'
+                    else:
+                        pass
+                    if row['attendance'] =='A':
+                        present_title = 'Absent'
+
+
+                print("Shift hours: " + str(hours))
+                print("Worked hours: " + str(working_hours))
+                print(present_title)
+                print("===================================================================")
+                user_by_data[row['user']].append({
+                    "id": row['id'],
+                    "date": datetime.strptime(str(row['date']), '%Y-%m-%d').strftime('%Y-%m-%d'),
+                    "clock_in": str(row['clock_in']),
+                    "clock_out": str(row['clock_out']),
+                    "working_from": row['working_from'],
+                    "attendance": row['attendance'],
+                    "shift": row['shift'],
+                    "shift_name": row['shift_name'],
+                    "shift_start_time": row['shift_start_time'],
+                    "shift_end_time": row['shift_end_time'],
+                    "shift_hours":str(hours),
+                    "working_hours":str(working_hours),
+                    "present_title":present_title
+                })
             return Response(
                 {
                     "Success": True,
-                    "Data": orderTableData,
-                    "Attendance Counts": list(attendance_counts),
+                    "Data": user_by_data,
+                    "Attendance_Counts": list(attendance_counts),
                 },
                 status=status.HTTP_200_OK
             )
