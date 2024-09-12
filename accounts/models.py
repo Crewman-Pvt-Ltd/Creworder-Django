@@ -189,7 +189,7 @@ class UserProfile(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
     professional_email = models.EmailField(null=True, blank=True)
-    shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True, related_name='shift')
+    # shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True, related_name='shift')
     enrolment_id = models.CharField(max_length=50, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name="department_wise_users",
