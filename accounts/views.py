@@ -41,7 +41,6 @@ class IPRestrictedLoginView(LoginView):
                 # Proceed with the standard response, the user may not exist
                 pass
 
-        # Call the original login logic after IP is validated
         return super().post(request, *args, **kwargs)
 
     def get_client_ip(self, request):
@@ -386,6 +385,8 @@ class AttendanceView(APIView):
                     user_end_time = datetime.strptime(clock_out_time_str, "%H:%M:%S")
                     user_time_difference = user_end_time - user_start_time
                     working_hours = user_time_difference.total_seconds() / 3600
+                    if clock_out_time_str=='':
+                        present_title = 'Not_Clock_Out'
                     if difference_in_minutes > 11:
                         present_title = 'Late'
                     elif working_hours >= hours and row['attendance'] !='A':

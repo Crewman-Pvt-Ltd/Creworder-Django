@@ -151,7 +151,15 @@ class UserStatus(models.IntegerChoices):
     suspended = 2, "Suspended"
     deleted = 3, "Deleted"
 
+class Shift(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    branch = models.ForeignKey(Branch, null=False, blank=False, related_name="shifts", on_delete=models.CASCADE)
+    start_time = models.TimeField(null=False, blank=False)
+    end_time = models.TimeField(null=False, blank=False)
 
+    def __str__(self):
+        return f'{self.name} - {self.branch.branch_id}'
+    
 class UserProfile(models.Model):
     gender_choices = [
         ('m', 'Male'),
@@ -181,6 +189,7 @@ class UserProfile(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
     professional_email = models.EmailField(null=True, blank=True)
+    shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True, related_name='shift')
     enrolment_id = models.CharField(max_length=50, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name="department_wise_users",
@@ -363,16 +372,6 @@ class Appreciation(models.Model):
 
     def __str__(self):
         return f'{self.award.title} - {self.user.username}'
-
-
-class Shift(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False)
-    branch = models.ForeignKey(Branch, null=False, blank=False, related_name="shifts", on_delete=models.CASCADE)
-    start_time = models.TimeField(null=False, blank=False)
-    end_time = models.TimeField(null=False, blank=False)
-
-    def __str__(self):
-        return f'{self.name} - {self.branch.branch_id}'
     
 
 class ShiftRoster(models.Model):
@@ -425,7 +424,7 @@ class Attendance(models.Model):
     shift = models.ForeignKey(Shift, on_delete=models.PROTECT, related_name="shift_wise_attendances", null=True)
     user = models.ForeignKey(User, related_name="attendances", null=False, blank=False, on_delete=models.CASCADE)
     clock_in = models.TimeField(null=False, blank=False)
-    clock_out = models.TimeField(null=False, blank=False)
+    clock_out = models.TimeField(null=True, blank=True)
     working_from = models.CharField(max_length=80, null=False, blank=False, choices=working_choices, default="office")
     attendance = models.CharField(choices=attendance, max_length=80, default="A", null=False, blank=False, )
 
