@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'cloud_telephony',
     'lead_management',
     'shipment',
+    'superadmin_assets',
 ]
 
 MIDDLEWARE = [
