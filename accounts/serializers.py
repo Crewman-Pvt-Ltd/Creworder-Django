@@ -2,7 +2,7 @@ import pdb
 
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel
 import string
 import random
 
@@ -39,12 +39,17 @@ class CompanySerializer(serializers.ModelSerializer):
         name = obj.package.name
         return name
 
+class PackageDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PackageDetailsModel
+        fields = '__all__'
 
 class PackageSerializer(serializers.ModelSerializer):
+    packagedetails = PackageDetailsSerializer(many=True, read_only=True)
+
     class Meta:
         model = Package
         fields = '__all__'
-
 
 class FormEnquirySerializer(serializers.ModelSerializer):
     class Meta:

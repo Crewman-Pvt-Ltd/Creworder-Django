@@ -1,7 +1,7 @@
 from django.contrib import admin
-
 from .models import Company
 from .models import Package
+from .models import PackageDetailsModel
 from .models import UserRole
 from .models import UserProfile
 from .models import Notice
@@ -22,6 +22,7 @@ from .models import ShiftRoster
 
 admin.site.register(Company)
 admin.site.register(Package)
+admin.site.register(PackageDetailsModel)
 admin.site.register(UserRole)
 admin.site.register(UserProfile)
 admin.site.register(Notice)
@@ -39,5 +40,3 @@ admin.site.register(Shift)
 admin.site.register(Attendance)
 admin.site.register(AllowedIP)
 admin.site.register(ShiftRoster)
-
-
