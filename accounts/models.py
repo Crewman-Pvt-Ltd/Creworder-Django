@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
+from superadmin_assets.models import SubMenuModel,MenuModel
 
 
 # from django.utils import timezone
@@ -35,7 +36,7 @@ class Package(models.Model):
     updated_at = models.DateField(auto_now=True)
     max_admin = models.IntegerField(blank=True, null=True)
     setup_fees = models.IntegerField(blank=True, null=True)
-    modules = models.ManyToManyField(Module, related_name='packages')
+    # modules = models.ManyToManyField(Module, related_name='packages')
 
     def save(self, *args, **kwargs):
         if self.created_by.role.role != 'superadmin':
@@ -44,6 +45,17 @@ class Package(models.Model):
 
     def __str__(self):
         return self.name
+    
+class PackageDetailsModel(models.Model):
+    package=models.ForeignKey(Package,on_delete=models.CASCADE,related_name="packagedetails")
+    menu=models.ForeignKey(MenuModel,on_delete=models.PROTECT,related_name="menu",blank=True, null=True)
+    submenu=models.ForeignKey(SubMenuModel,on_delete=models.PROTECT,related_name="submunuid",blank=True, null=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    update_at=models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = "package_detail_table"
+    def __str__(self):
+        return f"{self.id}"
 
 
 class Company(models.Model):

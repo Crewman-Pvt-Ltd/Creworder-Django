@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from guardian.shortcuts import get_objects_for_user
+from django.db import transaction
 import pdb
 from datetime import datetime
 import random
@@ -12,7 +13,8 @@ from .models import User, Company, Package, UserRole, UserProfile, Notice, Branc
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
-    HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer
+    HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
+    PackageDetailsSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -141,8 +143,38 @@ class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
     permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        package_data = data.get('package')
+        package_details_data = data.get('package_details')
+        package_serializer = PackageSerializer(data=package_data)
+        
+        if package_serializer.is_valid():
+            package = package_serializer.save()
+            for detail_data in package_details_data:
+                detail_data['package'] = package.id
+                package_detail_serializer = PackageDetailsSerializer(data=detail_data)
+                if package_detail_serializer.is_valid():
+                    package_detail_serializer.save()
+                else:
+                    return Response(package_detail_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+            package_serializer = PackageSerializer(package)
+            return Response(package_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(package_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    
 class UserRoleViewSet(viewsets.ModelViewSet):
     queryset = UserRole.objects.all()
     serializer_class = UserRoleSerializer
