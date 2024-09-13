@@ -30,8 +30,8 @@ class OrderLogSerializer(serializers.ModelSerializer):
     
 
 class OrderTableSerializer(serializers.ModelSerializer):
-    order_details = OrderDetailSerializer(many=True, read_only=True, source='orderdetail_set')  # Use related name if defined
-    # order_logs = OrderLogSerializer(many=True, read_only=True, source='orderlogmodel_set')  # Use related name if defined
+    order_details = OrderDetailSerializer(many=True, read_only=True, source='orderdetail_set')
+    # order_logs = OrderLogSerializer(many=True, read_only=True, source='orderlogmodel_set')
     order_created_by_username = serializers.SerializerMethodField()
     last_action_by_name = serializers.SerializerMethodField()
     last_upated_at = serializers.SerializerMethodField()

@@ -10,7 +10,7 @@ class MenuModel(models.Model):
     class Meta:
         db_table = 'menu_table'
     def __str__(self):
-        return f"category {self.id} by {self.name}"
+        return f"{self.id} by {self.name}"
     
 class SubMenuModel(models.Model):
     id = models.AutoField(primary_key=True)
@@ -23,4 +23,4 @@ class SubMenuModel(models.Model):
     class Meta:
         db_table = 'submenu_table'
     def __str__(self):
-        return f"category {self.id} by {self.name}"
+        return f"{self.id} by {self.name}"
