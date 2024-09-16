@@ -138,7 +138,6 @@ class BranchViewSet(viewsets.ModelViewSet):
             queryset = Branch.objects.all()
         return queryset
 
-
 class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
@@ -174,6 +173,35 @@ class PackageViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data
+        package_data = data.get('package')
+        package_details_data = data.get('package_details')
+        package_serializer = PackageSerializer(instance, data=package_data, partial=True)
+        if package_serializer.is_valid():
+            package = package_serializer.save()
+            existing_details = {detail.id: detail for detail in instance.packagedetails.all()}
+            for detail_data in package_details_data:
+                detail_id = detail_data.get('id')
+                if detail_id and detail_id in existing_details:
+                    package_detail_instance = existing_details.pop(detail_id)
+                    package_detail_serializer = PackageDetailsSerializer(package_detail_instance, data=detail_data, partial=True)
+                else:
+                    detail_data['package'] = package.id 
+                    package_detail_serializer = PackageDetailsSerializer(data=detail_data)
+                if package_detail_serializer.is_valid():
+                    package_detail_serializer.save()
+                else:
+                    return Response(package_detail_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            for remaining_detail in existing_details.values():
+                remaining_detail.delete()
+            package_serializer = PackageSerializer(package)
+            return Response(package_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(package_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserRoleViewSet(viewsets.ModelViewSet):
     queryset = UserRole.objects.all()
@@ -508,6 +536,61 @@ class GetUsernameSuggestions(APIView):
         suggestions = self.generate_username_suggestions(firstname, lastname, dob)
 
         return Response({"results": suggestions})
+
+# class GetPackageModule(viewsets.ModelViewSet):
+#     queryset = Package.objects.all()
+#     serializer_class = PackageSerializer
+#     permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+#     def retrieve(self, request, *args, **kwargs):
+#         userData = UserProfile.objects.filter(user_id=request.user.id).values("branch", "company").first()
+#         CompanyData=Company.objects.filter(id=userData['company']).values("package").first()
+#         print(CompanyData['package'])
+#         showDataDict={}
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance)
+#         for data in serializer.data['packagedetails']:
+#             if f"{data['menu_name']}" in showDataDict:
+#                 print("yes")
+#                 if isinstance(showDataDict[f"{data['menu_name']}"], list):
+#                     print(data['menu_name'])
+#                     showDataDict[f"{data['menu_name']}"].append({f"{data['sub_menu_name']}":f"{data['sub_menu_url']}"})
+#             else:
+#                 if data['sub_menu_name']==None:
+#                     showDataDict[f"{data['menu_name']}"]={f"{data['menu_name']}":f"{data['menu_url']}"}
+#                 else:
+#                     showDataDict[f"{data['menu_name']}"]=[{f"{data['sub_menu_name']}":f"{data['sub_menu_url']}"}]
+#         data = dict(serializer.data)
+#         data['sidebardata'] = showDataDict
+#         return Response(data)
+class GetPackageModule(viewsets.ModelViewSet):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+    def retrieve(self, request, *args, **kwargs):
+        userData = UserProfile.objects.filter(user_id=request.user.id).values("branch", "company").first()
+        CompanyData = Company.objects.filter(id=userData['company']).values("package").first()
+        package_id = CompanyData['package']
+        package_instance = Package.objects.get(id=package_id)
+        serializer = self.get_serializer(package_instance)
+        showDataDict = {}
+        for data in serializer.data['packagedetails']:
+            menu_name = data['menu_name']
+            sub_menu_name = data['sub_menu_name']
+            sub_menu_url = data['sub_menu_url']
+            menu_url = data['menu_url']
+
+            if menu_name in showDataDict:
+                if isinstance(showDataDict[menu_name], list):
+                    showDataDict[menu_name].append({sub_menu_name: sub_menu_url})
+            else:
+                if sub_menu_name is None:
+                    showDataDict[menu_name] = {menu_name: menu_url}
+                else:
+                    showDataDict[menu_name] = [{sub_menu_name: sub_menu_url}]
+
+        data = dict(serializer.data)
+        data['sidebardata'] = showDataDict
+        return Response(data)
 
 
 class Testing(APIView):

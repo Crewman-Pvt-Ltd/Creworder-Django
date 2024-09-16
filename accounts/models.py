@@ -1,5 +1,5 @@
 import hashlib
-# import pdb
+import pdb
 import random
 import string
 
@@ -120,7 +120,6 @@ class Company(models.Model):
 class Branch(models.Model):
     class Meta:
         verbose_name_plural = "Branches"
-
     name = models.CharField(max_length=80, blank=False, null=False)
     branch_id = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=255, blank=False, null=False)
