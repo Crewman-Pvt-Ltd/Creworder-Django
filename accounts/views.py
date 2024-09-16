@@ -138,7 +138,6 @@ class BranchViewSet(viewsets.ModelViewSet):
             queryset = Branch.objects.all()
         return queryset
 
-
 class PackageViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
     serializer_class = PackageSerializer
@@ -174,6 +173,35 @@ class PackageViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data
+        package_data = data.get('package')
+        package_details_data = data.get('package_details')
+        package_serializer = PackageSerializer(instance, data=package_data, partial=True)
+        if package_serializer.is_valid():
+            package = package_serializer.save()
+            existing_details = {detail.id: detail for detail in instance.packagedetails.all()}
+            for detail_data in package_details_data:
+                detail_id = detail_data.get('id')
+                if detail_id and detail_id in existing_details:
+                    package_detail_instance = existing_details.pop(detail_id)
+                    package_detail_serializer = PackageDetailsSerializer(package_detail_instance, data=detail_data, partial=True)
+                else:
+                    detail_data['package'] = package.id 
+                    package_detail_serializer = PackageDetailsSerializer(data=detail_data)
+                if package_detail_serializer.is_valid():
+                    package_detail_serializer.save()
+                else:
+                    return Response(package_detail_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            for remaining_detail in existing_details.values():
+                remaining_detail.delete()
+            package_serializer = PackageSerializer(package)
+            return Response(package_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(package_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserRoleViewSet(viewsets.ModelViewSet):
     queryset = UserRole.objects.all()
