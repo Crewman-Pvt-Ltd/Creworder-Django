@@ -537,6 +537,61 @@ class GetUsernameSuggestions(APIView):
 
         return Response({"results": suggestions})
 
+# class GetPackageModule(viewsets.ModelViewSet):
+#     queryset = Package.objects.all()
+#     serializer_class = PackageSerializer
+#     permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+#     def retrieve(self, request, *args, **kwargs):
+#         userData = UserProfile.objects.filter(user_id=request.user.id).values("branch", "company").first()
+#         CompanyData=Company.objects.filter(id=userData['company']).values("package").first()
+#         print(CompanyData['package'])
+#         showDataDict={}
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance)
+#         for data in serializer.data['packagedetails']:
+#             if f"{data['menu_name']}" in showDataDict:
+#                 print("yes")
+#                 if isinstance(showDataDict[f"{data['menu_name']}"], list):
+#                     print(data['menu_name'])
+#                     showDataDict[f"{data['menu_name']}"].append({f"{data['sub_menu_name']}":f"{data['sub_menu_url']}"})
+#             else:
+#                 if data['sub_menu_name']==None:
+#                     showDataDict[f"{data['menu_name']}"]={f"{data['menu_name']}":f"{data['menu_url']}"}
+#                 else:
+#                     showDataDict[f"{data['menu_name']}"]=[{f"{data['sub_menu_name']}":f"{data['sub_menu_url']}"}]
+#         data = dict(serializer.data)
+#         data['sidebardata'] = showDataDict
+#         return Response(data)
+class GetPackageModule(viewsets.ModelViewSet):
+    queryset = Package.objects.all()
+    serializer_class = PackageSerializer
+    permission_classes = [IsAuthenticated, DjangoObjectPermissions]
+    def retrieve(self, request, *args, **kwargs):
+        userData = UserProfile.objects.filter(user_id=request.user.id).values("branch", "company").first()
+        CompanyData = Company.objects.filter(id=userData['company']).values("package").first()
+        package_id = CompanyData['package']
+        package_instance = Package.objects.get(id=package_id)
+        serializer = self.get_serializer(package_instance)
+        showDataDict = {}
+        for data in serializer.data['packagedetails']:
+            menu_name = data['menu_name']
+            sub_menu_name = data['sub_menu_name']
+            sub_menu_url = data['sub_menu_url']
+            menu_url = data['menu_url']
+
+            if menu_name in showDataDict:
+                if isinstance(showDataDict[menu_name], list):
+                    showDataDict[menu_name].append({sub_menu_name: sub_menu_url})
+            else:
+                if sub_menu_name is None:
+                    showDataDict[menu_name] = {menu_name: menu_url}
+                else:
+                    showDataDict[menu_name] = [{sub_menu_name: sub_menu_url}]
+
+        data = dict(serializer.data)
+        data['sidebardata'] = showDataDict
+        return Response(data)
+
 
 class Testing(APIView):
     permission_classes = [IsAuthenticated]

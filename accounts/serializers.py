@@ -5,19 +5,17 @@ from .models import User, Company, Package, UserRole, UserProfile, Notice, Branc
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel
 import string
 import random
-
+from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
 
 class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
         fields = ['name', 'address', 'company', 'id']
 
-
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = '__all__'
-
 
 class CompanySerializer(serializers.ModelSerializer):
     total_user_count = serializers.SerializerMethodField()
@@ -40,13 +38,25 @@ class CompanySerializer(serializers.ModelSerializer):
         return name
 
 class PackageDetailsSerializer(serializers.ModelSerializer):
+    menu_name=serializers.SerializerMethodField()
+    menu_url=serializers.SerializerMethodField()
+    sub_menu_name=serializers.SerializerMethodField()
+    sub_menu_url=serializers.SerializerMethodField()
     class Meta:
         model = PackageDetailsModel
         fields = '__all__'
+    def get_menu_url(self,data):
+        return data.menu.url if data.menu else None
+    def get_sub_menu_url(self,data):
+        return data.submenu.url if data.submenu else None
+    def get_menu_name(self,data):
+        return data.menu.name if data.menu else None
+    def get_sub_menu_name(self,data):
+        return data.submenu.name if data.submenu else None
+
 
 class PackageSerializer(serializers.ModelSerializer):
     packagedetails = PackageDetailsSerializer(many=True, read_only=True)
-
     class Meta:
         model = Package
         fields = '__all__'
@@ -267,5 +277,4 @@ class AttendanceSerializer(serializers.ModelSerializer):
         return data.shift.start_time if data.shift else None
     def get_end_time(self, data):
         return data.shift.end_time if data.shift else None
-
     
