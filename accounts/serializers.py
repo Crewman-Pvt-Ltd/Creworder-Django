@@ -40,6 +40,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class PackageDetailsSerializer(serializers.ModelSerializer):
     menu_name=serializers.SerializerMethodField()
     menu_url=serializers.SerializerMethodField()
+    menu_icon=serializers.SerializerMethodField()
     sub_menu_name=serializers.SerializerMethodField()
     sub_menu_url=serializers.SerializerMethodField()
     class Meta:
@@ -53,6 +54,8 @@ class PackageDetailsSerializer(serializers.ModelSerializer):
         return data.menu.name if data.menu else None
     def get_sub_menu_name(self,data):
         return data.submenu.name if data.submenu else None
+    def get_menu_icon(self,data):
+        return data.menu.icon if data.menu else None
 
 
 class PackageSerializer(serializers.ModelSerializer):

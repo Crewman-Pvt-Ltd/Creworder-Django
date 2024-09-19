@@ -259,7 +259,6 @@ class GetSpecificUsers(APIView):
 
 class AdminSelfSignUp(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
         user_data = request.data.get('user')
 
@@ -317,7 +316,7 @@ class DesignationViewSet(viewsets.ModelViewSet):
             branch = user.profile.branch
             queryset = Designation.objects.filter(branch=branch)
         else:
-            queryset = Branch.objects.all()
+            queryset = Designation.objects.all()
         return queryset
 
 
@@ -578,15 +577,18 @@ class GetPackageModule(viewsets.ModelViewSet):
             sub_menu_name = data['sub_menu_name']
             sub_menu_url = data['sub_menu_url']
             menu_url = data['menu_url']
+            icon=data['menu_icon']
 
             if menu_name in showDataDict:
                 if isinstance(showDataDict[menu_name], list):
                     showDataDict[menu_name].append({sub_menu_name: sub_menu_url})
             else:
                 if sub_menu_name is None:
-                    showDataDict[menu_name] = {menu_name: menu_url}
+                    showDataDict[menu_name] = {menu_name: menu_url,"icon":icon}
                 else:
+                    showDataDict[menu_name+'_icon']=icon
                     showDataDict[menu_name] = [{sub_menu_name: sub_menu_url}]
+
 
         data = dict(serializer.data)
         data['sidebardata'] = showDataDict
