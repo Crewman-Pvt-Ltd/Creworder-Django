@@ -2,7 +2,7 @@ import hashlib
 import pdb
 import random
 import string
-
+from django.contrib.auth.models import Group
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
@@ -450,12 +450,15 @@ class AllowedIP(models.Model):
     def __str__(self):
         return f"{self.ip_address} for {self.branch.branch_id}"
     
-class RolePermissionModel(models.Model):
-    name = models.CharField(max_length=255,null=False,blank=False)
-    permissions = models.CharField(max_length=255,null=False,blank=False)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="branch")
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="company")
+class CustomAuthGroup(models.Model):
+    group = models.OneToOneField(Group, on_delete=models.CASCADE, related_name='custom_group')
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_branch')
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_company')
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
     class Meta:
-        db_table = "role_permission_table"
+        db_table = 'custom_auth_group'
+
     def __str__(self):
-        return f"{self.id} for {self.name}"
+        return f"{self.group.name}"
