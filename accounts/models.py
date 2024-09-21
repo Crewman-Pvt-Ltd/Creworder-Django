@@ -449,3 +449,13 @@ class AllowedIP(models.Model):
 
     def __str__(self):
         return f"{self.ip_address} for {self.branch.branch_id}"
+    
+class RolePermissionModel(models.Model):
+    name = models.CharField(max_length=255,null=False,blank=False)
+    permissions = models.CharField(max_length=255,null=False,blank=False)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="branch")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="company")
+    class Meta:
+        db_table = "role_permission_table"
+    def __str__(self):
+        return f"{self.id} for {self.name}"

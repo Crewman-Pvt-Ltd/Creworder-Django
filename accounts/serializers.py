@@ -2,7 +2,7 @@ import pdb
 
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,RolePermissionModel
 import string
 import random
 from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
@@ -269,7 +269,6 @@ class AttendanceSerializer(serializers.ModelSerializer):
     shift_name = serializers.CharField(source='shift.name')
     shift_start_time = serializers.CharField(source='shift.start_time')
     shift_end_time = serializers.CharField(source='shift.end_time')
-    
     class Meta:
         model = Attendance
         fields = '__all__'
@@ -280,4 +279,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
         return data.shift.start_time if data.shift else None
     def get_end_time(self, data):
         return data.shift.end_time if data.shift else None
+    
+class RolePermissionserializers(serializers.ModelSerializer):
+    class Meta:
+        model = RolePermissionModel
+        fields = '__all__'
     
