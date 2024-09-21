@@ -9,12 +9,12 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,RolePermissionModel
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer
+    PackageDetailsSerializer,RolePermissionserializers
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -606,3 +606,13 @@ class Testing(APIView):
         queryset = AppreciationSerializer(appreciations, many=True).data
         pdb.set_trace()
         return Response({"results": queryset})
+
+class RoleManagement(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = RolePermissionModel.objects.all()
+    serializer_class = RolePermissionserializers
+    pagination_class = None
+    def create(self, request, *args, **kwargs):
+        request.data['company'] = request.user.profile.company.id
+        request.data['branch'] = request.user.profile.branch.id
+        return super().create(request, *args, **kwargs)
