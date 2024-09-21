@@ -1,8 +1,8 @@
 import pdb
-
+from django.contrib.auth.models import Group,Permission
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,RolePermissionModel
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup
 import string
 import random
 from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
@@ -280,8 +280,57 @@ class AttendanceSerializer(serializers.ModelSerializer):
     def get_end_time(self, data):
         return data.shift.end_time if data.shift else None
     
-class RolePermissionserializers(serializers.ModelSerializer):
+class AuthGroupSerializers(serializers.ModelSerializer):
     class Meta:
-        model = RolePermissionModel
+        model = Group
         fields = '__all__'
+
+class BranchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = ['id', 'name']  # Include relevant fields from Branch
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['id', 'name']  # Include relevant fields from Company
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']  # Include relevant fields from Group
+
+
+class CustomAuthGroupSerializer(serializers.ModelSerializer):
+    group = GroupSerializer()
+    branch = BranchSerializer(read_only=True)
+    company = CompanySerializer(read_only=True)
+    branch_id = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all(), source='branch', write_only=True)
+    company_id = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), source='company', write_only=True)
+
+    class Meta:
+        model = CustomAuthGroup
+        fields = ['id', 'group', 'branch', 'company', 'branch_id', 'company_id', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        group_data = validated_data.pop('group')
+        group = Group.objects.create(**group_data)
+
+        custom_auth_group = CustomAuthGroup.objects.create(group=group, **validated_data)
+        return custom_auth_group
+
+    def update(self, instance, validated_data):
+        group_data = validated_data.pop('group', None)
+        if group_data:
+            group_serializer = GroupSerializer(instance.group, data=group_data, partial=True)
+            group_serializer.is_valid(raise_exception=True)
+            group_serializer.save()
+
+        return super().update(instance, validated_data)
     
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename']

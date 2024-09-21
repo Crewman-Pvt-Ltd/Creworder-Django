@@ -3,18 +3,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from guardian.shortcuts import get_objects_for_user
+from rest_framework import generics, status
+from django.contrib.auth.models import Group,Permission
 from django.db import transaction
 import pdb
 from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,RolePermissionModel
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer,RolePermissionserializers
+    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -606,13 +608,176 @@ class Testing(APIView):
         queryset = AppreciationSerializer(appreciations, many=True).data
         pdb.set_trace()
         return Response({"results": queryset})
-
-class RoleManagement(viewsets.ModelViewSet):
+    
+class CustomAuthGroupViewSet(viewsets.ModelViewSet):
+    queryset = CustomAuthGroup.objects.all()
+    serializer_class = CustomAuthGroupSerializer
     permission_classes = [IsAuthenticated]
-    queryset = RolePermissionModel.objects.all()
-    serializer_class = RolePermissionserializers
-    pagination_class = None
+
     def create(self, request, *args, **kwargs):
-        request.data['company'] = request.user.profile.company.id
-        request.data['branch'] = request.user.profile.branch.id
-        return super().create(request, *args, **kwargs)
+        request.data['company_id'] = request.user.profile.company.id
+        request.data['branch_id'] = request.user.profile.branch.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
+        
+    def destroy(self, request, *args, **kwargs):
+        """
+        Handles the deletion of a CustomAuthGroup instance.
+        """
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {"message": f"Group '{instance.group.name}' has been deleted."},
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+
+class UserGroupViewSet(viewsets.ViewSet):
+    """
+    A ViewSet for managing user group memberships using user_id and group_id.
+    """
+    permission_classes = [IsAuthenticated]
+    @action(detail=False, methods=['post'], url_path='add-user-to-group')
+    def add_user_to_group(self, request):
+        """
+        Custom action to add a user to a group using user_id and group_id.
+        """
+        user_id = request.data.get('user_id')
+        group_id = request.data.get('group_id')
+        try:
+            user = User.objects.get(id=user_id)
+            group = Group.objects.get(id=group_id)
+            user.groups.add(group)
+            user.save()
+            return Response({"message": f"User '{user.username}' added to group '{group.name}'."}, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['get'], url_path='list-group-members/(?P<group_id>\d+)')
+    def list_group_members(self, request, group_id=None):
+        """
+        Custom action to list all members of a specific group using group_id.
+        """
+        try:
+            group = Group.objects.get(id=group_id)
+            users = group.user_set.all()
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class GroupPermissionViewSet(viewsets.ViewSet):
+    """
+    A ViewSet for managing permissions within a group.
+    """
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['post'], url_path='add-permissions-to-group')
+    def add_permissions_to_group(self, request):
+        """
+        Add multiple permissions to a group.
+        """
+        group_id = request.data.get('group_id')
+        permission_ids = request.data.get('permission_ids', [])
+
+        if not isinstance(permission_ids, list):
+            return Response({"error": "permission_ids must be a list."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            group = Group.objects.get(id=group_id)
+            permissions = Permission.objects.filter(id__in=permission_ids)
+
+            if permissions.exists():
+                group.permissions.add(*permissions)
+                group.save()
+                return Response(
+                    {"message": f"Permissions added to group '{group.name}'."},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response({"error": "No valid permissions found."}, status=status.HTTP_404_NOT_FOUND)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['put'], url_path='update-permissions-of-group')
+    def update_permissions_of_group(self, request):
+        """
+        Update (replace) the permissions of a group with new permissions.
+        """
+        group_id = request.data.get('group_id')
+        permission_ids = request.data.get('permission_ids', [])
+
+        if not isinstance(permission_ids, list):
+            return Response({"error": "permission_ids must be a list."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            group = Group.objects.get(id=group_id)
+            new_permissions = Permission.objects.filter(id__in=permission_ids)
+
+            if new_permissions.exists():
+                group.permissions.set(new_permissions)
+                group.save()
+                return Response(
+                    {"message": f"Permissions updated for group '{group.name}'."},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response({"error": "No valid permissions found."}, status=status.HTTP_404_NOT_FOUND)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['delete'], url_path='delete-permissions-from-group')
+    def delete_permissions_from_group(self, request):
+        """
+        Delete specific permissions from a group.
+        """
+        group_id = request.data.get('group_id')
+        permission_ids = request.data.get('permission_ids', [])
+
+        if not isinstance(permission_ids, list):
+            return Response({"error": "permission_ids must be a list."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            group = Group.objects.get(id=group_id)
+            permissions_to_remove = Permission.objects.filter(id__in=permission_ids)
+
+            if permissions_to_remove.exists():
+                group.permissions.remove(*permissions_to_remove)
+                group.save()
+                return Response(
+                    {"message": f"Permissions removed from group '{group.name}'."},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response({"error": "No valid permissions found."}, status=status.HTTP_404_NOT_FOUND)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['get'], url_path='list-group-permissions/(?P<group_id>\d+)')
+    def list_group_permissions(self, request, group_id=None):
+        """
+        List all permissions of a specific group using group_id.
+        """
+        try:
+            group = Group.objects.get(id=group_id)
+            permissions = group.permissions.all()
+            serializer = PermissionSerializer(permissions, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
