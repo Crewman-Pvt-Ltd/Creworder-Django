@@ -7,6 +7,7 @@ from rest_framework import generics, status
 from django.contrib.auth.models import Group,Permission
 from django.db import transaction
 import pdb
+import sys
 from datetime import datetime
 import random
 from rest_framework.decorators import action
@@ -357,7 +358,7 @@ class AppreciationViewSet(viewsets.ModelViewSet):
 
 
 class ShiftViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,DjangoObjectPermissions]
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
 
@@ -580,12 +581,12 @@ class GetPackageModule(viewsets.ModelViewSet):
             sub_menu_url = data['sub_menu_url']
             menu_url = data['menu_url']
             icon=data['menu_icon']
-
             if menu_name in showDataDict:
                 if isinstance(showDataDict[menu_name], list):
                     showDataDict[menu_name].append({sub_menu_name: sub_menu_url})
             else:
-                if sub_menu_name is None:
+                if sub_menu_name is None or sub_menu_name==None:
+                    print("1221221")
                     showDataDict[menu_name] = {menu_name: menu_url,"icon":icon}
                 else:
                     showDataDict[menu_name+'_icon']=icon
@@ -609,7 +610,7 @@ class Testing(APIView):
         pdb.set_trace()
         return Response({"results": queryset})
     
-class CustomAuthGroupViewSet(viewsets.ModelViewSet):
+class CustomAuthGroupViewSetold(viewsets.ModelViewSet):
     queryset = CustomAuthGroup.objects.all()
     serializer_class = CustomAuthGroupSerializer
     permission_classes = [IsAuthenticated]
@@ -623,28 +624,117 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+class CustomAuthGroupViewSet(viewsets.ModelViewSet):
+    """
+    A ViewSet for creating, updating, and deleting objects and managing permissions within a group.
+    """
+    queryset = CustomAuthGroup.objects.all()
+    serializer_class = CustomAuthGroupSerializer
+    permission_classes = [IsAuthenticated]
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        print(type(request.data))
+        request.data['company_id'] = request.user.profile.company.id
+        request.data['branch_id'] = request.user.profile.branch.id
+        request.data['permission_ids']=[1,2,3,4,5,6]
 
-    def perform_create(self, serializer):
-        serializer.save()
+        permission_ids = request.data.get('permission_ids', [])
+        if not isinstance(permission_ids, list) or not permission_ids:
+            return Response(
+                {"error": "permission_ids must be a non-empty list."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        permissions = Permission.objects.filter(id__in=permission_ids)
+        if not permissions.exists():
+            return Response(
+                {"error": "No valid permissions found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
-    def perform_update(self, serializer):
-        serializer.save()
-        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            with transaction.atomic():
+                serializer.save()
+                headers = self.get_success_headers(serializer.data)
+                group_id = serializer.data['group']['id']
+                group = Group.objects.get(id=group_id)
+                group.permissions.add(*permissions)
+                group.save()
+                return Response(
+                    {
+                        "message": f"Group '{group.name}' created and permissions added.",
+                        "data": serializer.data,
+                    },
+                    status=status.HTTP_201_CREATED,
+                    headers=headers
+                )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        """
+        Update group permissions.
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        request.data['company_id'] = request.user.profile.company.id
+        request.data['branch_id'] = request.user.profile.branch.id
+        request.data['permission_ids']=[1,2,3,4,5,6]
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        permission_ids = request.data.get('permission_ids', [])
+        if permission_ids:
+            permissions = Permission.objects.filter(id__in=permission_ids)
+            if not permissions.exists():
+                return Response(
+                    {"error": "No valid permissions found."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        try:
+            with transaction.atomic():
+                serializer.save()
+                group = Group.objects.get(id=serializer.data['group']['id'])
+                group.permissions.clear()
+                group.permissions.add(*permissions)
+                group.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @transaction.atomic
     def destroy(self, request, *args, **kwargs):
         """
-        Handles the deletion of a CustomAuthGroup instance.
+        Delete a group and its associated permissions.
         """
         instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(
-            {"message": f"Group '{instance.group.name}' has been deleted."},
-            status=status.HTTP_204_NO_CONTENT
-        )
+        try:
+            with transaction.atomic():
+                group = Group.objects.get(id=instance.group.id)
+                group.permissions.clear()
+                group.delete()
+                instance.delete()
+                return Response({"massage": "Deleted    ."},status=status.HTTP_204_NO_CONTENT)
+        except Group.DoesNotExist:
+            return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
 
-    def perform_destroy(self, instance):
-        instance.delete()
-
-
+    def list(self, request, *args, **kwargs):
+        """
+        Get a list of CustomAuthGroup instances with their associated group, branch, and company details.
+        """
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 class UserGroupViewSet(viewsets.ViewSet):
     """
     A ViewSet for managing user group memberships using user_id and group_id.
@@ -781,3 +871,9 @@ class GroupPermissionViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Group.DoesNotExist:
             return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class PermmisionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    pagination_class = None 

@@ -1,11 +1,13 @@
 import pdb
-from django.contrib.auth.models import Group,Permission
+from django.contrib.auth.models import Group,Permission 
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup
 import string
 import random
 from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
+from superadmin_assets.models import SubMenuModel,MenuModel
 
 class BranchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -291,22 +293,28 @@ class BranchSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']  # Include relevant fields from Branch
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class CompanySerializer1(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ['id', 'name']  # Include relevant fields from Company
 
 
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename']
+
 class GroupSerializer(serializers.ModelSerializer):
+    permissions = PermissionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Group
-        fields = ['id', 'name']  # Include relevant fields from Group
-
+        fields = ['id', 'name', 'permissions']
 
 class CustomAuthGroupSerializer(serializers.ModelSerializer):
     group = GroupSerializer()
     branch = BranchSerializer(read_only=True)
-    company = CompanySerializer(read_only=True)
+    company = CompanySerializer1(read_only=True)
     branch_id = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all(), source='branch', write_only=True)
     company_id = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all(), source='company', write_only=True)
 
@@ -329,8 +337,3 @@ class CustomAuthGroupSerializer(serializers.ModelSerializer):
             group_serializer.save()
 
         return super().update(instance, validated_data)
-    
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = ['id', 'name', 'codename']
