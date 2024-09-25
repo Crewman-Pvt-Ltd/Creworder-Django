@@ -6,7 +6,7 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet,
     GetSpecificUsers, \
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
-    IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,GroupPermissionViewSet
+    IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,GroupPermissionViewSet,PermmisionViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -32,6 +32,7 @@ router.register(r'get-module', GetPackageModule,basename='get-module')
 router.register(r'auth-role-group',CustomAuthGroupViewSet,basename='auth-role')
 router.register(r'user-group', UserGroupViewSet, basename='user-group')
 router.register(r'group-permissions', GroupPermissionViewSet, basename='group-permissions')
+router.register(r'permissions', PermmisionViewSet, basename='permissions')
 urlpatterns = [
     path('', include(router.urls)),
     # path('login/', IPRestrictedLoginView.as_view(), name='login'),

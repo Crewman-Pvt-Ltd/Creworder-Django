@@ -10,7 +10,6 @@ class SubMenuSerializer(serializers.ModelSerializer):
 
 class MenuSerializer(serializers.ModelSerializer):
     sub_menu_list = serializers.SerializerMethodField()
-
     class Meta:
         model = MenuModel
         fields = '__all__'
