@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from django.contrib.contenttypes.models import ContentType
 from guardian.shortcuts import get_objects_for_user
 from rest_framework import generics, status
 from django.contrib.auth.models import Group,Permission
@@ -638,8 +639,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
         print(type(request.data))
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
-        request.data['permission_ids']=[1,2,3,4,5,6]
-
         permission_ids = request.data.get('permission_ids', [])
         if not isinstance(permission_ids, list) or not permission_ids:
             return Response(
@@ -684,7 +683,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
-        request.data['permission_ids']=[1,2,3,4,5,6]
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
@@ -877,3 +875,25 @@ class PermmisionViewSet(viewsets.ModelViewSet):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
     pagination_class = None 
+
+class FetchPermissionView(APIView):
+    def get(self, request, model_name=None):
+        modelname=''
+        try:
+            for ct in ContentType.objects.all():
+                model_class = ct.model_class()
+                if model_class:
+                    print(model_class.__name__)
+                    if model_name.lower() == 'menu':
+                        modelname = 'MenuModel'
+                    elif model_name.lower() == 'employes':
+                        modelname = 'User'
+                    elif model_name.lower()  in model_class.__name__.lower():
+                        modelname= model_class.__name__
+            print(modelname)
+            content_type = ContentType.objects.get(model=modelname.lower())
+            permissions = Permission.objects.filter(content_type=content_type)
+            serializer = PermissionSerializer(permissions, many=True)
+            return Response(serializer.data)
+        except ContentType.DoesNotExist:
+            return Response({"error": "Model not found"}, status=404)
