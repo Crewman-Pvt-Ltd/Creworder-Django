@@ -6,7 +6,8 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserRoleViewSet,
     GetSpecificUsers, \
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
-    IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,GroupPermissionViewSet,PermmisionViewSet
+    IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,\
+    GroupPermissionViewSet,PermmisionViewSet,FetchPermissionView
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -32,7 +33,6 @@ router.register(r'get-module', GetPackageModule,basename='get-module')
 router.register(r'auth-role-group',CustomAuthGroupViewSet,basename='auth-role')
 router.register(r'user-group', UserGroupViewSet, basename='user-group')
 router.register(r'group-permissions', GroupPermissionViewSet, basename='group-permissions')
-router.register(r'permissions', PermmisionViewSet, basename='permissions')
 urlpatterns = [
     path('', include(router.urls)),
     # path('login/', IPRestrictedLoginView.as_view(), name='login'),
@@ -42,5 +42,6 @@ urlpatterns = [
     path('user-notices/', GetNoticesForUser.as_view(), name="user-notices"),
     path('username-suggestions/', GetUsernameSuggestions.as_view(), name="username-suggestions"),
     path('get-attendance/', AttendanceView.as_view(), name='get-attendance'),
+    path('permissions/<str:model_name>/', FetchPermissionView.as_view(), name='fetch-permissions'),
     path('testing/', Testing.as_view(), name="testing")
 ]
