@@ -10,8 +10,7 @@ from django.db import models
 from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
 from superadmin_assets.models import SubMenuModel,MenuModel
-
-
+from django.core.validators import RegexValidator
 # from django.utils import timezone
 
 class Module(models.Model):
@@ -360,7 +359,6 @@ class Holiday(models.Model):
     department = models.ForeignKey(Department, null=True, blank=True, on_delete=models.PROTECT)
     designation = models.ForeignKey(Designation, null=False, blank=False, on_delete=models.PROTECT)
     branch = models.ForeignKey(Branch, null=True, blank=True, related_name="holidays", on_delete=models.CASCADE)
-
     def __str__(self):
         return f'{self.occasion} - {self.date}'
 
@@ -369,7 +367,6 @@ class Award(models.Model):
     title = models.CharField(max_length=120, null=False, blank=False, unique=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=False, blank=False, related_name="awards")
     summary = models.CharField(max_length=255, null=True, blank=True)
-
     def __str__(self):
         return f'{self.title} - {self.branch.branch_id}'
 
@@ -438,7 +435,6 @@ class Attendance(models.Model):
     clock_out = models.TimeField(null=True, blank=True)
     working_from = models.CharField(max_length=80, null=False, blank=False, choices=working_choices, default="office")
     attendance = models.CharField(choices=attendance, max_length=80, default="A", null=False, blank=False, )
-
     def __str__(self):
         return f'{self.user.username} - {self.date}'
 
@@ -462,3 +458,26 @@ class CustomAuthGroup(models.Model):
 
     def __str__(self):
         return f"{self.group.name}"
+     
+class PickUpPoint(models.Model):
+    contact_person_name=models.CharField(max_length=255)
+    contact_number=PhoneNumberField(unique=True)
+    contact_email=models.EmailField(max_length=100,unique=True, null=False)
+    alternate_contact_number=PhoneNumberField(unique=True,null=True,blank=True)
+    complete_address=models.CharField(max_length=255,null=False)
+    landmark=models.CharField(max_length=255,null=False)
+    pincode = models.IntegerField(max_length=6,null=False)
+    city=models.CharField(max_length=200,null=False)
+    state=models.CharField(max_length=200,null=False)
+    is_verified = models.BooleanField(default=False)
+    status = models.BooleanField(default=False)
+    country=models.CharField(max_length=200,null=False)
+    branches = models.ManyToManyField(Branch, related_name="pickup_branches")
+    company = models.ForeignKey(Company, blank=False, null=False, on_delete=models.CASCADE,related_name="pickup_company")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table='pick_up_point_table'
+    def __str__(self):
+        return f"{self.contact_person_name} {self.complete_address} {self.pincode}"
+
