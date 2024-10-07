@@ -13,12 +13,12 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer
+    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -675,17 +675,23 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def update(self, request, pk=None ,*args, **kwargs,):
         """
         Update group permissions.
         """
-        partial = kwargs.pop('partial', False)
         instance = self.get_object()
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        print(request.data)
+        order = CustomAuthGroup.objects.get(id=pk)
+        serializer = CustomAuthGroupSerializer(order)
+        serialized_data = serializer.data
+        if 'group' in request.data:
+            print(serialized_data['group']['name'])
+            if serialized_data['group']['name']==request.data['group']['name']:
+                request.data.pop('group', None)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-
         permission_ids = request.data.get('permission_ids', [])
         if permission_ids:
             permissions = Permission.objects.filter(id__in=permission_ids)
@@ -786,11 +792,9 @@ class GroupPermissionViewSet(viewsets.ViewSet):
 
         if not isinstance(permission_ids, list):
             return Response({"error": "permission_ids must be a list."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             group = Group.objects.get(id=group_id)
             permissions = Permission.objects.filter(id__in=permission_ids)
-
             if permissions.exists():
                 group.permissions.add(*permissions)
                 group.save()
@@ -897,3 +901,8 @@ class FetchPermissionView(APIView):
             return Response(serializer.data)
         except ContentType.DoesNotExist:
             return Response({"error": "Model not found"}, status=404)
+        
+class PickUpPointView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = PickUpPoint.objects.all()
+    serializer_class = PickUpPointSerializer

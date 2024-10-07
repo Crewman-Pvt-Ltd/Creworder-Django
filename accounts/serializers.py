@@ -3,7 +3,8 @@ from django.contrib.auth.models import Group,Permission
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup,\
+    PickUpPoint
 import string
 import random
 from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
@@ -337,3 +338,8 @@ class CustomAuthGroupSerializer(serializers.ModelSerializer):
             group_serializer.save()
 
         return super().update(instance, validated_data)
+    
+class PickUpPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PickUpPoint
+        fields = '__all__'
