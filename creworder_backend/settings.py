@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'lead_management',
     'shipment',
     'superadmin_assets',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -1,25 +1,37 @@
 import logging
+import logging.config
 import os
-def get_logger(fileName):
-    logs_dir = os.path.join(os.path.dirname(__file__), '../logs')
-    if not os.path.exists(logs_dir):
-        os.makedirs(logs_dir)
-    
-    logger = logging.getLogger(fileName)
-    
-    if not logger.hasHandlers():
-        file_handler = logging.FileHandler(os.path.join(logs_dir, f"{fileName}.log"))
-        file_handler.setLevel(logging.DEBUG)
 
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
+def setup_logging(log_file='logs/app.log', log_level=logging.DEBUG):
+    log_dir = os.path.dirname(f"logs/{log_file}.log")
+    os.makedirs(log_dir, exist_ok=True)
+    logging_config = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            },
+        },
+        'handlers': {
+            'console': {
+                'level': log_level,
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+            },
+            'file': {
+                'level': log_level,
+                'class': 'logging.FileHandler',
+                'filename': log_file,
+                'formatter': 'standard',
+            },
+        },
+        'root': {
+            'handlers': ['console', 'file'],
+            'level': log_level,
+        },
+    }
 
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        file_handler.setFormatter(formatter)
-        console_handler.setFormatter(formatter)
+    logging.config.dictConfig(logging_config)
 
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
-        logger.setLevel(logging.DEBUG)
-    
-    return logger
+setup_logging()

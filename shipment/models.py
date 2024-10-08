@@ -7,6 +7,7 @@ class ShipmentModel(models.Model):
     ]
     id=models.AutoField(primary_key=True)
     name=models.CharField(max_length=255)
+    provider_name=models.CharField(max_length=255)
     credential_username=models.CharField(max_length=255,null=True)
     credential_password=models.CharField(max_length=255,null=True)
     credential_email=models.CharField(max_length=255,null=True)
