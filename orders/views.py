@@ -7,7 +7,6 @@ from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySe
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from utils.custom_logger import get_logger
 import traceback
 from services.category.category_service import (
     createCategory,
@@ -22,7 +21,6 @@ from services.products.products_service import (
     getProduct,
 )
 from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders,ivoiceDeatail
-logger = get_logger('ordersView')
 class OrderAPIView(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -38,7 +36,6 @@ class OrderAPIView(APIView):
                 )
             return Response(orderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ValueError as e:
-            logger.error(f"{traceback.format_exc()}")
             return Response(
                 {"Success": False, "Errors": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,

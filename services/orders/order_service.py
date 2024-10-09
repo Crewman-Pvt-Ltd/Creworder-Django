@@ -18,10 +18,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import NotFound
 from phonenumbers.phonenumberutil import country_code_for_region,region_code_for_number,parse
 from phonenumbers import NumberParseException
-from utils.custom_logger import get_logger
 from django.db.models import Q
 from datetime import datetime,time
-logger = get_logger(os.path.abspath(__file__).split("/")[-1][:-3])
 def check_country_code_exists(number):
     try:
         parsed_number = parse(number, None)
