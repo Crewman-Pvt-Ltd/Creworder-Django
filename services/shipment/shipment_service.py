@@ -85,50 +85,50 @@ def updateShipment(id, data):
     except ObjectDoesNotExist:
         return None
     
-def checkServiceability(branch_id,company_id,pincode):
-    trackdata = ShipmentModel.objects.filter(branch=branch_id,company=company_id,status=1)
-    pickUppointData = PickUpPoint.objects.filter(company=company_id,status=1)
-    pickUpSerializerData = PickUpPointSerializer(pickUppointData, many=True)
-    serializer = ShipmentSerializer(trackdata, many=True)
-    serialized_data = serializer.data
-    eddshortestTime=365
-    EddList=[]
-    for pickUpPinCode in pickUpSerializerData.data:
-        EddDataShowDict={}
-        for data in serialized_data:
-            token=None
-            EddDataShowDict['provider_name']=data['provider_name']
-            EddDataShowDict['name']=data['name']
-            EddDataShowDict['shipment_id']=data['id']
-            EddDataShowDict['pickup_point']=pickUpPinCode['pincode']
-            EddDataShowDict['pickup_city']=pickUpPinCode['city']
-            EddDataShowDict['pickup_id']=pickUpPinCode['id']
-            if data['provider_name'].lower()=='shiprocket':
-                if data['credential_username']!='' or data['credential_username']!=None:
-                    token=getShipRocketToken(data['credential_username'],data['credential_password'])
-                url = "https://apiv2.shiprocket.in/v1/external/courier/serviceability/"
-                payload = json.dumps({
-                "pickup_postcode": f"{pickUpPinCode['pincode']}",
-                "delivery_postcode": f"{pincode}",
-                "weight": 0.5,
-                "cod": 1
-                })
-                headers = {
-                'Content-Type': 'application/json',
-                'Authorization': f'Bearer {token}'
-                }
-                response = requests.request("GET", url, headers=headers, data=payload)
-                a=0
-                shortestDayData={}
-                if response.json()['status']==200:
-                    for apiData in response.json()['data']['available_courier_companies']:
-                        if int(eddshortestTime)>int(apiData['estimated_delivery_days']):
-                            eddshortestTime=int(apiData['estimated_delivery_days'])
-                            shortestDayData['courier_name']=apiData['courier_name']
-                            shortestDayData['EDD']=apiData['estimated_delivery_days']
-                    EddDataShowDict['eddtime']=eddshortestTime
-                    EddList.append(EddDataShowDict)
-                    eddshortestTime=365
-            else:
-                pass
-    return EddList
+# def checkServiceability(branch_id,company_id,pincode):
+#     trackdata = ShipmentModel.objects.filter(branch=branch_id,company=company_id,status=1)
+#     pickUppointData = PickUpPoint.objects.filter(company=company_id,status=1)
+#     pickUpSerializerData = PickUpPointSerializer(pickUppointData, many=True)
+#     serializer = ShipmentSerializer(trackdata, many=True)
+#     serialized_data = serializer.data
+#     eddshortestTime=365
+#     EddList=[]
+#     for pickUpPinCode in pickUpSerializerData.data:
+#         EddDataShowDict={}
+#         for data in serialized_data:
+#             token=None
+#             EddDataShowDict['provider_name']=data['provider_name']
+#             EddDataShowDict['name']=data['name']
+#             EddDataShowDict['shipment_id']=data['id']
+#             EddDataShowDict['pickup_point']=pickUpPinCode['pincode']
+#             EddDataShowDict['pickup_city']=pickUpPinCode['city']
+#             EddDataShowDict['pickup_id']=pickUpPinCode['id']
+#             if data['provider_name'].lower()=='shiprocket':
+#                 if data['credential_username']!='' or data['credential_username']!=None:
+#                     token=getShipRocketToken(data['credential_username'],data['credential_password'])
+#                 url = "https://apiv2.shiprocket.in/v1/external/courier/serviceability/"
+#                 payload = json.dumps({
+#                 "pickup_postcode": f"{pickUpPinCode['pincode']}",
+#                 "delivery_postcode": f"{pincode}",
+#                 "weight": 0.5,
+#                 "cod": 1
+#                 })
+#                 headers = {
+#                 'Content-Type': 'application/json',
+#                 'Authorization': f'Bearer {token}'
+#                 }
+#                 response = requests.request("GET", url, headers=headers, data=payload)
+#                 a=0
+#                 shortestDayData={}
+#                 if response.json()['status']==200:
+#                     for apiData in response.json()['data']['available_courier_companies']:
+#                         if int(eddshortestTime)>int(apiData['estimated_delivery_days']):
+#                             eddshortestTime=int(apiData['estimated_delivery_days'])
+#                             shortestDayData['courier_name']=apiData['courier_name']
+#                             shortestDayData['EDD']=apiData['estimated_delivery_days']
+#                     EddDataShowDict['eddtime']=eddshortestTime
+#                     EddList.append(EddDataShowDict)
+#                     eddshortestTime=365
+#             else:
+#                 pass
+#     return EddList

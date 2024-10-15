@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 import traceback
+from django.db import transaction
 from services.category.category_service import (
     createCategory,
     updateCategory,
@@ -20,8 +21,9 @@ from services.products.products_service import (
     deleteProduct,
     getProduct,
 )
-from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders,ivoiceDeatail
+from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders,ivoiceDeatail,checkServiceability
 class OrderAPIView(APIView):
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
             orderSerializer = OrderTableSerializer(data=request.data)
@@ -293,3 +295,36 @@ class invoiceDetails(APIView):
             return Response({"success":False,"massage":"invoices id ,fields mandatory and not pass empty"},status=status.HTTP_400_BAD_REQUEST)
         data = ivoiceDeatail(request.user.id,request.data)
         return Response({"success": True, "Data":data},status=status.HTTP_200_OK)
+    
+class CheckServiceability(APIView):
+    def get(self, request, pk=None):
+        pincode = request.GET.get('pincode')
+        mobile = request.GET.get('mobile')
+        print(pincode)
+        print(mobile)
+        data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":pincode,"mobile":mobile})
+        if data==1:
+            return Response(
+                {
+                    "success": True,
+                    "data": {"massage":f"Re Order"},
+                },
+                status=status.HTTP_208_ALREADY_REPORTED,
+            )
+        elif data:
+            return Response(
+                {
+                    "success": True,
+                    "data": data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {
+                    "success": False,
+                    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+

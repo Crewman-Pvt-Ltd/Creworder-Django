@@ -5,7 +5,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from services.shipment.shipment_service import *
 from rest_framework.permissions import IsAuthenticated
-import pdb
 class ShipmentView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -84,23 +83,23 @@ class ShipmentView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-class CheckServiceability(APIView):
-    def get(self, request, pk=None):
-        data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
-        if data:
-            return Response(
-                {
-                    "success": True,
-                    "data": data,
-                },
-                status=status.HTTP_200_OK,
-            )
-        else:
-            return Response(
-                {
-                    "success": False,
-                    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
-                },
-                status=status.HTTP_404_NOT_FOUND,
-            )
+# class CheckServiceability(APIView):
+#     def get(self, request, pk=None):
+#         data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+#         if data:
+#             return Response(
+#                 {
+#                     "success": True,
+#                     "data": data,
+#                 },
+#                 status=status.HTTP_200_OK,
+#             )
+#         else:
+#             return Response(
+#                 {
+#                     "success": False,
+#                     "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+#                 },
+#                 status=status.HTTP_404_NOT_FOUND,
+#             )
 
