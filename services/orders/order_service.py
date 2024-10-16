@@ -157,7 +157,6 @@ def createOrders(data,user_id):
     if orderSerializer.is_valid():
         orderSaveResponce = orderSerializer.save()
         for product in data["product_details"]:
-            print(product)
             products = ProductModel.objects.filter(id=product['product']).first()
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data

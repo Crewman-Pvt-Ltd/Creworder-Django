@@ -2,7 +2,7 @@ import pdb
 
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Order_Table, OrderDetail, CategoryModel,ProductModel
+from .models import Order_Table, OrderDetail, CategoryModel,ProductModel,Customer_State
 from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySerializer,ProductSerializer
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -26,6 +26,9 @@ class OrderAPIView(APIView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
+            state_id = Customer_State.objects.get(name=f"{request.data['customer_state']}").id
+            request.data['order_created_by']=request.user.id
+            request.data['customer_state']=state_id
             orderSerializer = OrderTableSerializer(data=request.data)
             if orderSerializer.is_valid():
                 createOrdersResponse = createOrders(request.data, request.user.id)
