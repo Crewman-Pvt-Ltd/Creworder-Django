@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'shipment',
     'superadmin_assets',
     'django_extensions',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

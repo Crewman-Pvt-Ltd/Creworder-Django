@@ -2292,3 +2292,209 @@ Traceback (most recent call last):
 KeyError: 'product'
 2024-10-18 15:04:36,515 - django.request - WARNING - Bad Request: /api/orders/
 2024-10-18 15:06:02,276 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 16:03:18,931 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:19,078 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:19,142 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:19,292 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:19,555 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:19,565 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:19,593 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:19,609 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:19,617 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:19,633 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:19,641 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:19,647 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:19,652 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:19,674 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:19,691 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:19,750 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:19,756 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:19,759 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:19,766 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:19,767 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:19,768 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:19,825 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:19,837 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:19,846 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:19,854 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:19,855 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:19,879 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:19,893 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:19,928 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:19,935 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:19,938 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:19,949 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:19,950 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:19,956 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:20,008 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:20,018 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:20,035 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:20,040 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:20,131 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:20,138 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:20,145 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:20,169 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:20,184 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:20,204 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:20,207 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:20,210 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:20,212 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:20,221 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:20,234 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:20,265 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:20,285 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:20,294 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:20,295 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:20,299 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:20,300 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:20,326 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:20,338 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:20,431 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:20,435 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:20,436 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:20,442 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:20,443 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:20,484 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:20,520 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:20,524 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:20,526 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:20,530 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:20,531 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:21,880 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:22,002 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:22,115 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:22,194 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:22,569 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:22,581 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:22,582 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:22,588 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:22,602 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:22,603 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:22,621 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:22,652 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:22,655 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:22,663 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:22,680 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:22,687 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:22,688 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:22,707 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:22,717 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:22,726 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:22,742 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:22,749 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:22,750 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:22,769 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:22,779 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:22,808 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:22,812 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:22,815 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:22,822 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:22,839 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:22,844 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:22,885 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:22,916 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:22,923 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:22,930 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:22,946 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:22,957 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:23,048 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:23,199 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:23,207 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:23,228 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:23,230 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:23,231 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:23,234 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:23,251 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:23,273 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:23,322 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:23,322 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:23,329 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:23,335 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:23,336 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:23,340 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:23,462 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:23,465 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:23,468 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:23,477 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:23,479 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:23,481 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:23,561 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:23,573 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:23,576 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:23,577 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:23,578 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:23,601 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:23,615 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:23,646 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:23,655 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:23,656 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:06:22,151 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:06:22,158 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:06:22,210 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:06:22,276 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:06:22,280 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:06:22,303 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:06:22,448 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:06:22,652 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:06:22,706 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:06:22,710 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:06:22,733 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:06:22,763 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:06:22,770 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:06:22,774 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:06:22,782 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:06:22,783 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:06:22,789 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:06:22,819 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:06:22,840 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:06:22,852 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:06:22,857 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:06:22,861 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:06:22,861 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:06:22,873 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:06:22,892 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:06:22,970 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:06:22,974 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:06:22,975 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:06:22,975 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:06:22,976 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:06:22,977 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:06:23,019 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:06:23,052 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:06:23,053 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:06:23,058 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:06:23,062 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:06:23,063 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:06:23,072 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:06:23,155 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:06:23,158 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:06:23,159 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:06:23,164 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:06:23,167 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:06:23,168 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:06:23,211 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:06:23,246 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:06:23,250 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:06:23,251 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:06:23,259 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:06:23,260 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:06:23,266 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:06:23,325 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:06:23,345 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:06:23,345 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:06:23,350 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:06:23,352 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:06:23,353 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:06:23,377 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:06:23,425 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:06:23,439 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:06:23,449 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:06:23,453 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:06:23,453 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:06:23,456 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:06:23,475 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:06:23,488 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:06:23,510 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:06:23,510 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:16:27,813 - django.request - WARNING - Method Not Allowed: /api/user-dashboard-tiles/
+2024-10-18 16:49:00,889 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/
