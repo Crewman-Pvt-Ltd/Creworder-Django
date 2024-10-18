@@ -2498,3 +2498,6 @@ KeyError: 'product'
 2024-10-18 16:06:23,510 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
 2024-10-18 16:16:27,813 - django.request - WARNING - Method Not Allowed: /api/user-dashboard-tiles/
 2024-10-18 16:49:00,889 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/
+2024-10-18 18:46:36,836 - django.request - WARNING - Not Found: /api/user-dashboard-tiles/
+2024-10-18 18:49:18,625 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/
+2024-10-18 18:50:02,243 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/

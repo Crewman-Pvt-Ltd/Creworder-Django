@@ -8,7 +8,7 @@ from rest_framework.response import Response
 class GetUserDashboardtiles(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        if request.user.has_perm('accounts.can_approve_disapprove_leave'):
+        if request.user.has_perm('dashboard.can_view_teamlead_dashboard_team_order_list'):
             return Response(
                 {
                     "status": True,
