@@ -84,6 +84,7 @@ def createOrderDetailsJson(data):
             product['gst_amount']=int(total_product_amount)-int(product_actual_price)
             product['taxeble_amount']=int(total_product_amount)-int(product_actual_price)
             grossTotalAmount+=float(productData['product_price']) * int(product['product_qty'])
+            product['product_total']=float(productData['product_price']) * int(product['product_qty'])
             product_qty+=int(product['product_qty'])
         except:
             print("error")
@@ -157,7 +158,6 @@ def createOrders(data,user_id):
     if orderSerializer.is_valid():
         orderSaveResponce = orderSerializer.save()
         for product in data["product_details"]:
-            print(product)
             products = ProductModel.objects.filter(id=product['product']).first()
             productSerializerData = ProductSerializer(products)
             productData = productSerializerData.data

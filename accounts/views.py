@@ -26,7 +26,6 @@ from datetime import datetime, time
 from dj_rest_auth.views import LoginView
 from .permissions import CanChangeCompanyStatusPermission,CanLeaveApproveAndDisapprove
 
-
 class IPRestrictedLoginView(LoginView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')

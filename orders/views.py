@@ -2,8 +2,19 @@ import pdb
 
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Order_Table, OrderDetail, CategoryModel,ProductModel
-from .serializers import OrderTableSerializer, OrderDetailSerializer, CategorySerializer,ProductSerializer
+from .models import (
+    Order_Table,
+    OrderDetail,
+    CategoryModel,
+    ProductModel,
+    Customer_State,
+)
+from .serializers import (
+    OrderTableSerializer,
+    OrderDetailSerializer,
+    CategorySerializer,
+    ProductSerializer,
+)
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -21,11 +32,28 @@ from services.products.products_service import (
     deleteProduct,
     getProduct,
 )
-from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders,ivoiceDeatail,checkServiceability
+from services.orders.order_service import (
+    createOrders,
+    updateOrders,
+    deleteOrder,
+    getOrderDetails,
+    exportOrders,
+    ivoiceDeatail,
+    checkServiceability,
+)
+
+
 class OrderAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
+            state_id = Customer_State.objects.get(
+                name=f"{request.data['customer_state']}"
+            ).id
+            request.data["order_created_by"] = request.user.id
+            request.data["customer_state"] = state_id
             orderSerializer = OrderTableSerializer(data=request.data)
             if orderSerializer.is_valid():
                 createOrdersResponse = createOrders(request.data, request.user.id)
@@ -43,10 +71,9 @@ class OrderAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
     def get(self, request, pk=None):
         try:
-            data = getOrderDetails(request.user.id,pk)
+            data = getOrderDetails(request.user.id, pk)
             return Response(
                 {"Success": True, "Data": data},
                 status=status.HTTP_200_OK,
@@ -57,7 +84,6 @@ class OrderAPIView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    
     def delete(self, request, pk):
         success = deleteOrder(pk)
         if success:
@@ -70,10 +96,10 @@ class OrderAPIView(APIView):
                 {"Success": False, "Error": "Not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
     def put(self, request, pk):
         try:
-            updatedData = updateOrders(pk, request.data,request.user.id)
+            updatedData = updateOrders(pk, request.data, request.user.id)
             if updatedData:
                 return Response(
                     {
@@ -103,7 +129,8 @@ class OrderAPIView(APIView):
                 {"Success": False, "Errors": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
+
 class OrderDetailView(generics.RetrieveAPIView):
     queryset = Order_Table.objects.all()
     serializer_class = OrderTableSerializer
@@ -111,6 +138,7 @@ class OrderDetailView(generics.RetrieveAPIView):
 
 class CategoryView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             createCategoryResponse = createCategory(request.data, request.user.id)
@@ -190,6 +218,7 @@ class CategoryView(APIView):
 
 class ProductView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             createCategoryResponse = createProduct(request.data, request.user.id)
@@ -254,7 +283,7 @@ class ProductView(APIView):
 
     def get(self, request, pk):
         try:
-            data = getProduct(request.user.id,pk)
+            data = getProduct(request.user.id, pk)
             serializer = ProductSerializer(data, many=True)
             return Response(
                 {"Success": True, "Data": serializer.data},
@@ -266,48 +295,78 @@ class ProductView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
+
 
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 
+
 class CategoryListCreateAPIView(generics.ListCreateAPIView):
     queryset = CategoryModel.objects.all()
     serializer_class = CategorySerializer
+
 
 class CategorytDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CategoryModel.objects.all()
     serializer_class = CategorySerializer
 
+
 class orderExport(APIView):
     def post(self, request, *args, **kwargs):
-        if "data_range" not in request.data or request.data['data_range']=='' or "date_type" not in request.data or request.data['date_type']=='' or "status" not in request.data or request.data['status']=='':
-            return Response({"success":False,"massage":"data_range ,date_type and status all fields are mandatory and not pass empty"},status=status.HTTP_400_BAD_REQUEST)
-        data = exportOrders(request.user.id,request.data)
-        return Response({"success": True, "Data":data},status=status.HTTP_200_OK)
-    
+        if (
+            "data_range" not in request.data
+            or request.data["data_range"] == ""
+            or "date_type" not in request.data
+            or request.data["date_type"] == ""
+            or "status" not in request.data
+            or request.data["status"] == ""
+        ):
+            return Response(
+                {
+                    "success": False,
+                    "massage": "data_range ,date_type and status all fields are mandatory and not pass empty",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        data = exportOrders(request.user.id, request.data)
+        return Response({"success": True, "Data": data}, status=status.HTTP_200_OK)
+
+
 class invoiceDetails(APIView):
     def post(self, request, *args, **kwargs):
-        if "invoices" not in request.data or request.data['invoices']==None:
-            return Response({"success":False,"massage":"invoices id ,fields mandatory and not pass empty"},status=status.HTTP_400_BAD_REQUEST)
-        data = ivoiceDeatail(request.user.id,request.data)
-        return Response({"success": True, "Data":data},status=status.HTTP_200_OK)
-    
+        if "invoices" not in request.data or request.data["invoices"] == None:
+            return Response(
+                {
+                    "success": False,
+                    "massage": "invoices id ,fields mandatory and not pass empty",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        data = ivoiceDeatail(request.user.id, request.data)
+        return Response({"success": True, "Data": data}, status=status.HTTP_200_OK)
+
+
 class CheckServiceability(APIView):
     def get(self, request, pk=None):
-        pincode = request.GET.get('pincode')
-        mobile = request.GET.get('mobile')
+        pincode = request.GET.get("pincode")
+        mobile = request.GET.get("mobile")
         print(pincode)
         print(mobile)
-        data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":pincode,"mobile":mobile})
-        if data==1:
+        data = checkServiceability(
+            request.user.profile.branch_id,
+            request.user.profile.company_id,
+            {"pincode": pincode, "mobile": mobile},
+        )
+        if data == 1:
             return Response(
                 {
                     "success": True,
-                    "data": {"massage":f"Re Order"},
+                    "data": {"massage": f"Re Order"},
                 },
                 status=status.HTTP_208_ALREADY_REPORTED,
             )
@@ -323,8 +382,21 @@ class CheckServiceability(APIView):
             return Response(
                 {
                     "success": False,
-                    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+                    "data": {"massage": f"Non serviceable {request.data['pincode']}"},
                 },
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class GetUserPerformance(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if "user_id" not in request.data:
+            return Response(
+                {"massage": "user_id is mandatory"}, status.HTTP_400_BAD_REQUEST
+            )
+        orders = Order_Table.objects.filter(order_created_by=request.user.id)
+        serializer = OrderTableSerializer(orders, many=True)
+        return Response({"massage": "HI", "data": serializer.data}, status.HTTP_200_OK)
 

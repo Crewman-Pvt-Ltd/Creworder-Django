@@ -1,0 +1,2503 @@
+2024-10-08 16:48:06,492 - services.shipment.shipment_service - ERROR - Shivam
+2024-10-08 16:48:06,492 - services.shipment.shipment_service - WARNING - This is a warning log message.
+2024-10-08 16:48:06,492 - services.shipment.shipment_service - ERROR - This is an error log message.
+2024-10-08 16:48:08,258 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-08 17:25:33,228 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 123, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:26:34,047 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 124, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:28:03,612 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-08 17:28:57,846 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 107, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 27, in getShipRocketToken
+    print(response.json()['token'])
+KeyError: 'token'
+2024-10-08 17:29:29,672 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 107, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 27, in getShipRocketToken
+    print(response['status'])
+TypeError: 'Response' object is not subscriptable
+2024-10-08 17:29:58,548 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 107, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    return response.json()['token']
+KeyError: 'token'
+2024-10-08 17:31:55,786 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 107, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    return response.json()['token']
+KeyError: 'token'
+2024-10-08 17:33:42,180 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 125, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:33:57,011 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 125, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:35:01,679 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 109, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 17:36:37,846 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 127, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:38:22,798 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 126, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:39:55,993 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 125, in checkServiceability
+    if response.json()['status']==200:
+KeyError: 'status'
+2024-10-08 17:42:37,142 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 109, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 17:43:24,299 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 109, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 17:43:56,284 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-08 17:44:07,627 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-08 18:01:32,308 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 109, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 28, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 18:04:11,616 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 110, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 29, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 18:05:34,914 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/shipment/views.py", line 90, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 110, in checkServiceability
+    token=getShipRocketToken(data['credential_username'],data['credential_password'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/shipment/shipment_service.py", line 29, in getShipRocketToken
+    if response.json()['status_code']==200:
+KeyError: 'status_code'
+2024-10-08 18:06:04,549 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-08 18:06:18,071 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-10-09 10:15:57,440 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-09 12:19:33,460 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 299, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 271, in checkServiceability
+    trackdata = ShipmentModel.objects.filter(branch=branch_id,company=company_id,status=1)
+NameError: name 'ShipmentModel' is not defined
+2024-10-09 12:20:17,124 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 299, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 274, in checkServiceability
+    pickUppointData = PickUpPoint.objects.filter(company=company_id,status=1)
+NameError: name 'PickUpPoint' is not defined
+2024-10-09 12:20:51,403 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 299, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, request.data['pincode'])
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 276, in checkServiceability
+    pickUpSerializerData = PickUpPointSerializer(pickUppointData, many=True)
+NameError: name 'PickUpPointSerializer' is not defined
+2024-10-09 12:31:30,616 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 299, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {request.data['pincode'],request.data['mobile']})
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 274, in checkServiceability
+    pincode=data['pincode']
+TypeError: 'set' object is not subscriptable
+2024-10-09 12:32:10,905 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 299, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {request.data['pincode'],request.data['mobile']})
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 275, in checkServiceability
+    pincode=data['pincode']
+TypeError: 'set' object is not subscriptable
+2024-10-09 12:42:19,789 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:43:52,878 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:47:35,910 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:49:24,501 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:50:09,158 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:50:26,910 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:50:34,882 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:50:43,797 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 161, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 12:51:28,200 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 12:52:06,796 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 161, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 13:42:06,489 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:42:07,045 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:42:36,567 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 162, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 13:45:08,686 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:45:39,034 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 161, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 13:46:13,641 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:46:30,650 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:57:30,706 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 13:57:50,421 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 162, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 14:02:59,855 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 14:03:39,339 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 14:03:49,944 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 162, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-09 14:04:02,901 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 14:13:55,175 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-09 14:50:06,733 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 14:50:14,971 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 14:53:31,432 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 14:58:37,305 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 14:59:17,693 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 302, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 14:59:44,946 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 302, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 15:09:22,772 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'pincode'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 304, in get
+    print(f"All parameters: {all_params['pincode']}")
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'pincode'
+2024-10-09 15:11:23,660 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'pincode'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    print(request.GET['pincode'])
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'pincode'
+2024-10-09 15:17:29,589 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'pincode'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 302, in get
+    print(all_params['pincode'])
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'pincode'
+2024-10-09 15:18:09,273 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'pincode'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 302, in get
+    print(all_params['pincode'])
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'pincode'
+2024-10-09 15:23:28,981 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 15:24:14,843 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 15:25:43,837 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 301, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 15:27:28,995 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 305, in get
+    data = checkServiceability(request.user.profile.branch_id,request.user.profile.company_id, {"pincode":request.data['pincode'],"mobile":request.data['mobile']})
+KeyError: 'pincode'
+2024-10-09 18:59:10,685 - django.request - ERROR - Internal Server Error: /api/product/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+TypeError: ProductView.get() missing 1 required positional argument: 'pk'
+2024-10-09 18:59:26,778 - django.request - WARNING - Not Found: /api/product/2/
+2024-10-10 10:16:21,915 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-10 17:05:57,622 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:05:58,778 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:06:03,984 - django.request - WARNING - Forbidden: /api/get-module/0/
+2024-10-10 17:06:04,000 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:06:04,064 - django.request - WARNING - Forbidden: /api/get-module/0/
+2024-10-10 17:06:05,699 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:06:08,590 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:06:13,424 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:06:21,132 - django.request - WARNING - Forbidden: /api/branches/
+2024-10-10 17:07:48,136 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-10 18:56:12,439 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-10 18:56:52,691 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-11 10:38:51,062 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-11 11:29:24,746 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 10:25:23,949 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-15 10:27:09,503 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 12:25:46,417 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:31:15,603 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:31:20,265 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:31:25,295 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:31:36,334 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:33:48,397 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:34:53,018 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:36:07,524 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 14:37:26,017 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 15:04:20,683 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 15:04:22,293 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 15:04:25,811 - django.request - ERROR - Internal Server Error: /api/check-serviceability/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 326, in get
+    "data": {"massage":f"Non serviceable {request.data['pincode']}"},
+KeyError: 'pincode'
+2024-10-15 15:10:52,036 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 15:45:53,645 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 15:48:36,223 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 15:53:29,153 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 15:55:47,095 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 16:01:36,641 - django.request - WARNING - Not Found: /api//orders/
+2024-10-15 16:02:30,236 - django.request - WARNING - Not Found: /api//orders/
+2024-10-15 16:03:46,320 - django.request - WARNING - Not Found: /api//orders/
+2024-10-15 16:04:16,508 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 16:05:51,098 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 18:15:32,425 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 18:16:18,289 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-15 18:26:58,520 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-16 11:23:47,799 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-16 11:56:42,659 - django.request - WARNING - Bad Request: /api/createFollowUp/
+2024-10-16 11:57:21,570 - django.request - WARNING - Method Not Allowed: /api/createFollowUp/
+2024-10-16 14:19:37,500 - django.request - ERROR - Internal Server Error: /api/get-attendance
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/usr/local/lib/python3.10/dist-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/usr/local/lib/python3.10/dist-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/get-attendance/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+2024-10-16 14:19:41,972 - django.request - WARNING - Method Not Allowed: /api/get-attendance/
+2024-10-16 14:19:47,346 - django.request - ERROR - Internal Server Error: /api/get-attendance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'date_range'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/views.py", line 408, in get
+    date_range = request.query_params['date_range'].split(' - ')
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'date_range'
+2024-10-16 14:20:00,837 - django.request - ERROR - Internal Server Error: /api/get-attendance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 84, in __getitem__
+    list_ = super().__getitem__(key)
+KeyError: 'date_range'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/views.py", line 408, in get
+    date_range = request.query_params['date_range'].split(' - ')
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/datastructures.py", line 86, in __getitem__
+    raise MultiValueDictKeyError(key)
+django.utils.datastructures.MultiValueDictKeyError: 'date_range'
+2024-10-16 14:24:48,806 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-16 14:44:24,601 - django.request - WARNING - Bad Request: /api/users/
+2024-10-16 17:16:16,870 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+TypeError: GetUserPerformance.get() takes 1 positional argument but 2 were given
+2024-10-16 17:17:51,714 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+TypeError: GetUserPerformance.get() takes 1 positional argument but 2 were given
+2024-10-16 17:18:22,504 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `StreamingHttpResponse` to be returned from the view, but received a `<class 'tuple'>`
+2024-10-16 17:41:48,770 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 337, in get
+    if 'user_id' not in request.data['user_id']:
+TypeError: argument of type 'int' is not iterable
+2024-10-16 17:43:35,303 - django.request - WARNING - Bad Request: /api/user-performance/
+2024-10-16 17:46:05,053 - django.request - WARNING - Bad Request: /api/user-performance/
+2024-10-16 17:46:10,627 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 339, in get
+    state_id = Order_Table.objects.get(order_created_by=f"{request.data['user_id']}").id
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/query.py", line 649, in get
+    raise self.model.DoesNotExist(
+orders.models.Order_Table.DoesNotExist: Order_Table matching query does not exist.
+2024-10-16 17:49:36,504 - django.request - ERROR - Internal Server Error: /api/user-performance/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/renderers.py", line 100, in render
+    ret = json.dumps(
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/utils/json.py", line 25, in dumps
+    return json.dumps(*args, **kwargs)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/utils/encoders.py", line 67, in default
+    return super().default(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type ListSerializer is not JSON serializable
+2024-10-18 10:26:01,510 - django.request - WARNING - Not Found: /favicon.ico
+2024-10-18 12:32:38,773 - django.request - ERROR - Internal Server Error: /superadmin/accounts/package/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2018, in changelist_view
+    response = self.response_action(
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 1650, in response_action
+    response = func(self, request, queryset)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/actions.py", line 39, in delete_selected
+    ) = modeladmin.get_deleted_objects(queryset, request)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2160, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 171, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 238, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  [Previous line repeated 1 more time]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 224, in _nested
+    ret = [format_callback(obj)]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 144, in format_callback
+    no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+TypeError: __str__ returned non-string (type Order_Table)
+2024-10-18 12:33:19,633 - django.request - ERROR - Internal Server Error: /superadmin/accounts/package/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2018, in changelist_view
+    response = self.response_action(
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 1650, in response_action
+    response = func(self, request, queryset)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/actions.py", line 39, in delete_selected
+    ) = modeladmin.get_deleted_objects(queryset, request)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2160, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 171, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 238, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  [Previous line repeated 1 more time]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 224, in _nested
+    ret = [format_callback(obj)]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 144, in format_callback
+    no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+TypeError: __str__ returned non-string (type Order_Table)
+2024-10-18 12:42:05,179 - django.request - ERROR - Internal Server Error: /superadmin/accounts/package/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2018, in changelist_view
+    response = self.response_action(
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 1650, in response_action
+    response = func(self, request, queryset)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/actions.py", line 39, in delete_selected
+    ) = modeladmin.get_deleted_objects(queryset, request)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2160, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 171, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 238, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  [Previous line repeated 1 more time]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 224, in _nested
+    ret = [format_callback(obj)]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 144, in format_callback
+    no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+TypeError: __str__ returned non-string (type Order_Table)
+2024-10-18 12:42:31,891 - django.request - ERROR - Internal Server Error: /superadmin/accounts/package/5/delete/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2165, in delete_view
+    return self._delete_view(request, object_id, extra_context)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2192, in _delete_view
+    ) = self.get_deleted_objects([obj], request)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2160, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 171, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 238, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  [Previous line repeated 1 more time]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 224, in _nested
+    ret = [format_callback(obj)]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 144, in format_callback
+    no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+TypeError: __str__ returned non-string (type Order_Table)
+2024-10-18 12:43:11,602 - django.request - ERROR - Internal Server Error: /superadmin/accounts/package/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2018, in changelist_view
+    response = self.response_action(
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 1650, in response_action
+    response = func(self, request, queryset)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/actions.py", line 39, in delete_selected
+    ) = modeladmin.get_deleted_objects(queryset, request)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 2160, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 171, in get_deleted_objects
+    to_delete = collector.nested(format_callback)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 238, in nested
+    roots.extend(self._nested(root, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 222, in _nested
+    children.extend(self._nested(child, seen, format_callback))
+  [Previous line repeated 1 more time]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 224, in _nested
+    ret = [format_callback(obj)]
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 144, in format_callback
+    no_edit_link = "%s: %s" % (capfirst(opts.verbose_name), obj)
+TypeError: __str__ returned non-string (type Order_Table)
+2024-10-18 13:37:53,486 - django.request - ERROR - Internal Server Error: /superadmin/accounts/packagedetailsmodel/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 681, in get_field
+    return self.fields_map[field_name]
+KeyError: 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 289, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 322, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 683, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: PackageDetailsModel has no field named 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/library.py", line 258, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 345, in result_list
+    "results": list(results(cl)),
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 312, in __init__
+    super().__init__(*items)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 217, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 298, in lookup_field
+    value = attr(obj)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 999, in action_checkbox
+    "aria-label": format_html(_("Select this object for an action - {}"), obj),
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 135, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 117, in conditional_escape
+    return escape(text)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 50, in escape
+    return SafeString(html.escape(str(text)))
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/models.py", line 57, in __str__
+    return f"{self.id} {self.package.name} {self.menu.name} {self.submenu.name}"
+AttributeError: 'NoneType' object has no attribute 'name'
+2024-10-18 13:38:27,764 - django.request - ERROR - Internal Server Error: /superadmin/accounts/packagedetailsmodel/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 681, in get_field
+    return self.fields_map[field_name]
+KeyError: 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 289, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 322, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 683, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: PackageDetailsModel has no field named 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/library.py", line 258, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 345, in result_list
+    "results": list(results(cl)),
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 312, in __init__
+    super().__init__(*items)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 217, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 298, in lookup_field
+    value = attr(obj)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 999, in action_checkbox
+    "aria-label": format_html(_("Select this object for an action - {}"), obj),
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 135, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 117, in conditional_escape
+    return escape(text)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 50, in escape
+    return SafeString(html.escape(str(text)))
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/models.py", line 57, in __str__
+    return f"{self.id} {self.package.name} {self.menu.name} {self.submenu.name}"
+AttributeError: 'NoneType' object has no attribute 'name'
+2024-10-18 13:39:06,829 - django.request - ERROR - Internal Server Error: /superadmin/accounts/packagedetailsmodel/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 681, in get_field
+    return self.fields_map[field_name]
+KeyError: 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 289, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 322, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 683, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: PackageDetailsModel has no field named 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/library.py", line 258, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 345, in result_list
+    "results": list(results(cl)),
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 312, in __init__
+    super().__init__(*items)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 217, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 298, in lookup_field
+    value = attr(obj)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 999, in action_checkbox
+    "aria-label": format_html(_("Select this object for an action - {}"), obj),
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 135, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 117, in conditional_escape
+    return escape(text)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 50, in escape
+    return SafeString(html.escape(str(text)))
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/models.py", line 57, in __str__
+    return f"{self.id} {self.package.name} {self.menu.name} {self.submenu.id}"
+AttributeError: 'NoneType' object has no attribute 'id'
+2024-10-18 13:39:08,595 - django.request - ERROR - Internal Server Error: /superadmin/accounts/packagedetailsmodel/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 681, in get_field
+    return self.fields_map[field_name]
+KeyError: 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 289, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 322, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/options.py", line 683, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: PackageDetailsModel has no field named 'action_checkbox'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/usr/local/lib/python3.10/dist-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/usr/local/lib/python3.10/dist-packages/django/template/base.py", line 961, in render_annotated
+    return self.render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+  File "/usr/local/lib/python3.10/dist-packages/django/template/library.py", line 258, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 345, in result_list
+    "results": list(results(cl)),
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 312, in __init__
+    super().__init__(*items)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/templatetags/admin_list.py", line 217, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/utils.py", line 298, in lookup_field
+    value = attr(obj)
+  File "/usr/local/lib/python3.10/dist-packages/django/contrib/admin/options.py", line 999, in action_checkbox
+    "aria-label": format_html(_("Select this object for an action - {}"), obj),
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 135, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 117, in conditional_escape
+    return escape(text)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/html.py", line 50, in escape
+    return SafeString(html.escape(str(text)))
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/models.py", line 57, in __str__
+    return f"{self.id} {self.package.name} {self.menu.name} {self.submenu.id}"
+AttributeError: 'NoneType' object has no attribute 'id'
+2024-10-18 14:19:47,950 - django.request - ERROR - Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/utils/deprecation.py", line 136, in __call__
+    response = self.process_response(request, response)
+  File "/usr/local/lib/python3.10/dist-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+  File "/usr/local/lib/python3.10/dist-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/orders/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+2024-10-18 14:19:54,144 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 29, in post
+    state_id = Customer_State.objects.get(name=f"{request.data['customer_state']}").id
+KeyError: 'customer_state'
+2024-10-18 14:24:11,213 - django.request - WARNING - Forbidden: /api/orders/
+2024-10-18 14:25:55,648 - django.request - WARNING - Forbidden: /api/orders/
+2024-10-18 14:25:58,362 - django.request - WARNING - Forbidden: /api/orders/
+2024-10-18 14:26:16,715 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 30, in post
+    state_id = Customer_State.objects.get(name=f"{request.data['customer_state']}").id
+KeyError: 'customer_state'
+2024-10-18 14:29:52,745 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:51:03,065 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 30, in post
+    state_id = Customer_State.objects.get(name=f"{request.data['customer_state']}").id
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/db/models/query.py", line 649, in get
+    raise self.model.DoesNotExist(
+orders.models.Customer_State.DoesNotExist: Customer_State matching query does not exist.
+2024-10-18 14:51:49,277 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:52:06,301 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:52:24,204 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:52:30,343 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:52:45,264 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:52:56,391 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:53:01,343 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:53:02,896 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:53:11,714 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:54:23,599 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:54:33,376 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 14:54:39,063 - django.request - ERROR - Internal Server Error: /api/orders/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/lib/python3.10/contextlib.py", line 79, in inner
+    return func(*args, **kwds)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/orders/views.py", line 35, in post
+    createOrdersResponse = createOrders(request.data, request.user.id)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/services/orders/order_service.py", line 160, in createOrders
+    products = ProductModel.objects.filter(id=product['product']).first()
+KeyError: 'product'
+2024-10-18 15:04:36,515 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 15:06:02,276 - django.request - WARNING - Bad Request: /api/orders/
+2024-10-18 16:03:18,931 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:19,078 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:19,142 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:19,292 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:19,555 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:19,565 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:19,593 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:19,609 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:19,617 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:19,633 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:19,641 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:19,647 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:19,652 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:19,674 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:19,691 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:19,750 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:19,756 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:19,759 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:19,766 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:19,767 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:19,768 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:19,825 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:19,837 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:19,846 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:19,854 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:19,855 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:19,879 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:19,893 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:19,928 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:19,935 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:19,938 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:19,949 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:19,950 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:19,956 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:20,008 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:20,018 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:20,035 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:20,040 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:20,131 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:20,138 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:20,145 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:20,169 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:20,184 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:20,204 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:20,207 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:20,210 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:20,212 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:20,221 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:20,234 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:20,265 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:20,285 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:20,294 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:20,295 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:20,299 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:20,300 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:20,326 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:20,338 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:20,431 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:20,435 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:20,436 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:20,442 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:20,443 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:20,484 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:20,520 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:20,524 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:20,526 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:20,530 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:20,531 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:21,880 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:22,002 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:22,115 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:22,194 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:22,569 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:22,581 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:22,582 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:22,588 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:22,602 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:22,603 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:22,621 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:22,652 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:22,655 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:22,663 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:22,680 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:22,687 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:22,688 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:22,707 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:22,717 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:22,726 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:22,742 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:22,749 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:22,750 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:22,769 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:22,779 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:22,808 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:22,812 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:22,815 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:22,822 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:22,839 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:22,844 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:22,885 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:22,916 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:22,923 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:03:22,930 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:03:22,946 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:03:22,957 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:03:23,048 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:03:23,199 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:03:23,207 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:03:23,228 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:03:23,230 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:03:23,231 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:03:23,234 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:03:23,251 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:03:23,273 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:03:23,322 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:03:23,322 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:03:23,329 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:03:23,335 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:03:23,336 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:03:23,340 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:03:23,462 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:03:23,465 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:03:23,468 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:03:23,477 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:03:23,479 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:03:23,481 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:03:23,561 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:03:23,573 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:03:23,576 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:03:23,577 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:03:23,578 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:03:23,601 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:03:23,615 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:03:23,646 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:03:23,655 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:03:23,656 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:06:22,151 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:06:22,158 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:06:22,210 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:06:22,276 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:06:22,280 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:06:22,303 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:06:22,448 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:06:22,652 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:06:22,706 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:06:22,710 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:06:22,733 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:06:22,763 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:06:22,770 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:06:22,774 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:06:22,782 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:06:22,783 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:06:22,789 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:06:22,819 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:06:22,840 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:06:22,852 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:06:22,857 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:06:22,861 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:06:22,861 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:06:22,873 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:06:22,892 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:06:22,970 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:06:22,974 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:06:22,975 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:06:22,975 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:06:22,976 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:06:22,977 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:06:23,019 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:06:23,052 - django.request - WARNING - Not Found: /api/permissions/Employee/
+2024-10-18 16:06:23,053 - django.request - WARNING - Not Found: /api/permissions/Dashboard/
+2024-10-18 16:06:23,058 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:06:23,062 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:06:23,063 - django.request - WARNING - Not Found: /api/permissions/Leaves/
+2024-10-18 16:06:23,072 - django.request - WARNING - Not Found: /api/permissions/Targets/
+2024-10-18 16:06:23,155 - django.request - WARNING - Not Found: /api/permissions/Assign Telephone/
+2024-10-18 16:06:23,158 - django.request - WARNING - Not Found: /api/permissions/Invoice Layout/
+2024-10-18 16:06:23,159 - django.request - WARNING - Not Found: /api/permissions/Follow Up/
+2024-10-18 16:06:23,164 - django.request - WARNING - Not Found: /api/permissions/Shift Roster/
+2024-10-18 16:06:23,167 - django.request - WARNING - Not Found: /api/permissions/Labels Layout/
+2024-10-18 16:06:23,168 - django.request - WARNING - Not Found: /api/permissions/Assign Role/
+2024-10-18 16:06:23,211 - django.request - WARNING - Not Found: /api/permissions/Invoice Management/
+2024-10-18 16:06:23,246 - django.request - WARNING - Not Found: /api/permissions/Call Recording/
+2024-10-18 16:06:23,250 - django.request - WARNING - Not Found: /api/permissions/Add Leads/
+2024-10-18 16:06:23,251 - django.request - WARNING - Not Found: /api/permissions/QC Recording/
+2024-10-18 16:06:23,259 - django.request - WARNING - Not Found: /api/permissions/Export Followup/
+2024-10-18 16:06:23,260 - django.request - WARNING - Not Found: /api/permissions/Export Order/
+2024-10-18 16:06:23,266 - django.request - WARNING - Not Found: /api/permissions/Form list/
+2024-10-18 16:06:23,325 - django.request - WARNING - Not Found: /api/permissions/Lead Form/
+2024-10-18 16:06:23,345 - django.request - WARNING - Not Found: /api/permissions/All Leads/
+2024-10-18 16:06:23,345 - django.request - WARNING - Not Found: /api/permissions/RTO List/
+2024-10-18 16:06:23,350 - django.request - WARNING - Not Found: /api/permissions/EDD Cases/
+2024-10-18 16:06:23,352 - django.request - WARNING - Not Found: /api/permissions/OFD Counter/
+2024-10-18 16:06:23,353 - django.request - WARNING - Not Found: /api/permissions/NDR Cases/
+2024-10-18 16:06:23,377 - django.request - WARNING - Not Found: /api/permissions/Manifesto/
+2024-10-18 16:06:23,425 - django.request - WARNING - Not Found: /api/permissions/Repeat Order/
+2024-10-18 16:06:23,439 - django.request - WARNING - Not Found: /api/permissions/Pincode Order/
+2024-10-18 16:06:23,449 - django.request - WARNING - Not Found: /api/permissions/All Orders/
+2024-10-18 16:06:23,453 - django.request - WARNING - Not Found: /api/permissions/Calegory/
+2024-10-18 16:06:23,453 - django.request - WARNING - Not Found: /api/permissions/Schedule Order/
+2024-10-18 16:06:23,456 - django.request - WARNING - Not Found: /api/permissions/Course Order/
+2024-10-18 16:06:23,475 - django.request - WARNING - Not Found: /api/permissions/Team Performance/
+2024-10-18 16:06:23,488 - django.request - WARNING - Not Found: /api/permissions/Agent Performance/
+2024-10-18 16:06:23,510 - django.request - WARNING - Not Found: /api/permissions/NDR Team Performance/
+2024-10-18 16:06:23,510 - django.request - WARNING - Not Found: /api/permissions/Branch Performance/
+2024-10-18 16:16:27,813 - django.request - WARNING - Method Not Allowed: /api/user-dashboard-tiles/
+2024-10-18 16:49:00,889 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/
+2024-10-18 18:46:36,836 - django.request - WARNING - Not Found: /api/user-dashboard-tiles/
+2024-10-18 18:49:18,625 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/
+2024-10-18 18:50:02,243 - django.request - WARNING - Forbidden: /api/user-dashboard-tiles/

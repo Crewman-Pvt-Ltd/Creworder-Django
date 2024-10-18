@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/', include('cloud_telephony.urls')),
     path('api/', include('lead_management.urls')),
     path('api/', include('shipment.urls')),
+    path('api/', include('dashboard.urls')),
     path('api/', include('superadmin_assets.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -54,7 +54,7 @@ class PackageDetailsModel(models.Model):
     class Meta:
         db_table = "package_detail_table"
     def __str__(self):
-        return f"{self.id} {self.package.name} {self.menu.name}"
+        return f"{self.id} {self.package.name} {self.menu.name} {self.submenu}"
 
 
 class Company(models.Model):
