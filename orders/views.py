@@ -23,6 +23,7 @@ from services.products.products_service import (
 )
 from services.orders.order_service import createOrders,updateOrders,deleteOrder,getOrderDetails,exportOrders,ivoiceDeatail,checkServiceability
 class OrderAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
@@ -330,4 +331,13 @@ class CheckServiceability(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+class GetUserPerformance(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        if 'user_id' not in request.data:
+            return Response({"massage":"user_id is mandatory"},status.HTTP_400_BAD_REQUEST)
+        orders = Order_Table.objects.filter(order_created_by=request.user.id)
+        serializer = OrderTableSerializer(orders, many=True)
+        return Response({"massage":"HI","data":serializer.data},status.HTTP_200_OK)
 

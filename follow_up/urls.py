@@ -16,4 +16,3 @@ urlpatterns = [
     path('createNotepad/', NotepadCreateOrUpdate.as_view(), name='createNotepad'),
     path('getNotepad/<int:auth_id>/', NotepadDetail.as_view(), name='notepad_detail'),  
 ]
-
