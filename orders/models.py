@@ -144,6 +144,16 @@ class Order_Table(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = 'orders_table'
+        
+    def save(self, *args, **kwargs):
+        created = self.pk is None
+        super().save(*args, **kwargs)
+        OrderLogModel.objects.create(
+            order=self,
+            order_status=self.order_status,
+            action_by=self.order_created_by,
+            remark=f"Order {'created' if created else 'updated'} with ID: {self.id}"
+        )
     
 
 class OrderDetail(models.Model):
