@@ -7,14 +7,11 @@ from rest_framework.response import Response
 from orders.models import Order_Table
 from django.utils import timezone
 from datetime import datetime
-
-
 class GetUserDashboardtiles(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         start_datetime = datetime(2024, 1, 1, 0, 0)
-        end_datetime = datetime(2024, 10, 21, 23, 59)
+        end_datetime = datetime(2024, 10, 22, 23, 59)
         tiles_count = {}
         if (
             request.user.has_perm("dashboard.can_view_own_dashboard_running_tile")

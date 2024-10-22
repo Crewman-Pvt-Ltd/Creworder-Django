@@ -12,9 +12,9 @@ import sys
 from datetime import datetime
 import random
 from rest_framework.decorators import action
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
+from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint
-from .serializers import UserSerializer, CompanySerializer, PackageSerializer, UserRoleSerializer, \
+from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
@@ -84,10 +84,11 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         queryset = User.objects.all()
-        if user.role.role == "superadmin":
-            queryset = User.objects.filter(role__role=user.role.role)
-        elif user.role.role == "admin" or user.role.role == "agent":
-            branch = user.profile.branch
+        # pdb.set_trace()
+        if user.profile.user_type == "superadmin":
+            queryset = User.objects.filter(profile__user_type=user.profile.user_type)
+        elif user.profile.user_type == "admin" or user.profile.user_type== "agent":
+            branch = user.profile.user_type
             queryset = User.objects.filter(profile__branch=branch).exclude(id=user.id)
         return queryset
 
@@ -206,10 +207,10 @@ class PackageViewSet(viewsets.ModelViewSet):
         else:
             return Response(package_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class UserRoleViewSet(viewsets.ModelViewSet):
-    queryset = UserRole.objects.all()
-    serializer_class = UserRoleSerializer
-    permission_classes = [IsAuthenticated]
+# class UserRoleViewSet(viewsets.ModelViewSet):
+#     queryset = UserRole.objects.all()
+#     serializer_class = UserRoleSerializer
+#     permission_classes = [IsAuthenticated]
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -238,7 +239,7 @@ class UserPermissionsView(APIView):
         user_data = UserSerializer(user, many=False).data
         profile = UserProfileSerializer(user.profile, many=False).data
         user_data['profile'] = profile
-        role = user.role.role
+        role = user.profile.user_type
         response_data = {"user": user_data, "role": role, "permissions": guardian_permissions}
         return Response(response_data)
 
@@ -315,7 +316,7 @@ class DesignationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role.role == "admin" or user.role.role == "agent":
+        if user.profile.user_type == "admin" or user.profile.user_type == "agent":
             branch = user.profile.branch
             queryset = Designation.objects.filter(branch=branch)
         else:
