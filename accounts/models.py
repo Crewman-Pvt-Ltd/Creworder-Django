@@ -35,10 +35,8 @@ class Package(models.Model):
     updated_at = models.DateField(auto_now=True)
     max_admin = models.IntegerField(blank=True, null=True)
     setup_fees = models.IntegerField(blank=True, null=True)
-    # modules = models.ManyToManyField(Module, related_name='packages')
-
     def save(self, *args, **kwargs):
-        if self.created_by.role.role != 'superadmin':
+        if self.created_by.profile.branch != 'superadmin':
             raise PermissionDenied("Only superadmins can create packages.")
         super().save(*args, **kwargs)
 
@@ -67,10 +65,8 @@ class Company(models.Model):
             ('can_manage_own_company', 'Can manage own company'),
             ('can_change_company_status', 'Can change company status')
         )
-
     payment_freq = [('month', 'Monthly'), ('quarter', "Quarterly"), ('annual', 'Annually')]
     account_type_choices = [('current', 'Current Account'), ('savings', 'Savings Account')]
-
     name = models.CharField(max_length=100, blank=False)
     company_email = models.EmailField(max_length=100, blank=False, unique=True, null=False)
     company_phone = PhoneNumberField(null=False, unique=True, blank=False)
@@ -141,18 +137,16 @@ class Branch(models.Model):
         return f'{self.branch_id} ({self.company.name})'
 
 
-class UserRole(models.Model):
-    ROLE_CHOICES = [
-        ('superadmin', 'Super Admin'),
-        ('admin', 'Admin'),
-        ('agent', 'Agent'),
-    ]
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='role')
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES)
-
-    def __str__(self):
-        return self.user.username
+# class UserRole(models.Model):
+#     ROLE_CHOICES = [
+#         ('superadmin', 'Super Admin'),
+#         ('admin', 'Admin'),
+#         ('agent', 'Agent'),
+#     ]
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='role')
+#     role = models.CharField(max_length=50, choices=ROLE_CHOICES)
+#     def __str__(self):
+#         return self.user.username
 
 
 class UserStatus(models.IntegerChoices):
@@ -183,13 +177,16 @@ class UserProfile(models.Model):
         ('trainee', 'Trainee'),
         ('intern', 'Internship')
     ]
-
+    ROLE_CHOICES = [
+        ('superadmin', 'Super Admin'),
+        ('admin', 'Admin'),
+        ('agent', 'Agent'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     status = models.IntegerField(choices=UserStatus.choices, default=UserStatus.active)
     gender = models.CharField(max_length=2, choices=gender_choices, default="m")
     contact_no = PhoneNumberField(null=False, unique=True, blank=False)
-    marital_status = models.CharField(max_length=20, choices=[('married', "Married"), ('unmarried', "Unmarried")],
-                                      default="unmarried")
+    marital_status = models.CharField(max_length=20, choices=[('married', "Married"), ('unmarried', "Unmarried")],default="unmarried")
     date_of_joining = models.DateField(auto_now_add=True)
     daily_order_target = models.IntegerField(blank=True, null=True)
     reporting = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
@@ -199,16 +196,15 @@ class UserProfile(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name='users')
     professional_email = models.EmailField(null=True, blank=True)
-    # shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True, related_name='shift')
+    teamlead=models.ForeignKey(User,on_delete=models.PROTECT,null=True,blank=True,related_name='agent_teamlead')
+    manager=models.ForeignKey(User,on_delete=models.PROTECT,null=True,blank=True,related_name='agent_manager')
     enrolment_id = models.CharField(max_length=50, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
-    department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name="department_wise_users",
-                                   null=True, blank=True)
-    designation = models.ForeignKey('Designation', on_delete=models.PROTECT, related_name='designation_wise_users',
-                                    null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.PROTECT, related_name="department_wise_users",null=True, blank=True)
+    designation = models.ForeignKey('Designation', on_delete=models.PROTECT, related_name='designation_wise_users',null=True, blank=True)
     login_allowed = models.BooleanField(default=False)
     employment_type = models.CharField(max_length=30, null=True, blank=True, choices=employment_choices)
-
+    user_type = models.CharField(max_length=50, choices=ROLE_CHOICES,default="agent")
     def save(self, *args, **kwargs):
         if not self.employee_id:
             self.employee_id = self.generate_employee_id()
@@ -216,9 +212,9 @@ class UserProfile(models.Model):
 
     def generate_employee_id(self):
         prefix = ""
-        if self.user.role.role == "superadmin":
+        if self.user.profile.user_type == "superadmin":
             prefix = "SUPER"
-        elif self.user.role.role == "admin" or self.user.role.role == "agent":
+        elif self.user.profile.user_type == "admin" or self.user.profile.user_type == "agent":
             prefix = str(self.user.profile.company.company_id).upper()[:4]
 
         length = 8 - len(prefix)

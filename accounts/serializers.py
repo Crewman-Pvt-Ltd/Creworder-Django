@@ -2,7 +2,7 @@ import pdb
 from django.contrib.auth.models import Group,Permission 
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
-from .models import User, Company, Package, UserRole, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
+from .models import User, Company, Package,UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup,\
     PickUpPoint
 import string
@@ -73,16 +73,16 @@ class FormEnquirySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserRoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserRole
-        fields = '__all__'
+# class UserRoleSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserRole
+#         fields = '__all__'
 
 
-class UserRoleCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserRole
-        exclude = ['user']
+# class UserRoleCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserRole
+#         exclude = ['user']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -105,49 +105,34 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileCreateSerializer()
-    role = UserRoleCreateSerializer()
-
+    # role = UserRoleCreateSerializer()
     class Meta:
         model = User
         fields = ['id', 'username', 'password',  'first_name', 'last_name', 'email', 'last_login', 'date_joined',
-                  'is_staff', 'profile', 'role']
+                  'is_staff', 'profile']
         extra_kwargs = {
             'password': {'write_only': True}
         }
-
     def create(self, validated_data):
         profile_data = validated_data.pop("profile")
-        role_data = validated_data.pop("role")
-        # pdb.set_trace()
-        # password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-        # print(password)
-
         user = User.objects.create_user(**validated_data)
-
-        UserRole.objects.create(user=user, **role_data)
         UserProfile.objects.create(user=user, **profile_data)
-
         return user
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
-
-        # pdb.set_trace()
-
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
         instance.is_staff = validated_data.get('is_staff', instance.is_staff)
         instance.save()
-
         if profile_data:
             profile = instance.profile
             pdb.set_trace()
             for attr, value in profile_data.items():
                 setattr(profile, attr, value)
             profile.save()
-
         return instance
 
 
@@ -164,10 +149,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         contact_no = validated_data.pop("contact_no")
         package = Package.objects.get(id=1)
         company = Company.objects.create(package=package, **company_data)
-
         user = User.objects.create_user(**validated_data)
-        UserRole.objects.create(user=user, role='admin')
-
         UserProfile.objects.create(
             user=user,
             contact_no=contact_no,
