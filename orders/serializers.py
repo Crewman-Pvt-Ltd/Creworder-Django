@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductModel
         fields = '__all__'  
+        
 class OrderDetailSerializer(serializers.ModelSerializer):
     gst_rate=serializers.SerializerMethodField()
     class Meta:

@@ -4,10 +4,15 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from orders.models import Order_Table
-from accounts.models import UserProfile
+from orders.models import Order_Table,OrderDetail
+from orders.serializers import OrderDetailSerializer,OrderTableSerializer
+from accounts.models import UserProfile,UserTargetsDelails,User
+from accounts.serializers import UserProfileSerializer,UserSerializer
+from .serializers import UserDetailForDashboard
 from django.utils import timezone
 from django.db.models import Q
+import pdb
+import time
 from datetime import datetime
 class GetUserDashboardtiles(APIView):
     permission_classes = [IsAuthenticated]
@@ -587,3 +592,101 @@ class GetUserDashboardtiles(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+class TeamOrderListForDashboard(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        data={}
+        if (request.user.has_perm("dashboard.can_view_own_dashboard_team_order_list") or request.user.has_perm("dashboard.can_view_all_dashboard_team_order_list") or request.user.has_perm("dashboard.can_view_manager_dashboard_team_order_list") or request.user.has_perm("dashboard.can_view_teamlead_dashboard_team_order_list") or request.user.profile.user_type=='admin'):
+            if request.user.has_perm("dashboard.can_view_own_dashboard_team_order_list"):
+                pass
+            elif request.user.has_perm("dashboard.can_view_all_dashboard_team_order_list") or request.user.profile.user_type=='admin':
+                teamlead_ids = UserProfile.objects.filter(branch=request.user.profile.branch, company=request.user.profile.company).values_list('teamlead', flat=True).distinct() 
+                _teamleadTotalOrder=0
+                _teamleadDailyTarget=0
+                _teamleadTotalLead=0
+                _teamleadAcceptedOrder=0
+                _teamleadRejectedOrder=0
+                _teamleadNoResponse=0 
+                for teamlead_id in list(teamlead_ids):
+                    if teamlead_id!=None:
+                        _teamleaddat = User.objects.filter(id=teamlead_id).first()
+                        if _teamleaddat:
+                            _teamlead_serialized_data = UserSerializer(_teamleaddat).data
+                        agent_ids = UserProfile.objects.filter(branch=request.user.profile.branch, company=request.user.profile.company,teamlead=teamlead_id).values_list('user', flat=True).distinct()
+                        userDetailsDict={}
+                        for agent_id in list(agent_ids):
+                            user_profile = User.objects.filter(id=agent_id).first()
+                            if user_profile:
+                                _agent_serialized_data = UserSerializer(user_profile).data
+                            _teamleadDailyTarget += _agent_serialized_data['profile']['daily_order_target']
+                            _totalOrder = Order_Table.objects.filter(order_created_by=agent_id,branch=request.user.profile.branch,company=request.user.profile.company).count()
+                            _teamleadTotalOrder += _totalOrder
+                            _acceptedOrder = Order_Table.objects.filter(order_created_by=agent_id,branch=request.user.profile.branch,company=request.user.profile.company,order_status=2).count()
+                            _teamleadAcceptedOrder += _acceptedOrder
+                            _rejectedOrder = Order_Table.objects.filter(order_created_by=agent_id,branch=request.user.profile.branch,company=request.user.profile.company,order_status=3).count()
+                            _noResponse = Order_Table.objects.filter(order_created_by=agent_id,branch=request.user.profile.branch,company=request.user.profile.company,order_status=4).count()
+                            userDetailsDict[agent_id]={"id":agent_id,"total_order":_totalOrder,"daily_target":_agent_serialized_data['profile']['daily_order_target'],"name":_agent_serialized_data['username'],"total_Lead":100,"accepted_order":_acceptedOrder,"rejected_order":_rejectedOrder,"no_response":_noResponse}
+                            data[teamlead_id]=userDetailsDict
+                        userDetailsDict["teamleadTiles"]={"lead_id":teamlead_id,"teamlead_name":_teamlead_serialized_data['username'],"total_order":_teamleadTotalOrder,"daily_target":_teamleadDailyTarget,"total_lead":_teamleadTotalLead,"accepted_order":_teamleadAcceptedOrder,"oejected_order":_teamleadRejectedOrder,"no_response":_teamleadNoResponse}
+                        _teamleadTotalOrder, _teamleadDailyTarget, _teamleadTotalLead, _teamleadAcceptedOrder, _teamleadRejectedOrder, _teamleadNoResponse = (0, 0, 0, 0, 0, 0)
+
+            elif request.user.has_perm("dashboard.can_view_manager_dashboard_team_order_list"):
+                pass
+            elif request.user.has_perm("dashboard.can_view_teamlead_dashboard_team_order_list"):
+                pass
+        return Response(
+            {
+                "status": True,
+                "message": "Data fetched successfully",
+                "data": data,
+                "errors": None,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+class TopShellingProduct(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        _orderDetails = Order_Table.objects.filter(branch=request.user.profile.branch,company=request.user.profile.company)
+        _orderSerializerData = OrderTableSerializer(_orderDetails, many=True).data
+        # _productId = {}
+        _productId = {}
+        for order in _orderSerializerData:
+            for product in order['order_details']:
+                print(product)
+                product_name = product['product_name']
+                product_qty = product['product_qty']
+                product_mrp = product['product_mrp']
+                price = product_mrp * product_qty
+                order_id = product['order']
+
+                if product_name in _productId:
+                    if _productId[product_name]['orderId'] != order_id:
+                        _productId[product_name]['order_count'] += 1
+                        _productId[product_name]['orderId'] = order_id
+                        
+                    _productId[product_name]['unit'] += product_qty
+                    _productId[product_name]['total_shell_in_rupee'] = _productId[product_name]['unit']*product_mrp
+                else:
+                    _productId[product_name] = {
+                        "unit": product_qty,
+                        "total_shell_in_rupee": price,
+                        "product_price": product_mrp,
+                        "product_image": "-------------------",
+                        "orderId": order_id,
+                        "order_count": 1
+                    }
+                # print(_productId)
+                # time.sleep(8)
+
+        return Response(
+            {
+                "status": True,
+                "message": "Data fetched successfully",
+                "data": _productId,
+                "errors": None,
+            },
+            status=status.HTTP_200_OK,
+        )
+        pass
