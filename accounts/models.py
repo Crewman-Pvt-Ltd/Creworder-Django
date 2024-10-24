@@ -224,7 +224,30 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
+    
+class UserTargetsDelails(models.Model):
+    month_choice = [
+    ('january', 'January'),
+    ('february', 'February'),
+    ('march', 'March'),
+    ('april', 'April'),
+    ('may', 'May'),
+    ('june', 'June'),
+    ('july', 'July'),
+    ('august', 'August'),
+    ('september', 'September'),
+    ('october', 'October'),
+    ('november', 'November'),
+    ('december', 'December'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='targets')
+    month = models.CharField(max_length=20, blank=False, null=False, choices=month_choice)
+    target=models.IntegerField(blank=False,null=False)
+    achieved_target=models.IntegerField(blank=False,null=False)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    class Meta:
+        db_table = 'user_targets_details_table'
 
 class Notice(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)

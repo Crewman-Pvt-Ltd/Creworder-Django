@@ -135,7 +135,7 @@ class BranchViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role.role == "admin" or user.role.role == "agent":
+        if user.profile.user_type == "admin" or user.profile.user_type == "agent":
             company = user.profile.company
             queryset = Branch.objects.filter(company=company)
         else:

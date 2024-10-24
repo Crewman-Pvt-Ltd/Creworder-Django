@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 from .models import User, Company, Package,UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance,ShiftRoster,PackageDetailsModel,CustomAuthGroup,\
-    PickUpPoint
+    PickUpPoint,UserTargetsDelails
 import string
 import random
 from superadmin_assets.serializers import SubMenuSerializer,MenuSerializer
