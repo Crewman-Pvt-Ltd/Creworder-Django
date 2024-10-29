@@ -128,6 +128,7 @@ class Order_Table(models.Model):
     repeat_order = models.IntegerField(choices=[(0, 'New'), (1, 'Repeat')])
     order_created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     is_booked = models.IntegerField(choices=[(0, 'Not Booked'), (1, 'Booked')])
+    is_scheduled = models.IntegerField(choices=[(0, 'Not Schedule'), (1, 'Scheduled')],default=0)
     service_provider = models.CharField(max_length=50, null=True, blank=True)
     call_id = models.CharField(max_length=50, null=True, blank=True)
     course_order = models.IntegerField(default=0)
