@@ -4,16 +4,23 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from orders.models import Order_Table,OrderDetail
+from orders.models import Order_Table,OrderDetail,Customer_State
 from orders.serializers import OrderDetailSerializer,OrderTableSerializer
 from accounts.models import UserProfile,UserTargetsDelails,User
 from accounts.serializers import UserProfileSerializer,UserSerializer
-from .serializers import UserDetailForDashboard
+from .serializers import UserDetailForDashboard,OrderSerializerDashboard
+from django.db.models import Count, OuterRef, Subquery,Sum
+from utils.custom_logger import setup_logging
 from django.utils import timezone
 from django.db.models import Q
+from django.db.models import Count
 import pdb
 import time
+import traceback
 from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
+setup_logging(log_file='logs/dashboard_view.log', log_level=logging.WARNING)
 class GetUserDashboardtiles(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -645,48 +652,351 @@ class TeamOrderListForDashboard(APIView):
             status=status.HTTP_200_OK,
         )
 
+# class TopShellingProduct(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request, *args, **kwargs):
+#         _orderDetails = Order_Table.objects.filter(branch=request.user.profile.branch,company=request.user.profile.company)
+#         _orderSerializerData = OrderTableSerializer(_orderDetails, many=True).data
+#         _productId = {}
+#         for order in _orderSerializerData:
+#             for product in order['order_details']:
+#                 product_name = product['product_name']
+#                 product_qty = product['product_qty']
+#                 product_mrp = product['product_mrp']
+#                 price = product_mrp * product_qty
+#                 order_id = product['order']
+
+#                 if product_name in _productId:
+#                     if _productId[product_name]['orderId'] != order_id:
+#                         _productId[product_name]['order_count'] += 1
+#                         _productId[product_name]['orderId'] = order_id
+                        
+#                     _productId[product_name]['unit'] += product_qty
+#                     _productId[product_name]['total_shell_in_rupee'] = _productId[product_name]['unit']*product_mrp
+#                 else:
+#                     _productId[product_name] = {
+#                         "unit": product_qty,
+#                         "total_shell_in_rupee": price,
+#                         "product_price": product_mrp,
+#                         "product_image": "-------------------",
+#                         "orderId": order_id,
+#                         "order_count": 1
+#                     }
+
+#         return Response(
+#             {
+#                 "status": True,
+#                 "message": "Data fetched successfully",
+#                 "data": _productId,
+#                 "errors": None,
+#             },
+#             status=status.HTTP_200_OK,
+#         )
+
+
 class TopShellingProduct(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
-        _orderDetails = Order_Table.objects.filter(branch=request.user.profile.branch,company=request.user.profile.company)
-        _orderSerializerData = OrderTableSerializer(_orderDetails, many=True).data
-        # _productId = {}
-        _productId = {}
-        for order in _orderSerializerData:
+        _branch = request.user.profile.branch_id
+        if 'branch' in request.GET and request.GET['branch']:
+            _branch = request.GET['branch']
+            
+        orders = Order_Table.objects.filter(
+            branch=_branch,
+            company=request.user.profile.company
+        )
+        serialized_orders = OrderTableSerializer(orders, many=True).data
+        product_summary = self._summarize_products(serialized_orders)
+        
+        return Response(
+            {
+                "status": True,
+                "message": "Data fetched successfully",
+                "data": product_summary,
+                "errors": None,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    def _summarize_products(self, orders):
+        product_summary = {}
+
+        for order in orders:
             for product in order['order_details']:
-                print(product)
                 product_name = product['product_name']
                 product_qty = product['product_qty']
                 product_mrp = product['product_mrp']
-                price = product_mrp * product_qty
                 order_id = product['order']
+                total_price = product_mrp * product_qty
 
-                if product_name in _productId:
-                    if _productId[product_name]['orderId'] != order_id:
-                        _productId[product_name]['order_count'] += 1
-                        _productId[product_name]['orderId'] = order_id
-                        
-                    _productId[product_name]['unit'] += product_qty
-                    _productId[product_name]['total_shell_in_rupee'] = _productId[product_name]['unit']*product_mrp
+                if product_name in product_summary:
+                    self._update_product_summary(product_summary[product_name], product_qty, order_id, total_price)
                 else:
-                    _productId[product_name] = {
-                        "unit": product_qty,
-                        "total_shell_in_rupee": price,
-                        "product_price": product_mrp,
-                        "product_image": "-------------------",
-                        "orderId": order_id,
-                        "order_count": 1
-                    }
-                # print(_productId)
-                # time.sleep(8)
+                    product_summary[product_name] = self._create_new_product_entry(
+                        product_qty, total_price, product_mrp, order_id
+                    )
+
+        return product_summary
+
+    def _update_product_summary(self, product_data, qty, order_id, total_price):
+        if product_data['orderId'] != order_id:
+            product_data['order_count'] += 1
+            product_data['orderId'] = order_id
+
+        product_data['unit'] += qty
+        product_data['total_shell_in_rupee'] = product_data['unit'] * product_data['product_price']
+
+    def _create_new_product_entry(self, qty, total_price, price, order_id):
+        return {
+            "unit": qty,
+            "total_shell_in_rupee": total_price,
+            "product_price": price,
+            "product_image": "-------------------",
+            "orderId": order_id,
+            "order_count": 1
+        }
+
+class ScheduleOrderForDashboard(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            _branch = request.user.profile.branch_id
+            start_datetime, end_datetime = self.get_date_range(request)
+            if 'branch' in request.GET and request.GET['branch']:
+                _branch = request.GET['branch']
+
+            scheduled_count = self.get_order_count(is_scheduled=1, branch=_branch, start_datetime=start_datetime, end_datetime=end_datetime)
+            non_scheduled_count = self.get_order_count(is_scheduled=0, branch=_branch, start_datetime=start_datetime, end_datetime=end_datetime)
+            return Response(
+                {
+                    "status": True,
+                    "message": "Data fetched successfully",
+                    "data": {
+                        "non_scheduled": non_scheduled_count,
+                        "scheduled": scheduled_count,
+                    },
+                    "errors": None,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            return Response(
+                {"status": False, "message": "An error occurred", "data": {}, "errors": True},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    def get_date_range(self, request):
+        """Extract and validate the date range from the request."""
+        if 'date_range' in request.GET and request.GET['date_range']:
+            date_range = request.GET['date_range'].split(' ')
+            if len(date_range) != 2:
+                raise ValueError("Date Range invalid")
+            start_datetime = datetime.fromisoformat(date_range[0])
+            end_datetime = datetime.fromisoformat(date_range[1])
+            return start_datetime, end_datetime
+        else:
+            today = datetime.now()
+            return datetime(today.year, today.month, 1), today
+
+    def get_order_count(self, is_scheduled, branch, start_datetime, end_datetime):
+        """Count orders based on scheduling status."""
+        return Order_Table.objects.filter(
+            is_scheduled=is_scheduled,
+            branch=branch,
+            company=self.request.user.profile.company,
+            updated_at__range=(start_datetime, end_datetime),
+        ).count()
+
+class StateWiseSalesTracker(APIView):
+    def get(self, request, *args: tuple, **kwargs: dict) -> Response:
+        try:
+            dashboard = ScheduleOrderForDashboard()
+            _branch = request.user.profile.branch_id
+            start_datetime, end_datetime = dashboard.get_date_range(request)
+            if 'branch' in request.GET and request.GET['branch']:
+                _branch = request.GET['branch']
+
+            orders_data = (
+                Order_Table.objects.filter(
+                    branch=_branch,
+                    company=request.user.profile.company,
+                    updated_at__range=(start_datetime, end_datetime),
+                )
+                .values('customer_state')
+                .annotate(count=Count('id'))
+            )
+
+            state_mapping = {state.id: state.name for state in Customer_State.objects.all()}
+            state_counts = {
+                state_mapping.get(entry['customer_state'], 'Unknown'): entry['count']
+                for entry in orders_data
+            }
+
+            if not state_counts:
+                return Response(
+                    {
+                        "status": True,
+                        "message": "No data found for the specified criteria.",
+                        "data": state_counts,
+                        "errors": None,
+                    },
+                    status=status.HTTP_204_NO_CONTENT,
+                )
+
+            return Response(
+                {
+                    "status": True,
+                    "message": "Data fetched successfully",
+                    "data": state_counts,
+                    "errors": None,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            logger.error(f"Error fetching state-wise sales data: {str(e)}")
+            logger.error(traceback.format_exc())
+            return Response(
+                {
+                    "status": False,
+                    "message": "An error occurred while fetching data.",
+                    "data": None,
+                    "errors": str(e),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+            
+class InvoiceDataForDashboard(APIView):
+    def get(self, request, *args: tuple, **kwargs: dict) -> Response:
+        dashboard = ScheduleOrderForDashboard()
+        _branch = request.user.profile.branch_id
+
+        try:
+            start_datetime, end_datetime = dashboard.get_date_range(request)
+        except Exception as e:
+            logger.error(f"Error fetching date range: {e}")
+            return Response(
+                {
+                    "status": False,
+                    "message": "Error fetching date range.",
+                    "errors": True,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if 'branch' in request.GET and request.GET['branch']:
+            _branch = request.GET['branch']
+        
+        try:
+            orders_data = Order_Table.objects.filter(
+                branch=_branch,
+                company=request.user.profile.company,
+                updated_at__range=(start_datetime, end_datetime),
+            )
+        except Exception as e:
+            logger.error(f"Error fetching orders data: {e}")
+            return Response(
+                {
+                    "status": False,
+                    "message": "Error fetching orders data.",
+                    "errors": True,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        data = {
+            'unpaid_amount': {'count': 0, 'amount': 0},
+            'paid_amount': {'count': 0, 'amount': 0},
+            'cancel_amount': {'count': 0, 'amount': 0},
+            'sent_amount': {'count': 0, 'amount': 0},
+        }
+
+        if orders_data.exists():
+            for row in orders_data:
+                try:
+                    if (row.payment_status.id == 1 or row.payment_status.id == 3) and row.order_status.id != 3 and row.is_scheduled == 0:
+                        data['unpaid_amount']['count'] += 1
+                        data['unpaid_amount']['amount'] += (row.gross_amount - row.prepaid_amount)
+                    elif row.payment_status.id == 2:
+                        data['paid_amount']['count'] += 1
+                        data['paid_amount']['amount'] += row.gross_amount
+                    elif row.order_status.id == 3:
+                        data['cancel_amount']['count'] += 1
+                        data['cancel_amount']['amount'] += row.gross_amount
+                    elif row.is_scheduled == 1:
+                        data['sent_amount']['count'] += 1
+                        data['sent_amount']['amount'] += row.gross_amount
+                except Exception as e:
+                    logger.error(f"Error processing order ID {row.id}: {e}")
 
         return Response(
             {
                 "status": True,
                 "message": "Data fetched successfully",
-                "data": _productId,
-                "errors": None,
+                "data": data,
+                "errors": False,
             },
             status=status.HTTP_200_OK,
         )
-        pass
+class SalesForecastDashboard(APIView):
+    def get(self, request, *args: tuple, **kwargs: dict) -> Response:
+        dashboard = ScheduleOrderForDashboard()
+        _branch = request.user.profile.branch_id
+
+        try:
+            start_datetime, end_datetime = dashboard.get_date_range(request)
+        except Exception as e:
+            logger.error(f"Error fetching date range: {e}")
+            return Response(
+                {
+                    "status": False,
+                    "message": "Error fetching date range.",
+                    "errors": True,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if 'branch' in request.GET and request.GET['branch']:
+            _branch = request.GET['branch']
+        
+        try:
+            orders_data = Order_Table.objects.filter(
+                branch=_branch,
+                company=request.user.profile.company,
+                updated_at__range=(start_datetime, end_datetime),
+            )
+        except Exception as e:
+            logger.error(f"Error fetching orders data: {e}")
+            return Response(
+                {
+                    "status": False,
+                    "message": "Error fetching orders data.",
+                    "errors": True,
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        data = {}
+        if orders_data.exists():
+            for row in orders_data:
+                try:
+                    status_name = row.order_status.name
+                    if status_name in data:
+                        data[status_name]['count'] += 1
+                        data[status_name]['amount'] += row.gross_amount
+                    else:
+                        data[status_name] = {
+                            'count': 1,
+                            'amount': row.gross_amount,
+                        }
+                except Exception as e:
+                    logger.error(f"Error processing order with ID {row.id}: {e}")
+
+        return Response(
+            {
+                "status": True,
+                "message": "Data fetched successfully",
+                "data": data,
+                "errors": False,
+            },
+            status=status.HTTP_200_OK,
+        )
