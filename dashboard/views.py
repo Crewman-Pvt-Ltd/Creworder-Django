@@ -9,7 +9,7 @@ from orders.serializers import OrderDetailSerializer,OrderTableSerializer
 from accounts.models import UserProfile,UserTargetsDelails,User
 from accounts.serializers import UserProfileSerializer,UserSerializer
 from .serializers import UserDetailForDashboard,OrderSerializerDashboard
-from django.db.models import Count, OuterRef, Subquery,Sum
+from django.db.models import Count, OuterRef, Subquery, Sum
 from utils.custom_logger import setup_logging
 from django.utils import timezone
 from django.db.models import Q
@@ -21,11 +21,15 @@ from datetime import datetime
 import logging
 logger = logging.getLogger(__name__)
 setup_logging(log_file='logs/dashboard_view.log', log_level=logging.WARNING)
+
 class GetUserDashboardtiles(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        start_datetime = datetime(2024, 1, 1, 0, 0)
-        end_datetime = datetime(2024, 10, 22, 23, 59)
+        dashboard = ScheduleOrderForDashboard()
+        _branch = request.user.profile.branch_id
+        start_datetime, end_datetime = dashboard.get_date_range(request)
+        if 'branch' in request.GET and request.GET['branch']:
+            _branch = request.GET['branch']
         agent_ids = UserProfile.objects.filter(manager=request.user.id).values_list('user', flat=True)
         user_ids_for_manager = UserProfile.objects.filter(Q(teamlead__in=agent_ids) | Q(user=request.user.id)).values_list('user', flat=True)
         user_ids_for_manager = set(user_ids_for_manager) | set(agent_ids)
@@ -43,27 +47,27 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_running_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_running_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_manager_dashboard_running_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_manager,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_teamlead_dashboard_running_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_teamlead,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -77,13 +81,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_Pending_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=1,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_Pending_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=1,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -91,7 +95,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_manager,
                     order_status=1,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -99,7 +103,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_teamlead,
                     order_status=1,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -114,7 +118,7 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_repeat_order_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     repeat_order=1,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -123,7 +127,7 @@ class GetUserDashboardtiles(APIView):
                 "dashboard.can_view_all_dashboard_repeat_order_tile"
             ):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     repeat_order=1,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -131,7 +135,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_teamlead,
                     repeat_order=1,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -139,7 +143,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_manager,
                     repeat_order=1,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -158,13 +162,13 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
                     order_status=3,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_rejected_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,                    
                     order_status=3,
                     created_at__range=(start_datetime, end_datetime),
@@ -173,7 +177,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_teamlead,
                     order_status=3,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -181,7 +185,7 @@ class GetUserDashboardtiles(APIView):
                 orders_count = Order_Table.objects.filter(
                     order_created_by__in=user_ids_for_manager,
                     order_status=3,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -196,7 +200,7 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_all_dashboard_in_transit_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     company=request.user.profile.company,
                     order_status=6,
                     created_at__range=(start_datetime, end_datetime),
@@ -206,7 +210,7 @@ class GetUserDashboardtiles(APIView):
                 "dashboard.can_view_all_dashboard_in_transit_tile"
             ):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=6,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -234,14 +238,14 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_accepted_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=2,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
                 tiles_count["running_tile_count"] = orders_count
             elif request.user.has_perm("dashboard.can_view_all_dashboard_accepted_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=2,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -269,13 +273,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_no_response_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=4,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_no_response_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=4,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -303,14 +307,14 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_future_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=5,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
                 tiles_count["running_tile_count"] = orders_count
             elif request.user.has_perm("dashboard.can_view_all_dashboard_future_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=5,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -337,13 +341,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_delivered_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=7,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_delivered_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=7,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -370,7 +374,7 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_delivered_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=8,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -403,13 +407,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_rto"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=9,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_rto"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=9,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -436,13 +440,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_non_serviceable_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=10,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_non_serviceable_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=10,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -469,13 +473,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_reattempt_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=11,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_reattempt_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=11,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -502,13 +506,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_ofd_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=12,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_own_dashboard_ofd_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=12,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -535,13 +539,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_lost_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=14,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_lost_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=14,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -567,13 +571,13 @@ class GetUserDashboardtiles(APIView):
             if request.user.has_perm("dashboard.can_view_own_dashboard_ndr_tile"):
                 orders_count = Order_Table.objects.filter(
                     order_created_by=request.user.id,
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=36,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
             elif request.user.has_perm("dashboard.can_view_all_dashboard_ndr_tile"):
                 orders_count = Order_Table.objects.filter(
-                    branch=request.user.profile.branch,
+                    branch=_branch,
                     order_status=36,
                     created_at__range=(start_datetime, end_datetime),
                 ).count()
@@ -651,48 +655,6 @@ class TeamOrderListForDashboard(APIView):
             },
             status=status.HTTP_200_OK,
         )
-
-# class TopShellingProduct(APIView):
-#     permission_classes = [IsAuthenticated]
-#     def get(self, request, *args, **kwargs):
-#         _orderDetails = Order_Table.objects.filter(branch=request.user.profile.branch,company=request.user.profile.company)
-#         _orderSerializerData = OrderTableSerializer(_orderDetails, many=True).data
-#         _productId = {}
-#         for order in _orderSerializerData:
-#             for product in order['order_details']:
-#                 product_name = product['product_name']
-#                 product_qty = product['product_qty']
-#                 product_mrp = product['product_mrp']
-#                 price = product_mrp * product_qty
-#                 order_id = product['order']
-
-#                 if product_name in _productId:
-#                     if _productId[product_name]['orderId'] != order_id:
-#                         _productId[product_name]['order_count'] += 1
-#                         _productId[product_name]['orderId'] = order_id
-                        
-#                     _productId[product_name]['unit'] += product_qty
-#                     _productId[product_name]['total_shell_in_rupee'] = _productId[product_name]['unit']*product_mrp
-#                 else:
-#                     _productId[product_name] = {
-#                         "unit": product_qty,
-#                         "total_shell_in_rupee": price,
-#                         "product_price": product_mrp,
-#                         "product_image": "-------------------",
-#                         "orderId": order_id,
-#                         "order_count": 1
-#                     }
-
-#         return Response(
-#             {
-#                 "status": True,
-#                 "message": "Data fetched successfully",
-#                 "data": _productId,
-#                 "errors": None,
-#             },
-#             status=status.HTTP_200_OK,
-#         )
-
 
 class TopShellingProduct(APIView):
     permission_classes = [IsAuthenticated]
@@ -937,6 +899,7 @@ class InvoiceDataForDashboard(APIView):
             },
             status=status.HTTP_200_OK,
         )
+        
 class SalesForecastDashboard(APIView):
     def get(self, request, *args: tuple, **kwargs: dict) -> Response:
         dashboard = ScheduleOrderForDashboard()
