@@ -13,4 +13,4 @@ class MenuViewSet(viewsets.ModelViewSet):
 class SubMenuViewSet(viewsets.ModelViewSet):
     queryset = SubMenuModel.objects.all()
     serializer_class = SubMenuSerializer
-    pagination_class = None 
+    pagination_class = None

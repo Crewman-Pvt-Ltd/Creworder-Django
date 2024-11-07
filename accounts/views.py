@@ -881,26 +881,14 @@ class PermmisionViewSet(viewsets.ModelViewSet):
     pagination_class = None 
 
 class FetchPermissionView(APIView):
-    def get(self, request, model_name=None):
-        modelname=''
-        try:
-            for ct in ContentType.objects.all():
-                model_class = ct.model_class()
-                if model_class:
-                    print(model_class.__name__)
-                    if model_name.lower() == 'menu':
-                        modelname = 'MenuModel'
-                    elif model_name.lower() == 'employes':
-                        modelname = 'User'
-                    elif model_name.lower()  in model_class.__name__.lower():
-                        modelname= model_class.__name__
-            print(modelname)
-            content_type = ContentType.objects.get(model=modelname.lower())
-            permissions = Permission.objects.filter(content_type=content_type)
-            serializer = PermissionSerializer(permissions, many=True)
-            return Response(serializer.data)
-        except ContentType.DoesNotExist:
-            return Response({"error": "Model not found"}, status=404)
+    def post(self, request, model_name=None):
+        if not request.data or 'name_list' not in request.data or not request.data['name_list']:
+            return Response({"detail": "Request body must contain a non-empty 'name_list'."}, status=400)
+        name_list = [name.replace(" ", "_").lower() for name in request.data.get('name_list', [])]
+        content_type_ids = ContentType.objects.filter(model__in=name_list).values_list('id', flat=True)
+        permissions = Permission.objects.filter(content_type__in=content_type_ids)
+        return Response(PermissionSerializer(permissions, many=True).data)
+
         
 class PickUpPointView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]

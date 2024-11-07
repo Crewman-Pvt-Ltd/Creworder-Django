@@ -904,7 +904,11 @@ class SalesForecastDashboard(APIView):
     def get(self, request, *args: tuple, **kwargs: dict) -> Response:
         dashboard = ScheduleOrderForDashboard()
         _branch = request.user.profile.branch_id
-
+        if request.user.has_perm("testcontent1.test_permission1"):
+            return Response({"name":"han sahi challa he"},status=status.HTTP_200_OK)
+        else:
+            return Response({"name":"nhi sahi challa he 😔"},status=status.HTTP_403_FORBIDDEN)
+            
         try:
             start_datetime, end_datetime = dashboard.get_date_range(request)
         except Exception as e:

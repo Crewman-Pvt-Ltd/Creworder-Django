@@ -42,6 +42,6 @@ urlpatterns = [
     path('user-notices/', GetNoticesForUser.as_view(), name="user-notices"),
     path('username-suggestions/', GetUsernameSuggestions.as_view(), name="username-suggestions"),
     path('get-attendance/', AttendanceView.as_view(), name='get-attendance'),
-    path('permissions/<str:model_name>/', FetchPermissionView.as_view(), name='fetch-permissions'),
+    path('get-permission-ids/', FetchPermissionView.as_view(), name='fetch-permissions'),
     path('testing/', Testing.as_view(), name="testing")
 ]
