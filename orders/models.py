@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import PermissionDenied
 from accounts.models import Company, Branch
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import Permission
 
 class CategoryModel(models.Model):
     STATUS = [
@@ -51,6 +53,20 @@ class ProductModel(models.Model):
     def __str__(self):
         return f"products {self.id} by {self.product_name}"
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        content_type, created = ContentType.objects.get_or_create(
+            app_label=f"{self.product_name.lower().replace(' ', '_')}",
+            model=f"{self.product_name.lower().replace(' ', '_')}"
+        )
+        permission_names = ["can_work_on_this"]
+        for perm_name in permission_names:
+            Permission.objects.get_or_create(
+                name=f"Product {perm_name.replace('_', ' ').capitalize()} {self.product_name.replace('_', ' ')}",
+                codename=f"product_{perm_name}_{self.product_name.lower().replace(' ', '_')}",
+                content_type=content_type
+            )
+    
 class Payment_Type(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
@@ -74,6 +90,20 @@ class OrderStatus(models.Model):
         db_table = 'order_status_table'
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        content_type, created = ContentType.objects.get_or_create(
+            app_label=f"{self.name.lower().replace(' ', '_')}",
+            model=f"{self.name.lower().replace(' ', '_')}"
+        )
+        permission_names = ["can_work_on_this"]
+        for perm_name in permission_names:
+            Permission.objects.get_or_create(
+                name=f"Order Status {perm_name.replace('_', ' ').capitalize()} {self.name.replace('_', ' ')}",
+                codename=f"order_status_{perm_name}_{self.name.lower().replace(' ', '_')}",
+                content_type=content_type
+            )
     
 class Payment_Status(models.Model):
     id = models.AutoField(primary_key=True)

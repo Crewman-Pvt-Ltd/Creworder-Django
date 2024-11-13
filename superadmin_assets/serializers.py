@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MenuModel,SubMenuModel
+from .models import MenuModel,SubMenuModel,SettingsMenu
 
 
 class SubMenuSerializer(serializers.ModelSerializer):
@@ -17,3 +17,9 @@ class MenuSerializer(serializers.ModelSerializer):
     def get_sub_menu_list(self, menu):
         sub_menus = SubMenuModel.objects.filter(menu_id=menu.id)
         return SubMenuSerializer(sub_menus, many=True).data
+
+
+class SettingMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SettingsMenu
+        fields = '__all__'

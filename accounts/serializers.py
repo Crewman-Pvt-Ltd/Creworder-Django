@@ -325,3 +325,9 @@ class PickUpPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = PickUpPoint
         fields = '__all__'
+
+
+class PermissionSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename', 'content_type']
