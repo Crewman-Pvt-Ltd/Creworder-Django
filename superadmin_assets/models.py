@@ -25,7 +25,7 @@ class MenuModel(models.Model):
         for perm_name in permission_names:
             Permission.objects.get_or_create(
                 name=f"{perm_name.replace('_', ' ').capitalize()} {self.name.replace('_', ' ')}",
-                codename=f"can_{perm_name}_{self.name.lower().replace(' ', '_')}",
+                codename=f"{perm_name}_{self.name.lower().replace(' ', '_')}",
                 content_type=content_type
             )
     
@@ -52,6 +52,36 @@ class SubMenuModel(models.Model):
         for perm_name in permission_names:
             Permission.objects.get_or_create(
                 name=f"{perm_name.replace('_', ' ').capitalize()} {self.name.replace('_', ' ')}",
-                codename=f"can_{perm_name}_{self.name.lower().replace(' ', '_')}",
+                codename=f"{perm_name}_{self.name.lower().replace(' ', '_')}",
+                content_type=content_type
+            )
+          
+class SettingsMenu(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255,unique=True)
+    url = models.TextField()
+    icon = models.TextField()
+    component_name = models.TextField()
+    status = models.IntegerField(choices=[(0, 'Inactive'), (1, 'Active')], default=1)
+    for_user = models.CharField(max_length=255,choices=[('superadmin', 'For Super Admin'), ('admin', 'For Admin'),('both', 'Both')])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'settings_menu_table'
+    def __str__(self):
+        return f"{self.id} by {self.name}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        content_type, created = ContentType.objects.get_or_create(
+            app_label=f"settings_{self.name.lower().replace(' ', '_')}",
+            model=f"settings_{self.name.lower().replace(' ', '_')}"
+        )
+        permission_names = ["view","add","change","delete"]
+        for perm_name in permission_names:
+            Permission.objects.get_or_create(
+                name=f"settings_{perm_name.replace('_', ' ').capitalize()} {self.name.replace('_', ' ')}",
+                codename=f"settings_{perm_name}_{self.name.lower().replace(' ', '_')}",
                 content_type=content_type
             )

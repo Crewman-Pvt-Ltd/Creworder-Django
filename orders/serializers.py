@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order_Table, OrderDetail,CategoryModel,ProductModel,OrderLogModel,Payment_Type
+from .models import Order_Table, OrderDetail,CategoryModel,ProductModel,OrderLogModel,Payment_Type,OrderStatus
 from django.contrib.auth.models import User
 from accounts.serializers import CompanySerializer
 
@@ -60,6 +60,11 @@ class OrderTableSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryModel
+        fields = '__all__'  
+
+class OrderStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderStatus
         fields = '__all__'  
 
 class InvoiceSerializer(serializers.ModelSerializer):

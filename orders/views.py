@@ -2,18 +2,22 @@ import pdb
 
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import viewsets, status
+from django.db.models import Q
 from .models import (
     Order_Table,
     OrderDetail,
     CategoryModel,
     ProductModel,
     Customer_State,
+    OrderStatus
 )
 from .serializers import (
     OrderTableSerializer,
     OrderDetailSerializer,
     CategorySerializer,
     ProductSerializer,
+    OrderStatusSerializer
 )
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -299,6 +303,8 @@ class ProductView(APIView):
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = None 
+
 
 
 class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -315,6 +321,20 @@ class CategorytDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CategoryModel.objects.all()
     serializer_class = CategorySerializer
 
+
+class OrderStatusAPIView(viewsets.ModelViewSet):
+    queryset = OrderStatus.objects.all()
+    serializer_class = OrderStatusSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user = self.request.user
+        user_type = user.profile.user_type
+        queryset = OrderStatus.objects.filter(
+            branch=user.profile.branch,
+            company=user.profile.company
+        )
+        return queryset
 
 class orderExport(APIView):
     def post(self, request, *args, **kwargs):

@@ -88,7 +88,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if user.profile.user_type == "superadmin":
             queryset = User.objects.filter(profile__user_type=user.profile.user_type)
         elif user.profile.user_type == "admin" or user.profile.user_type== "agent":
-            branch = user.profile.user_type
+            branch = user.profile.branch
             queryset = User.objects.filter(profile__branch=branch).exclude(id=user.id)
         return queryset
 
@@ -724,7 +724,7 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
                 group.permissions.clear()
                 group.delete()
                 instance.delete()
-                return Response({"massage": "Deleted    ."},status=status.HTTP_204_NO_CONTENT)
+                return Response({"massage": "Deleted."},status=status.HTTP_204_NO_CONTENT)
         except Group.DoesNotExist:
             return Response({"error": "Group not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -882,13 +882,16 @@ class PermmisionViewSet(viewsets.ModelViewSet):
 
 class FetchPermissionView(APIView):
     def post(self, request, model_name=None):
+        request.data['name_list'].extend(["Order Details", "Dashboard"])
         if not request.data or 'name_list' not in request.data or not request.data['name_list']:
             return Response({"detail": "Request body must contain a non-empty 'name_list'."}, status=400)
         name_list = [name.replace(" ", "_").lower() for name in request.data.get('name_list', [])]
-        content_type_ids = ContentType.objects.filter(model__in=name_list).values_list('id', flat=True)
+        content_type_ids = ContentType.objects.filter(Q(model__in=name_list) | Q(model__startswith='settings_')).values_list('id', flat=True)
         permissions = Permission.objects.filter(content_type__in=content_type_ids)
-        return Response(PermissionSerializer(permissions, many=True).data)
-
+        permissions_dict = {}
+        for permission in permissions:
+            permissions_dict[permission.codename] = permission.id
+        return Response(permissions_dict)
         
 class PickUpPointView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
