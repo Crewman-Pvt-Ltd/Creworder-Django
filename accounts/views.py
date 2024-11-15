@@ -635,8 +635,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        print(request.data)
-        print(type(request.data))
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
         permission_ids = request.data.get('permission_ids', [])
@@ -654,7 +652,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         try:
             with transaction.atomic():
                 serializer.save()
@@ -682,7 +679,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
-        print(request.data)
         order = CustomAuthGroup.objects.get(id=pk)
         serializer = CustomAuthGroupSerializer(order)
         serialized_data = serializer.data
