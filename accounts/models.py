@@ -11,6 +11,8 @@ from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
 from superadmin_assets.models import SubMenuModel,MenuModel
 from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
+
 # from django.utils import timezone
 
 class Module(models.Model):
@@ -225,30 +227,6 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
     
-class UserTargetsDelails(models.Model):
-    month_choice = [
-    ('january', 'January'),
-    ('february', 'February'),
-    ('march', 'March'),
-    ('april', 'April'),
-    ('may', 'May'),
-    ('june', 'June'),
-    ('july', 'July'),
-    ('august', 'August'),
-    ('september', 'September'),
-    ('october', 'October'),
-    ('november', 'November'),
-    ('december', 'December'),
-    ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='targets')
-    month = models.CharField(max_length=20, blank=False, null=False, choices=month_choice)
-    target=models.IntegerField(blank=False,null=False)
-    achieved_target=models.IntegerField(blank=False,null=False)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    class Meta:
-        db_table = 'user_targets_details_table'
-
 class Notice(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
     description = models.CharField(max_length=255)
@@ -500,3 +478,55 @@ class PickUpPoint(models.Model):
     def __str__(self):
         return f"{self.contact_person_name} {self.complete_address} {self.pincode}"
 
+class UserTargetsDelails(models.Model):
+    """
+    Represents target-related data for users, including daily, weekly, and achieved targets.
+    """
+    month_choice = [
+    ('january', 'January'),
+    ('february', 'February'),
+    ('march', 'March'),
+    ('april', 'April'),
+    ('may', 'May'),
+    ('june', 'June'),
+    ('july', 'July'),
+    ('august', 'August'),
+    ('september', 'September'),
+    ('october', 'October'),
+    ('november', 'November'),
+    ('december', 'December'),
+    ]
+    id = models.BigAutoField(primary_key=True, verbose_name=_("ID"))  
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Target Amount"))
+    interm_product = models.CharField(max_length=255, verbose_name=_("Interm Product"))
+    interm_amount = models.CharField(max_length=255, verbose_name=_("Interm Amount"))
+    daily_target = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Daily Target"))
+    weekly_target = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Weekly Target"))
+    user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE,verbose_name=_("User"),related_name='targets')
+    achieve_target = models.BooleanField(default=False, verbose_name=_("Achieve Target"))
+    in_use = models.BooleanField(default=True, verbose_name=_("In Use"))
+    month = models.CharField(max_length=20, blank=False, null=False, choices=month_choice)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    branch = models.ForeignKey(Branch, related_name="Target_branch",on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, blank=False, null=False, on_delete=models.CASCADE,related_name="Target_Company")
+
+
+    class Meta:
+        db_table = 'user_targets_details_table'
+        verbose_name = _("Target Table")
+        verbose_name_plural = _("Target Tables")
+        ordering = ['-id']  
+        constraints = [
+            models.CheckConstraint(check=models.Q(target_amount__gte=0), name='check_target_amount_positive'),
+            models.CheckConstraint(check=models.Q(daily_target__gte=0), name='check_daily_target_positive'),
+            models.CheckConstraint(check=models.Q(weekly_target__gte=0), name='check_weekly_target_positive'),
+        ]
+
+    def __str__(self):
+        return f"Target for User {self.user_id} - {self.target_amount}"
+
+    def save(self, *args, **kwargs):
+        if self.interm_product:
+            self.interm_product = self.interm_product.title()
+        super().save(*args, **kwargs)

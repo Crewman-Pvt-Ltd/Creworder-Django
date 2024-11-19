@@ -13,12 +13,13 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
+    UserTargetsDelails
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer
+    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -635,8 +636,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        print(request.data)
-        print(type(request.data))
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
         permission_ids = request.data.get('permission_ids', [])
@@ -654,7 +653,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         try:
             with transaction.atomic():
                 serializer.save()
@@ -682,7 +680,6 @@ class CustomAuthGroupViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         request.data['company_id'] = request.user.profile.company.id
         request.data['branch_id'] = request.user.profile.branch.id
-        print(request.data)
         order = CustomAuthGroup.objects.get(id=pk)
         serializer = CustomAuthGroupSerializer(order)
         serialized_data = serializer.data
@@ -897,3 +894,10 @@ class PickUpPointView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = PickUpPoint.objects.all()
     serializer_class = PickUpPointSerializer
+
+
+
+class TargetView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserTargetsDelails.objects.all()
+    serializer_class = UserTargetSerializer
