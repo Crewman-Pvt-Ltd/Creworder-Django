@@ -331,3 +331,9 @@ class PermissionSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Permission
         fields = ['id', 'name', 'codename', 'content_type']
+
+
+class UserTargetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTargetsDelails
+        fields = '__all__'

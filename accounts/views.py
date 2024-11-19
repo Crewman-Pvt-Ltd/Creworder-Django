@@ -13,12 +13,13 @@ from datetime import datetime
 import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
-    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint
+    Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
+    UserTargetsDelails
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer
+    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -893,3 +894,10 @@ class PickUpPointView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = PickUpPoint.objects.all()
     serializer_class = PickUpPointSerializer
+
+
+
+class TargetView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = UserTargetsDelails.objects.all()
+    serializer_class = UserTargetSerializer
