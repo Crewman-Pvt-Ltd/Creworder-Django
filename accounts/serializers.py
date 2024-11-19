@@ -334,6 +334,12 @@ class PermissionSerializer1(serializers.ModelSerializer):
 
 
 class UserTargetSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
     class Meta:
         model = UserTargetsDelails
         fields = '__all__'
+
+    def get_username(self,data):
+        if data.user_id:
+            return data.user_id.username if data.user_id else None
