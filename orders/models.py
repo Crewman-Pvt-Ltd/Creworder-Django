@@ -82,6 +82,7 @@ class Payment_Type(models.Model):
 class OrderStatus(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    description = models.TextField(default="Order Status")
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, default=1)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
