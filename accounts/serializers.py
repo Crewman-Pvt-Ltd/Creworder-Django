@@ -341,5 +341,5 @@ class UserTargetSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_username(self,data):
-        if data.user_id:
-            return data.user_id.username if data.user_id else None
+        if data.user:
+            return data.user.username if data.user else None
