@@ -325,16 +325,34 @@ class CategorytDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class OrderStatusAPIView(viewsets.ModelViewSet):
     queryset = OrderStatus.objects.all()
     serializer_class = OrderStatusSerializer
+    permission_classes = [IsAuthenticated] 
     pagination_class = None
 
     def get_queryset(self):
+        """
+        Retrieve OrderStatus based on the user's branch and company.
+        """
         user = self.request.user
-        user_type = user.profile.user_type
         queryset = OrderStatus.objects.filter(
             branch=user.profile.branch,
             company=user.profile.company
         )
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        """
+        Handle creating an OrderStatus instance.
+        """
+        user = request.user
+        data = request.data.copy() 
+        data['branch'] = user.profile.branch.id
+        data['company'] = user.profile.company.id
+
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class orderExport(APIView):
     def post(self, request, *args, **kwargs):
