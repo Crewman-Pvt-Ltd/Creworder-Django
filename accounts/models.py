@@ -12,6 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from superadmin_assets.models import SubMenuModel,MenuModel
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
+from datetime import date
 
 # from django.utils import timezone
 
@@ -498,11 +499,10 @@ class UserTargetsDelails(models.Model):
     ]
     id = models.BigAutoField(primary_key=True, verbose_name=_("ID"))  
     target_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Target Amount"))
-    interm_product = models.CharField(max_length=255, verbose_name=_("Interm Product"))
-    interm_amount = models.CharField(max_length=255, verbose_name=_("Interm Amount"))
+    target_order = models.CharField(max_length=255, verbose_name=_("Target Orders"))
     daily_target = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Daily Target"))
     weekly_target = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Weekly Target"))
-    user_id = models.ForeignKey('auth.User',on_delete=models.CASCADE,verbose_name=_("User"),related_name='targets')
+    user = models.ForeignKey('auth.User',on_delete=models.CASCADE,verbose_name=_("User"),related_name='targets')
     achieve_target = models.BooleanField(default=False, verbose_name=_("Achieve Target"))
     in_use = models.BooleanField(default=True, verbose_name=_("In Use"))
     month = models.CharField(max_length=20, blank=False, null=False, choices=month_choice)
@@ -527,6 +527,9 @@ class UserTargetsDelails(models.Model):
         return f"Target for User {self.user_id} - {self.target_amount}"
 
     def save(self, *args, **kwargs):
-        if self.interm_product:
-            self.interm_product = self.interm_product.title()
+        today = date.today()
+        current_month = today.strftime("%B").lower()
+        selected_month = self.month.lower()
+        if current_month==selected_month:
+            UserTargetsDelails.objects.filter(models.Q(in_use=True), models.Q(user=self.user)).update(in_use=False)
         super().save(*args, **kwargs)
