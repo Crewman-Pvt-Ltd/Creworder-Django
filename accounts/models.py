@@ -13,6 +13,8 @@ from superadmin_assets.models import SubMenuModel,MenuModel
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from datetime import date
+from django.core.exceptions import ValidationError
+
 
 # from django.utils import timezone
 
@@ -532,4 +534,39 @@ class UserTargetsDelails(models.Model):
         selected_month = self.month.lower()
         if current_month==selected_month:
             UserTargetsDelails.objects.filter(models.Q(in_use=True), models.Q(user=self.user)).update(in_use=False)
+        super().save(*args, **kwargs)
+
+class AdminBankDetails(models.Model):
+    account_number = models.CharField(max_length=255)
+    re_account_number = models.CharField(max_length=255)
+    ACCOUNT_TYPE_CHOICES = [('saving_account', 'Saving Account'),('current_account', 'Current Account'),('salary_account', 'Salary Account'),]
+    account_type = models.CharField(max_length=100, choices=ACCOUNT_TYPE_CHOICES, null=False)
+    bank_name = models.CharField(max_length=255, null=True, blank=True)
+    ifsc_code = models.CharField(max_length=255, null=False)
+    account_holder_name = models.CharField(max_length=255, null=False)
+    branch_name = models.CharField(max_length=255, null=False)
+    user = models.ForeignKey('auth.User', related_name='admin_bank_details_user', on_delete=models.CASCADE)
+    PRIORITY_CHOICES = [(1, 'First'),(2, 'Second'),(3, 'Third'),]
+    priority = models.IntegerField(choices=PRIORITY_CHOICES, null=False)
+    branch = models.ForeignKey('Branch', related_name="admin_bank_details_branch", on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', blank=False, null=False, on_delete=models.CASCADE, related_name="admin_bank_details_company")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'admin_bank_details_table'
+        unique_together = ('user', 'priority')
+
+    def __str__(self):
+        return f"{self.user.username} {self.bank_name} {self.account_number}"
+
+    def clean(self):
+        if self.account_number != self.re_account_number:
+            raise ValidationError("Re-entered account number must match the account number.")
+
+        if AdminBankDetails.objects.filter(user=self.user, priority=self.priority).exclude(pk=self.pk).exists():
+            raise ValidationError(f"Priority {self.priority} already exists for this user.")
+     
+    def save(self, *args, **kwargs):
+        self.clean()
         super().save(*args, **kwargs)

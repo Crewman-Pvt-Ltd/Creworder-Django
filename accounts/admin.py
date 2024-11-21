@@ -20,6 +20,8 @@ from .models import AllowedIP
 from .models import ShiftRoster
 from .models import PickUpPoint
 from .models import UserTargetsDelails
+from .models import AdminBankDetails
+
                                        
 admin.site.register(Company)
 admin.site.register(Package)
@@ -42,3 +44,4 @@ admin.site.register(AllowedIP)
 admin.site.register(ShiftRoster)
 admin.site.register(PickUpPoint)
 admin.site.register(UserTargetsDelails)
+admin.site.register(AdminBankDetails)
