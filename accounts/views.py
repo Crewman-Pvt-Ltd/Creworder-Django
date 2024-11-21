@@ -14,12 +14,12 @@ import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
-    UserTargetsDelails
+    UserTargetsDelails,AdminBankDetails
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
-    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer
+    PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer,AdminBankDetailsSerializers
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -901,3 +901,29 @@ class TargetView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = UserTargetsDelails.objects.all()
     serializer_class = UserTargetSerializer
+
+class AdminBankDetailsViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = AdminBankDetails.objects.all()
+    serializer_class = AdminBankDetailsSerializers
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        user_profile = UserProfile.objects.get(user__id=request.data['user'])
+        data['branch']=user_profile.branch.id
+        data['company']=user_profile.company.id
+        if data.get('account_number') != data.get('re_account_number'):
+            return Response(
+                {"error": "Account number and re-entered account number must match."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = request.user
+        priority = data.get('priority')
+        if AdminBankDetails.objects.filter(user=user, priority=priority).exists():
+            return Response(
+                {"error": f"Priority {priority} already exists for this user."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
