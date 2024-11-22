@@ -53,9 +53,8 @@ class OrderAPIView(APIView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
-            state_id = Customer_State.objects.get(
-                name=f"{request.data['customer_state']}"
-            ).id
+            state = Customer_State.objects.get(name=request.data['customer_state'])
+            state_id = state.id
             request.data["order_created_by"] = request.user.id
             request.data["customer_state"] = state_id
             orderSerializer = OrderTableSerializer(data=request.data)
@@ -69,9 +68,16 @@ class OrderAPIView(APIView):
                     status=status.HTTP_201_CREATED,
                 )
             return Response(orderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except ValueError as e:
+        
+        except Customer_State.DoesNotExist:
             return Response(
-                {"Success": False, "Errors": str(e)},
+                {"Success": False, "Error": "Customer state not found."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        except Exception as e:
+            return Response(
+                {"Success": False, "Error": str(e)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

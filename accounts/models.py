@@ -14,6 +14,7 @@ from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from datetime import date
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 
 
 # from django.utils import timezone
@@ -440,8 +441,13 @@ class Attendance(models.Model):
 
 
 class AllowedIP(models.Model):
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="allowed_ip")
     ip_address = models.GenericIPAddressField()
+    ip_from_choices = [('home', 'Home'),('office', 'Office')]
+    ip_from = models.CharField(max_length=100, choices=ip_from_choices, null=False,default='office')
+    branch = models.ForeignKey('Branch', related_name="ip_address_branch", on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', blank=False, default=1, null=False, on_delete=models.CASCADE, related_name="ip_address_company")
+    created_at = models.DateTimeField(default=now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.ip_address} for {self.branch.branch_id}"
@@ -552,7 +558,6 @@ class AdminBankDetails(models.Model):
     company = models.ForeignKey('Company', blank=False, null=False, on_delete=models.CASCADE, related_name="admin_bank_details_company")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     class Meta:
         db_table = 'admin_bank_details_table'
         unique_together = ('user', 'priority')
@@ -566,7 +571,6 @@ class AdminBankDetails(models.Model):
 
         if AdminBankDetails.objects.filter(user=self.user, priority=self.priority).exclude(pk=self.pk).exists():
             raise ValidationError(f"Priority {self.priority} already exists for this user.")
-     
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
