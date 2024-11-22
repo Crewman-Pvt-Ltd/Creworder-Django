@@ -7,7 +7,8 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsV
     GetNoticesForUser, DepartmentViewSet, DesignationViewSet, LeaveViewSet, HolidayViewSet, AwardViewSet, \
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
     IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,\
-    GroupPermissionViewSet,PermmisionViewSet,FetchPermissionView,PickUpPointView,TargetView,AdminBankDetailsViewSet
+    GroupPermissionViewSet,PermmisionViewSet,FetchPermissionView,PickUpPointView,TargetView,AdminBankDetailsViewSet,\
+    AddAllowIpViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -36,6 +37,7 @@ router.register(r'group-permissions', GroupPermissionViewSet, basename='group-pe
 router.register(r'pick-up-point', PickUpPointView, basename='pickup-point')
 router.register(r'user-target', TargetView, basename='user-target')
 router.register(r'admin-bank-details', AdminBankDetailsViewSet, basename='admin-bank-details')
+router.register(r'add-ip-forlogin', AddAllowIpViewSet, basename='add-ip-forlogin')
 urlpatterns = [
     path('', include(router.urls)),
     path('user-permissions/', UserPermissionsView.as_view(), name="user-permissions"),
