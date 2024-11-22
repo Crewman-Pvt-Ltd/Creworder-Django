@@ -8,9 +8,11 @@ from .views import (
     CloudtelephoneyChannelAssignForUser,
     CloudTelephoneyChannelAssignUpdate,
     CloudTelephoneyChannelAssignDelete,
+    UserMailSetupView
 )
 
 router = DefaultRouter()
+router.register(r'user-mail-setup',UserMailSetupView,basename='user-mail-setup')
 urlpatterns = [
     path("", include(router.urls)),
     path(

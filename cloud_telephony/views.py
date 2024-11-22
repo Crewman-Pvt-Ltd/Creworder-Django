@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from django.db import transaction
+from rest_framework import viewsets, status
 from services.cloud_telephoney.cloud_telephoney_service import (
     createCloudTelephoneyChannel,
     deleteCloudTelephoneyChannel,
@@ -13,8 +15,10 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import (
     CloudTelephonyChannelSerializer,
     CloudTelephonyChannelAssignSerializer,
+    UserMailSetUpSerializers
 )
 import pdb
+from .models import UserMailSetup
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -165,4 +169,26 @@ class CloudTelephoneyChannelAssignDelete(APIView):
                 {"Success": False, "Error": "Not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+class UserMailSetupView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset =UserMailSetup.objects.all()
+    serializer_class= UserMailSetUpSerializers
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        request.data['company'] = user.profile.company.id
+        return super().create(request, *args, **kwargs)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+
+        if 'company' not in request.data:
+            request.data['company'] = instance.company.id 
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
