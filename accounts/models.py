@@ -574,3 +574,16 @@ class AdminBankDetails(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+
+class QcTable(models.Model):
+    question = models.TextField(null=False)
+    branch = models.ForeignKey('Branch', related_name="qc_branch", on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', blank=False, default=1, null=False, on_delete=models.CASCADE, related_name="qc_company")
+    created_at = models.DateTimeField(default=now)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table='qc_table'
+    def __str__(self):
+        return f"{self.ip_address} for {self.branch.branch_id}"
+    

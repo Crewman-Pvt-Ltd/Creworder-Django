@@ -14,13 +14,13 @@ import random
 from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
-    UserTargetsDelails,AdminBankDetails
+    UserTargetsDelails,AdminBankDetails,QcTable
 from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
     PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer,AdminBankDetailsSerializers,\
-    AllowedIPSerializers
+    AllowedIPSerializers,QcSerialiazer
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -940,3 +940,27 @@ class AddAllowIpViewSet(viewsets.ModelViewSet):
         request.data['branch'] = user.profile.branch.id
         request.data['company'] = user.profile.company.id
         return super().create(request, *args, **kwargs)
+    
+class QcViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset =QcTable.objects.all()
+    serializer_class= QcSerialiazer
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        request.data['company'] = user.profile.company.id
+        return super().create(request, *args, **kwargs)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+
+        if 'company' not in request.data:
+            request.data['company'] = instance.company.id 
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
