@@ -51,3 +51,25 @@ class CloudTelephonyChannelAssign(models.Model):
         db_table = "telephony_channals_assign_table"
     def __str__(self):
         return f"Note {self.id} by {self.cloud_celephony_provider_name}"
+    
+
+
+class UserMailSetup(models.Model):
+    name=models.CharField(max_length=255,null=False)
+    email=models.EmailField(max_length=255,null=False)
+    username=models.CharField(max_length=255,null=False)
+    password=models.CharField(max_length=25,null=False)
+    hostname=models.CharField(max_length=255,null=False)
+    mail_smtp=models.CharField(max_length=255,null=False)
+    mail_port=models.IntegerField(max_length=6,null=False)
+    branch=models.ForeignKey(Branch,on_delete=models.CASCADE)
+    company=models.ForeignKey(Company,on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table='user_mail_setup_table'
+    def __str__(self):
+        return f"{self.name} {self.email} {self.company.name} {self.branch.name}"
+
+
