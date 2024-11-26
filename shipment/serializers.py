@@ -4,3 +4,8 @@ class ShipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShipmentModel
         fields = '__all__'  
+
+class CourierServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourierServiceModel
+        fields = '__all__'  

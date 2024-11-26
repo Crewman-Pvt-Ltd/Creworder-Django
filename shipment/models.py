@@ -24,3 +24,18 @@ class ShipmentModel(models.Model):
         db_table = 'shipment_table'
     def __str__(self):
         return f"products {self.id} by {self.name}"
+    
+class CourierServiceModel(models.Model):
+    name = models.CharField(max_length=255)
+    api_url=models.TextField(null=False,blank=False)
+    remark=models.TextField(null=False,blank=False)
+    branch=models.ForeignKey(Branch,on_delete=models.PROTECT)
+    company=models.ForeignKey(Company,on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    update_at=models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table='courier_services_table'
+        
+    def __str__(self):
+        return f"Courier name {self.name}, Branch {self.branch.name}"

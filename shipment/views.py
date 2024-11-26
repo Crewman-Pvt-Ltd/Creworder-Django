@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import ShipmentSerializer
+from .serializers import ShipmentSerializer,CourierServiceSerializer
+from .models import CourierServiceModel
+from rest_framework import viewsets, status
 from rest_framework import status
 from rest_framework.response import Response
 from services.shipment.shipment_service import *
 from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
 class ShipmentView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -103,3 +106,28 @@ class ShipmentView(APIView):
 #                 status=status.HTTP_404_NOT_FOUND,
 #             )
 
+class CourierServiceView(viewsets.ModelViewSet):
+    queryset = CourierServiceModel.objects.all()
+    serializer_class = CourierServiceSerializer
+    permission_classes = [IsAuthenticated]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        if 'branch' not in request.data:
+            request.data['branch'] = user.profile.branch.id 
+        request.data['company'] = user.profile.company.id
+        return super().create(request, *args, **kwargs)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+
+        if 'company' not in request.data:
+            request.data['company'] = instance.company.id 
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
