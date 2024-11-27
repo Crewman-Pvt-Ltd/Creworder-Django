@@ -17,11 +17,15 @@ from .serializers import (
     OrderDetailSerializer,
     CategorySerializer,
     ProductSerializer,
-    OrderStatusSerializer
+    OrderStatusSerializer,
+    FilterOrdersSerializer
 )
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from dashboard.views import ScheduleOrderForDashboard
+
 import traceback
 from django.db import transaction
 from services.category.category_service import (
@@ -399,8 +403,6 @@ class CheckServiceability(APIView):
     def get(self, request, pk=None):
         pincode = request.GET.get("pincode")
         mobile = request.GET.get("mobile")
-        print(pincode)
-        print(mobile)
         data = checkServiceability(
             request.user.profile.branch_id,
             request.user.profile.company_id,
@@ -434,7 +436,6 @@ class CheckServiceability(APIView):
 
 class GetUserPerformance(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         if "user_id" not in request.data:
             return Response(
@@ -444,4 +445,39 @@ class GetUserPerformance(APIView):
         serializer = OrderTableSerializer(orders, many=True)
         return Response({"massage": "HI", "data": serializer.data}, status.HTTP_200_OK)
 
-    
+class FilterOrdersPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 100 
+
+class FilterOrdersView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    pagination_class = FilterOrdersPagination
+    def create(self, request):
+        filters = request.data
+        queryset = Order_Table.objects.all()
+        filter_conditions = Q()
+        filterable_fields = [
+            "order_id", "customer_email", "customer_phone", "customer_name", 
+            "city", "total_amount", "awb", "call_id", "status" , "order_created_by" , "customer_state",
+            "payment_type"
+        ]
+        exact_match_conditions = Q()
+        partial_match_conditions = Q()
+        for field in filterable_fields:
+            if filters.get(field):
+                exact_match_conditions &= Q(**{field: filters[field]})
+                partial_match_conditions |= Q(**{field: filters[field]})
+        if len(filters.keys()) == len(filterable_fields):
+            filter_conditions = exact_match_conditions
+        else:
+            filter_conditions = partial_match_conditions
+        if filters.get("date_range"):
+            dashboard = ScheduleOrderForDashboard()
+            start_datetime, end_datetime = dashboard.get_date_range_post(request)
+            filter_conditions &= Q(created_at__range=[start_datetime, end_datetime])
+        queryset = queryset.filter(filter_conditions)
+        paginator = self.pagination_class()
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+        serializer = FilterOrdersSerializer(paginated_queryset, many=True)
+        return paginator.get_paginated_response(serializer.data)

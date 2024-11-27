@@ -773,6 +773,19 @@ class ScheduleOrderForDashboard(APIView):
         else:
             today = datetime.now()
             return datetime(today.year, today.month, 1), today
+        
+    def get_date_range_post(self, request):
+        """Extract and validate the date range from the request."""
+        if 'date_range' in request.data and request.data['date_range']:
+            date_range = request.data['date_range'].split(' ')
+            if len(date_range) != 2:
+                raise ValueError("Date Range invalid")
+            start_datetime = datetime.fromisoformat(date_range[0])
+            end_datetime = datetime.fromisoformat(date_range[1])
+            return start_datetime, end_datetime
+        else:
+            today = datetime.now()
+            return datetime(today.year, today.month, 1), today
 
     def get_order_count(self, is_scheduled, branch, start_datetime, end_datetime):
         """Count orders based on scheduling status."""
