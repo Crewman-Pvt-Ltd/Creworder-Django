@@ -98,5 +98,11 @@ class InvoiceSerializer(serializers.ModelSerializer):
             return CompanySerializer(obj.company).data
         return None
 
+class FilterOrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order_Table
+        fields = '__all__'
+
+
 
     
