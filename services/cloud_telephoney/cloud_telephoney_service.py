@@ -14,10 +14,11 @@ def createCloudTelephoneyChannel(data, userid):
     userData = UserProfile.objects.filter(user_id=userid).first()
     serializer = UserProfileSerializer(userData)
     serialized_data = serializer.data
-    data["branch"] = serialized_data["branch"]
-    data["company"] = serialized_data["company"]
-    data["user"] = userid
-    serializer = CloudTelephonyChannelSerializer(data=data)
+    mutable_data = data.copy()
+    mutable_data['branch'] = serialized_data["branch"]
+    mutable_data['company'] = serialized_data["company"]
+    mutable_data['user'] = userid
+    serializer = CloudTelephonyChannelSerializer(data=mutable_data)
     if serializer.is_valid():
         cloud_telephony_channel = serializer.save()
         return cloud_telephony_channel
