@@ -85,3 +85,27 @@ class SettingsMenu(models.Model):
                 codename=f"settings_{perm_name}_{self.name.lower().replace(' ', '_')}",
                 content_type=content_type
             )
+
+class PixelCodeModel(models.Model):
+    google_analytics_code = models.TextField()
+    meta_pexel_code = models.TextField()
+    other_pexel_code = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'pixelcode_table'
+    def __str__(self):
+        return f"{self.id} by {self.name}"
+    
+class BennerModel(models.Model):
+    banner_img = models.ImageField(upload_to="banner_images/")
+    link = models.TextField()
+    title = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'banner_table'
+    def __str__(self):
+        return f"{self.id} by {self.link}"
