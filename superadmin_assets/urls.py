@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import MenuViewSet,SubMenuViewSet,SettingMenuViewSet,PixelCodeView,BannerView
+from .views import MenuViewSet,SubMenuViewSet,SettingMenuViewSet,PixelCodeView,BannerView,TheamSetting
 from django.urls import path, include
 
 router = DefaultRouter()
@@ -8,7 +8,7 @@ router.register(r'submenu', SubMenuViewSet)
 router.register(r'setting_menu', SettingMenuViewSet, basename='settingmenu')
 router.register(r'pixel-code',PixelCodeView,basename='pixel-code')
 router.register(r'banner',BannerView,basename='banner')
-
+router.register(r'theam-setting',TheamSetting,basename='theam-setting')
 urlpatterns = [
     path('', include(router.urls)),
 ]

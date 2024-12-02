@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MenuModel,SubMenuModel,SettingsMenu,PixelCodeModel,BennerModel
+from .models import MenuModel,SubMenuModel,SettingsMenu,PixelCodeModel,BennerModel,TheamSettingModel
 
 
 class SubMenuSerializer(serializers.ModelSerializer):
@@ -33,3 +33,9 @@ class BannerModelSerializer(serializers.ModelSerializer):
     class Meta:
         model=BennerModel
         fields='__all__'
+
+class TheamSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=TheamSettingModel
+        fields='__all__'
+        
