@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils.crypto import get_random_string
 from phonenumber_field.modelfields import PhoneNumberField
-from superadmin_assets.models import SubMenuModel,MenuModel
+# from superadmin_assets.models import SubMenuModel,MenuModel
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from datetime import date
@@ -50,15 +50,17 @@ class Package(models.Model):
         return self.name
     
 class PackageDetailsModel(models.Model):
-    package=models.ForeignKey(Package,on_delete=models.CASCADE,related_name="packagedetails")
-    menu=models.ForeignKey(MenuModel,on_delete=models.PROTECT,related_name="menu",blank=True, null=True)
-    submenu=models.ForeignKey(SubMenuModel,on_delete=models.PROTECT,related_name="submunuid",blank=True, null=True)
-    created_at=models.DateTimeField(auto_now_add=True)
-    update_at=models.DateTimeField(auto_now=True)
+    package = models.ForeignKey("Package", on_delete=models.CASCADE, related_name="packagedetails")
+    menu = models.ForeignKey("superadmin_assets.MenuModel", on_delete=models.PROTECT, related_name="menu", blank=True, null=True)
+    submenu = models.ForeignKey("superadmin_assets.SubMenuModel", on_delete=models.PROTECT, related_name="submunuid", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         db_table = "package_detail_table"
+
     def __str__(self):
-        return f"{self.id} {self.package.name} {self.menu.name} {self.submenu}"
+        return f"{self.id} {self.package.name} {self.menu.name if self.menu else 'No Menu'} {self.submenu.name if self.submenu else 'No Submenu'}"
 
 
 class Company(models.Model):
