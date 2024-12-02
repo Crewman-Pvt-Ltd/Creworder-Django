@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .serializers import MenuSerializer,SubMenuSerializer,SettingMenuSerializer,PixelCodeModelSerializer,BannerModelSerializer,TheamSettingSerializer
+from .serializers import MenuSerializer,SubMenuSerializer,SettingMenuSerializer,PixelCodeModelSerializer,BannerModelSerializer,ThemeSettingSerializer
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
-from .models import MenuModel,SubMenuModel,SettingsMenu,PixelCodeModel,BennerModel,TheamSettingModel
+from .models import MenuModel,SubMenuModel,SettingsMenu,PixelCodeModel,BennerModel,ThemeSettingModel
 from django.db.models import Q
 
 class MenuViewSet(viewsets.ModelViewSet):
@@ -38,7 +38,7 @@ class BannerView(viewsets.ModelViewSet):
     serializer_class = BannerModelSerializer
     pagination_class = None
 
-class TheamSetting(viewsets.ModelViewSet):
-    queryset = TheamSettingModel.objects.all()
-    serializer_class = TheamSettingSerializer
+class ThemeSetting(viewsets.ModelViewSet):
+    queryset = ThemeSettingModel.objects.all()
+    serializer_class = ThemeSettingSerializer
     pagination_class = None
