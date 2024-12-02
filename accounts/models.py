@@ -99,7 +99,7 @@ class Company(models.Model):
     support_email = models.EmailField(max_length=100, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if self.created_by.role.role != 'superadmin':
+        if self.created_by.profile.user_type != 'superadmin':
             raise PermissionDenied("Only superadmins can create companies.")
         if not self.company_id:
             self.company_id = self.generate_company_id()
