@@ -111,21 +111,21 @@ class BennerModel(models.Model):
     def __str__(self):
         return f"{self.id} by {self.link}"
     
-class TheamSettingModel(models.Model):
+class ThemeSettingModel(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
-    dark_logo = models.ImageField(upload_to="theam_setting_images/")
-    light_logo = models.ImageField(upload_to="theam_setting_images/")
-    favicon_logo = models.ImageField(upload_to="theam_setting_images/")
-    invoice_logo = models.ImageField(upload_to="theam_setting_images/")
-    signature = models.ImageField(upload_to="theam_setting_images/")
+    dark_logo = models.ImageField(upload_to="theme_setting_images/")
+    light_logo = models.ImageField(upload_to="theme_setting_images/")
+    favicon_logo = models.ImageField(upload_to="theme_setting_images/")
+    invoice_logo = models.ImageField(upload_to="theme_setting_images/")
+    signature = models.ImageField(upload_to="theme_setting_images/")
     primary_color_code = models.CharField(max_length=255, blank=False, null=False)
-    page_theam = models.CharField(max_length=255,choices=[('dark', 'Dark'), ('light', 'Light')], default='light')
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE,related_name='theam_branch')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name='theam_company')
+    page_theme = models.CharField(max_length=255,choices=[('dark', 'Dark'), ('light', 'Light')], default='light')
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE,related_name='theme_branch')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,related_name='theme_company')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'theam_setting_table'
+        db_table = 'theme_setting_table'
     def __str__(self):
         return f"{self.id} by {self.name}"
