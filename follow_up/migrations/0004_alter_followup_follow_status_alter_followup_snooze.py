@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='followup',
             name='follow_status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('pesponded', 'Responded'), ('deleted', 'Deleted')], max_length=255),
+            field=models.CharField(choices=[('pending', 'Pending'), ('responded', 'Responded'), ('deleted', 'Deleted')], max_length=255),
         ),
         migrations.AlterField(
             model_name='followup',

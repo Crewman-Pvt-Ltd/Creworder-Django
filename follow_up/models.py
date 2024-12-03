@@ -9,7 +9,7 @@ phone_regex = RegexValidator(
 class FollowUp(models.Model):
     FOLLOW_STATUS_CHOICES = [
         ("pending", 'Pending'),
-        ("pesponded", 'Responded'),
+        ("responded", 'Responded'),
         ("deleted", 'Deleted'),
     ]
     SNOOZE_CHOICES = [
