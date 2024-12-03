@@ -8,20 +8,20 @@ phone_regex = RegexValidator(
 )
 class FollowUp(models.Model):
     FOLLOW_STATUS_CHOICES = [
-        (0, 'Pending'),
-        (1, 'Responded'),
-        (4, 'Deleted'),
+        ("pending", 'Pending'),
+        ("pesponded", 'Responded'),
+        ("deleted", 'Deleted'),
     ]
     SNOOZE_CHOICES = [
-        (0, 'Pending'),
-        (1, 'Snooze'),
+        ("pending", 'Pending'),
+        ("snooze", 'Snooze'),
     ]
     customer_name = models.CharField(max_length=255)
     customer_phone = models.CharField(validators=[phone_regex], max_length=17, blank=False)
     reminder_date = models.DateTimeField()
     description = models.TextField()
-    follow_status = models.IntegerField(choices=FOLLOW_STATUS_CHOICES)
-    snooze = models.IntegerField(choices=SNOOZE_CHOICES)
+    follow_status = models.CharField(max_length=255,choices=FOLLOW_STATUS_CHOICES)
+    snooze = models.CharField(max_length=255,choices=SNOOZE_CHOICES)
     follow_addedBy = models.ForeignKey(User, related_name='user_id', on_delete=models.CASCADE) 
     call_id = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
