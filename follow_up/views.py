@@ -6,37 +6,49 @@ from .serializers import FollowUpSerializer,NotepadSerializer
 from django.db import transaction
 from services.follow_up.notepad_service import createOrUpdateNotepad,getNotepadByAuthid
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import ValidationError
+from django.db import transaction
+from django.utils.datastructures import MultiValueDict
+
 import pdb
 
 class FollowUpView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset =FollowUp.objects.all()
-    serializer_class= FollowUpSerializer
+    queryset = FollowUp.objects.all()
+    serializer_class = FollowUpSerializer
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         user = request.user
+        mutable_data = request.data.copy()
+        if 'branch' not in mutable_data:
+            mutable_data['branch'] = request.user.profile.branch.id
+        mutable_data['company'] = user.profile.company.id
+        request._full_data = mutable_data
 
-        if 'branch' not in request.data:
-            request.data['branch'] = request.user.profile.branch.id
-        request.data['company'] = user.profile.company.id
         return super().create(request, *args, **kwargs)
     
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         user = request.user
-        if 'branch' not in request.data:
-            request.data['branch'] = request.user.profile.branch.id
-        if 'company' not in request.data:
-            request.data['company'] = request.user.profile.company.id
-            # pdb.set_trace()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        mutable_data = request.data.copy()
+
+        if 'branch' not in mutable_data:
+            mutable_data['branch'] = request.user.profile.branch.id
+        if 'company' not in mutable_data:
+            mutable_data['company'] = request.user.profile.company.id
+        
+        serializer = self.get_serializer(instance, data=mutable_data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
         return Response(serializer.data)
-    
+
 class NotepadCreateOrUpdate(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
