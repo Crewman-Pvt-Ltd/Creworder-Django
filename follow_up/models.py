@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from accounts.models import Company, Branch
 
 phone_regex = RegexValidator(
     regex=r'^\+?1?\d{9,15}$',
@@ -17,6 +18,8 @@ class FollowUp(models.Model):
     snooze = models.CharField(max_length=255,choices=SNOOZE_CHOICES)
     follow_add_by = models.ForeignKey(User, related_name='user_id', on_delete=models.CASCADE) 
     call_id = models.CharField(max_length=50, null=True, blank=True)
+    branch = models.ForeignKey(Branch, related_name="followup_branch", on_delete=models.CASCADE,blank=True, null=True,)
+    company = models.ForeignKey(Company, blank=True, null=True, on_delete=models.CASCADE, related_name="followup_company")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
