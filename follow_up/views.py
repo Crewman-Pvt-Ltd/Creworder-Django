@@ -1,8 +1,9 @@
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets,status
 from .models import FollowUp
 from .serializers import FollowUpSerializer,NotepadSerializer
+from django.db import transaction
 from services.follow_up.notepad_service import createOrUpdateNotepad,getNotepadByAuthid
 from services.follow_up.follow_up_service import (
     createFollowUp,
@@ -88,7 +89,32 @@ class FollowUpUpdate(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
+
+class FollowUpView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset =FollowUp.objects.all()
+    serializer_class= FollowUpSerializer
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        request.data['company'] = user.profile.company.id
+        return super().create(request, *args, **kwargs)
+    
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+
+        if 'company' not in request.data:
+            request.data['company'] = instance.company.id 
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+    
 class NotepadCreateOrUpdate(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
