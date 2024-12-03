@@ -5,8 +5,10 @@ from .views import (CreateFollowUp,
                     FollowUpDelete,
                     FollowUpUpdate,
                     NotepadCreateOrUpdate,
-                    NotepadDetail)
+                    NotepadDetail,
+                    FollowUpView)
 router = DefaultRouter()
+router.register(r'follow-up',FollowUpView,basename='follow-up')
 urlpatterns = [
     path('', include(router.urls)),
     path('createFollowUp/', CreateFollowUp.as_view(), name='create_follow_up'),
