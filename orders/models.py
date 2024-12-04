@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.exceptions import PermissionDenied
-from accounts.models import Company, Branch
+from accounts.models import Company, Branch,PickUpPoint
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Permission
 
@@ -169,6 +169,7 @@ class Order_Table(models.Model):
     edd_time = models.CharField(max_length=255,null=True,blank=True)
     zone =models.CharField(max_length=255,null=True,blank=True)
     region=models.CharField(max_length=255,null=True,blank=True)
+    pick_up_point=models.ForeignKey(PickUpPoint,on_delete=models.PROTECT,null=True,blank=True)
     course_order_repeated = models.IntegerField(default=0)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, default=1)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)  
