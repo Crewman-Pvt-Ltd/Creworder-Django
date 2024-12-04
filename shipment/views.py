@@ -6,6 +6,7 @@ from rest_framework import viewsets, status
 from rest_framework import status
 from rest_framework.response import Response
 from services.shipment.shipment_service import *
+from services.shipment.schedule_orders import ShiprocketScheduleOrder
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 class ShipmentView(APIView):
@@ -131,3 +132,26 @@ class CourierServiceView(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(serializer.data)
+    
+class ScheduleOrders(viewsets.ModelViewSet):
+    queryset = ShipmentModel.objects.all()
+    serializer_class = ShipmentSerializer
+    permission_classes = [IsAuthenticated]
+    
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        trackdata = ShipmentModel.objects.filter(branch=request.user.profile.branch.id,company=request.user.profile.company.id,status=1)
+        serializer = ShipmentSerializer(trackdata, many=True)
+        serialized_data = serializer
+        for shipmentData in serialized_data.data:
+            if shipmentData['provider_name'].lower()=='shiprocket':
+                if shipmentData['credential_username']!='' or shipmentData['credential_username']!=None:
+                    shiprocket_service = ShiprocketScheduleOrder(shipmentData['credential_username'],shipmentData['credential_password'])
+                    _response=shiprocket_service.schedule_order([35,34,33,37], request.user.profile.branch.id, request.user.profile.company.id)
+        if _response:
+            return Response(
+                {
+                    "data":_response
+                },
+                status=status.HTTP_200_OK,
+            )

@@ -624,7 +624,7 @@ class TeamOrderListForDashboard(APIView):
     def get(self, request, *args, **kwargs):
         data={}
         if (request.user.has_perm("dashboard.view_own_dashboard_team_order_list") or request.user.has_perm("dashboard.view_all_dashboard_team_order_list") or request.user.has_perm("dashboard.view_manager_dashboard_team_order_list") or request.user.has_perm("dashboard.view_teamlead_dashboard_team_order_list") or request.user.profile.user_type=='admin'):
-            if request.user.has_perm("dashboard.view_own_dashboard_team_order_list"):
+            if request.user.has_perm("dashboard.view_own_dashboard_team_order_list_s"):
                 pass
             elif request.user.has_perm("dashboard.view_all_dashboard_team_order_list") or request.user.profile.user_type=='admin':
                 teamlead_ids = UserProfile.objects.filter(branch=request.user.profile.branch, company=request.user.profile.company).values_list('teamlead', flat=True).distinct() 
@@ -654,7 +654,7 @@ class TeamOrderListForDashboard(APIView):
                             _noResponse = Order_Table.objects.filter(order_created_by=agent_id,branch=request.user.profile.branch,company=request.user.profile.company,order_status=4).count()
                             userDetailsDict[agent_id]={"id":agent_id,"total_order":_totalOrder,"daily_target":_agent_serialized_data['profile']['daily_order_target'],"name":_agent_serialized_data['username'],"total_Lead":100,"accepted_order":_acceptedOrder,"rejected_order":_rejectedOrder,"no_response":_noResponse}
                             data[teamlead_id]=userDetailsDict
-                        userDetailsDict["teamleadTiles"]={"lead_id":teamlead_id,"teamlead_name":_teamlead_serialized_data['username'],"total_order":_teamleadTotalOrder,"daily_target":_teamleadDailyTarget,"total_lead":_teamleadTotalLead,"accepted_order":_teamleadAcceptedOrder,"oejected_order":_teamleadRejectedOrder,"no_response":_teamleadNoResponse}
+                        userDetailsDict["teamleadTiles"]={"lead_id":teamlead_id,"teamlead_name":_teamlead_serialized_data['username'],"total_order":_teamleadTotalOrder,"daily_target":_teamleadDailyTarget,"total_lead":_teamleadTotalLead,"accepted_order":_teamleadAcceptedOrder,"rejected_order":_teamleadRejectedOrder,"no_response":_teamleadNoResponse}
                         _teamleadTotalOrder, _teamleadDailyTarget, _teamleadTotalLead, _teamleadAcceptedOrder, _teamleadRejectedOrder, _teamleadNoResponse = (0, 0, 0, 0, 0, 0)
 
             elif request.user.has_perm("dashboard.view_manager_dashboard_team_order_list"):

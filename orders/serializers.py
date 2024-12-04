@@ -10,11 +10,17 @@ class ProductSerializer(serializers.ModelSerializer):
         
 class OrderDetailSerializer(serializers.ModelSerializer):
     gst_rate=serializers.SerializerMethodField()
+    product_sku=serializers.SerializerMethodField()
+    product_hsn_number=serializers.SerializerMethodField()
     class Meta:
         model = OrderDetail
         fields = '__all__'
     def get_gst_rate(self ,data):
         return data.product.product_gst_percent if data.product else None
+    def get_product_sku(self ,data):
+        return data.product.product_sku if data.product else None
+    def get_product_hsn_number(self,data):
+        return data.product.product_hsn_number if data.product else None
 
 
 class OrderLogSerializer(serializers.ModelSerializer):
@@ -38,6 +44,8 @@ class OrderTableSerializer(serializers.ModelSerializer):
     last_upated_at = serializers.SerializerMethodField()
     payment_mode = serializers.SerializerMethodField()
     order_status_title = serializers.SerializerMethodField()
+    customer_state_name= serializers.SerializerMethodField()
+    payment_type_name=serializers.SerializerMethodField()
     class Meta:
         model = Order_Table
         fields = '__all__'  
@@ -46,6 +54,10 @@ class OrderTableSerializer(serializers.ModelSerializer):
         return auth.order_created_by.username if auth.order_created_by else None
     def get_order_status_title(self, data):
         return data.order_status.name if data.order_status else None
+    def get_customer_state_name(self,data):
+        return data.customer_state.name if data.customer_state else None
+    def get_payment_type_name(self,data):
+        return data.payment_type.name if data.payment_type else None
     def get_last_action_by_name(self, obj):
         recent_log = OrderLogModel.objects.filter(order=obj).order_by('-updated_at').first()
         return OrderLogSerializer(recent_log).data['action_by_username'] if recent_log else None
