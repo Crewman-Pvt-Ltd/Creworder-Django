@@ -403,16 +403,25 @@ class CheckServiceability(APIView):
     def get(self, request, pk=None):
         pincode = request.GET.get("pincode")
         mobile = request.GET.get("mobile")
+        re_order=request.GET.get("re_order")
         data = checkServiceability(
             request.user.profile.branch_id,
             request.user.profile.company_id,
-            {"pincode": pincode, "mobile": mobile},
+            {"pincode": pincode, "mobile": mobile,"re_order":re_order},
         )
         if data == 1:
             return Response(
                 {
                     "success": True,
                     "data": {"massage": f"Re Order"},
+                },
+                status=status.HTTP_208_ALREADY_REPORTED,
+            )
+        elif data == 2:
+            return Response(
+                {
+                    "success": True,
+                    "data": {"massage": f"Non serviceable"},
                 },
                 status=status.HTTP_208_ALREADY_REPORTED,
             )

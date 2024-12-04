@@ -273,6 +273,7 @@ def ivoiceDeatail(user_id, data):
 def checkServiceability(branch_id,company_id,data):
     pincode=data['pincode']
     mobile=data['mobile']
+    re_order=data['re_order']
     trackdata = ShipmentModel.objects.filter(branch=branch_id,company=company_id,status=1)
     pickUppointData = PickUpPoint.objects.filter(company=company_id,status=1)
     pickUpSerializerData = PickUpPointSerializer(pickUppointData, many=True)
@@ -280,7 +281,8 @@ def checkServiceability(branch_id,company_id,data):
     serialized_data = serializer.data
     orderData = Order_Table.objects.filter(branch=branch_id,company=company_id,customer_phone=f'+91{mobile[-10:]}'
 ).first()
-    if(orderData):
+    print(re_order)
+    if orderData and int(re_order) == 0:
         return 1
     eddshortestTime=365
     EddList=[]
@@ -327,6 +329,10 @@ def checkServiceability(branch_id,company_id,data):
 
                     EddList.append(EddDataShowDict)
                     eddshortestTime=365
+                else:
+                    return 2
+                    # EddDataShowDict['massage']=response.json()['message']
+                    # EddList.append(EddDataShowDict)
             else:
                 pass
     return EddList
