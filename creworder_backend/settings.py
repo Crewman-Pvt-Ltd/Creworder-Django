@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'superadmin_assets',
     'django_extensions',
     'dashboard',
+    'landing_page'
 ]
 
 MIDDLEWARE = [

@@ -964,3 +964,35 @@ class QcViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(serializer.data)
+    
+class AssignRole(APIView):
+    def post(self, request, *args, **kwargs):
+        teamlead_id = request.data.get('teamlead')
+        manager_id = request.data.get('manager')
+        agent_list = request.data.get('agent_list')
+        if not teamlead_id or not manager_id or not agent_list:
+            return Response({"Success": False, "Message": "Teamlead, manager, and agent list are required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+        try:
+            teamlead = UserProfile.objects.get(user_id=teamlead_id)
+            manager = UserProfile.objects.get(user_id=manager_id)
+        except UserProfile.DoesNotExist:
+            return Response({"Success": False, "Message": "Teamlead or Manager not found."},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        updated_profiles = []
+        for agent_id in agent_list:
+            try:
+                agent_profile = UserProfile.objects.get(user_id=agent_id)
+                
+                agent_profile.teamlead = teamlead.user
+                agent_profile.manager = manager.user
+                agent_profile.save()
+                updated_profiles.append(agent_profile.user.username)
+            except UserProfile.DoesNotExist:
+                return Response({"Success": False, "Message": f"Agent with ID {agent_id} not found."},
+                                status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {"Success": True, "Data": {"Updated Agents": updated_profiles}},
+            status=status.HTTP_200_OK,
+        )
