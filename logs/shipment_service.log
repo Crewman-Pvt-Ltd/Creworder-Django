@@ -830,3 +830,113 @@ TypeError: list indices must be integers or slices, not str
 2024-12-04 11:30:11,896 - django.request - WARNING - Not Found: /api/check-serviceability/
 2024-12-04 11:36:18,781 - django.request - WARNING - Not Found: /api/check-serviceability/
 2024-12-04 11:37:02,585 - django.request - WARNING - Not Found: /api/check-serviceability/
+2024-12-04 18:28:28,349 - django.request - WARNING - Bad Request: /api/assign-role/
+2024-12-04 18:28:59,413 - django.request - ERROR - Internal Server Error: /api/assign-role/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/shivamkumarsain/Projects/Creworder-Django/accounts/views.py", line 971, in create
+    return super().create(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/mixins.py", line 17, in create
+    serializer = self.get_serializer(data=request.data)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+AssertionError: 'AssignRole' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2024-12-05 11:04:49,824 - django.request - WARNING - Not Found: /api/get_cloud_telephonic_channels/
+2024-12-05 11:05:10,521 - django.request - WARNING - Not Found: /api/get_cloud_telephonic_channels/
+2024-12-05 11:05:16,905 - django.request - WARNING - Not Found: /api/get_cloud_telephonic_channels/
+2024-12-05 11:06:38,510 - django.request - WARNING - Method Not Allowed: /api/createCloudTelephoneyChannel/
+2024-12-05 11:07:03,787 - django.request - WARNING - Method Not Allowed: /api/createCloudTelephoneyChannel/
+2024-12-05 11:07:08,553 - django.request - WARNING - Bad Request: /api/createCloudTelephoneyChannel/
+2024-12-05 11:07:24,702 - django.request - WARNING - Bad Request: /api/createCloudTelephoneyChannel/
+2024-12-05 11:12:21,091 - django.request - WARNING - Not Found: /favicon.ico
+2024-12-05 12:18:32,805 - django.request - ERROR - Internal Server Error: /api/assign-role/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/mixins.py", line 38, in list
+    queryset = self.filter_queryset(self.get_queryset())
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+AssertionError: 'AssignRole' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2024-12-05 12:19:13,476 - django.request - ERROR - Internal Server Error: /api/assign-role/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/mixins.py", line 38, in list
+    queryset = self.filter_queryset(self.get_queryset())
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+AssertionError: 'AssignRole' should either include a `queryset` attribute, or override the `get_queryset()` method.
+2024-12-05 12:26:15,984 - django.request - ERROR - Internal Server Error: /api/assign-role/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.10/dist-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/mixins.py", line 17, in create
+    serializer = self.get_serializer(data=request.data)
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 112, in get_serializer
+    serializer_class = self.get_serializer_class()
+  File "/usr/local/lib/python3.10/dist-packages/rest_framework/generics.py", line 126, in get_serializer_class
+    assert self.serializer_class is not None, (
+AssertionError: 'AssignRole' should either include a `serializer_class` attribute, or override the `get_serializer_class()` method.
+2024-12-05 12:41:01,433 - django.request - WARNING - Not Found: /api/sliders/
+2024-12-05 12:41:08,776 - django.request - WARNING - Not Found: /api/sliders/
+2024-12-05 12:42:09,437 - django.request - WARNING - Bad Request: /api/sliders/

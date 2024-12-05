@@ -8,7 +8,7 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsV
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
     IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,\
     GroupPermissionViewSet,PermmisionViewSet,FetchPermissionView,PickUpPointView,TargetView,AdminBankDetailsViewSet,\
-    AddAllowIpViewSet,QcViewSet
+    AddAllowIpViewSet,QcViewSet,AssignRole
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -39,6 +39,7 @@ router.register(r'user-target', TargetView, basename='user-target')
 router.register(r'admin-bank-details', AdminBankDetailsViewSet, basename='admin-bank-details')
 router.register(r'add-ip-forlogin', AddAllowIpViewSet, basename='add-ip-forlogin')
 router.register(r'qc',QcViewSet,basename='qc')
+# router.register(r'assign-role',AssignRole,basename='assign-role')
 urlpatterns = [
     path('', include(router.urls)),
     path('user-permissions/', UserPermissionsView.as_view(), name="user-permissions"),
@@ -48,5 +49,7 @@ urlpatterns = [
     path('username-suggestions/', GetUsernameSuggestions.as_view(), name="username-suggestions"),
     path('get-attendance/', AttendanceView.as_view(), name='get-attendance'),
     path('get-permission-ids/', FetchPermissionView.as_view(), name='fetch-permissions'),
-    path('testing/', Testing.as_view(), name="testing")
+    path('testing/', Testing.as_view(), name="testing"),
+    path('assign-role',AssignRole.as_view(),name ='assign-role'),
+
 ]

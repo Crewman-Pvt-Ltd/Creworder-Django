@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/', include('shipment.urls')),
     path('api/', include('dashboard.urls')),
     path('api/', include('superadmin_assets.urls')),
+    path('api/', include('landing_page.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
