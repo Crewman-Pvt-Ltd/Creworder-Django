@@ -1133,7 +1133,6 @@ class AgentListByManagerAPIView(APIView):
     def get(self, request, *args, **kwargs):
         manager_id = request.query_params.get('manager_id', None)
         
-        # Ensure that manager_id is provided
         if not manager_id:
             return Response(
                 {"Success": False, "Error": "manager_id must be provided."},
