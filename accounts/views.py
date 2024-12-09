@@ -233,7 +233,7 @@ class NoticeViewSet(viewsets.ModelViewSet):
         queryset = Notice.objects.filter(created_by=user)
         return queryset
 
-
+# for all permisson given user
 class UserPermissionsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -969,32 +969,156 @@ class QcViewSet(viewsets.ModelViewSet):
     
 class AssignRole(APIView):
     def post(self, request, *args, **kwargs):
+        # Get the teamlead, manager, and agent_list from the request data
         teamlead_id = request.data.get('teamlead')
         manager_id = request.data.get('manager')
         agent_list = request.data.get('agent_list')
-        if not teamlead_id or not manager_id or not agent_list:
-            return Response({"Success": False, "Message": "Teamlead, manager, and agent list are required."},
+
+        # Validate if teamlead and manager are provided
+        if not teamlead_id:
+            return Response({"Success": False, "Message": "Teamlead required."},
                             status=status.HTTP_400_BAD_REQUEST)
+        if not manager_id:
+            return Response({"Success": False, "Message": "Manager required."},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+        if not agent_list or not isinstance(agent_list, list):
+            return Response({"Success": False, "Message": "Agent list is required and should be a list."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Try to get the teamlead and manager instances
         try:
             teamlead = UserProfile.objects.get(user_id=teamlead_id)
-            manager = UserProfile.objects.get(user_id=manager_id)
         except UserProfile.DoesNotExist:
-            return Response({"Success": False, "Message": "Teamlead or Manager not found."},
+            return Response({"Success": False, "Message": "Teamlead not found."},
                             status=status.HTTP_404_NOT_FOUND)
 
+        try:
+            manager = UserProfile.objects.get(user_id=manager_id)
+        except UserProfile.DoesNotExist:
+            return Response({"Success": False, "Message": "Manager not found."},
+                            status=status.HTTP_404_NOT_FOUND)
+
+        # List to hold updated agents
         updated_profiles = []
+
+        # Update the users in the agent_list
         for agent_id in agent_list:
             try:
                 agent_profile = UserProfile.objects.get(user_id=agent_id)
-                
+
+                # Assign the teamlead and manager to the agent
                 agent_profile.teamlead = teamlead.user
                 agent_profile.manager = manager.user
                 agent_profile.save()
+
+                # Add the updated agent username to the list
                 updated_profiles.append(agent_profile.user.username)
             except UserProfile.DoesNotExist:
                 return Response({"Success": False, "Message": f"Agent with ID {agent_id} not found."},
                                 status=status.HTTP_404_NOT_FOUND)
+
         return Response(
             {"Success": True, "Data": {"Updated Agents": updated_profiles}},
             status=status.HTTP_200_OK,
+        )
+# team lead list and manager list view 
+ 
+class TeamleadViewSet(APIView):
+    """
+    Returns a list of all distinct teamlead users.
+    """
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
+    
+    def get(self, request, *args, **kwargs):
+        # Query to get distinct teamlead values
+        teamleads = UserProfile.objects.exclude(teamlead=None).values('teamlead').distinct()
+
+        # Fetching the teamlead users based on the distinct IDs
+        teamlead_users = UserProfile.objects.filter(user__in=[teamlead['teamlead'] for teamlead in teamleads])
+        
+        # Serialize the teamlead users
+        serializer = UserProfileSerializer(teamlead_users, many=True)
+        
+        # Return the response with the serialized data
+        return Response(
+            {"Success": True, "Data":  serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+    
+
+class ManagerViewSet(APIView):
+   
+
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
+    
+    def get(self, request, *args, **kwargs):
+        # Query to get distinct manager values
+        managers = UserProfile.objects.exclude(manager=None).values('manager').distinct()
+
+        # Fetching the manager users based on the distinct IDs
+        manager_users = UserProfile.objects.filter(user__in=[manager['manager'] for manager in managers])
+        
+        # Serialize the manager users
+        serializer = UserProfileSerializer(manager_users, many=True)
+        
+        # Return the response with the serialized data
+        return Response(
+            {"Success": True, "Data":  serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+
+class AgentListByTeamleadAPIView(APIView):
+
+    permission_classes = [IsAuthenticated] 
+    """
+    Returns the list of agents for a specific teamlead.
+    Accepts 'teamlead_id' as a query parameter.
+    """
+    def get(self, request, *args, **kwargs):
+        teamlead_id = request.query_params.get('teamlead_id', None)
+        
+        # Ensure that teamlead_id is provided
+        if not teamlead_id:
+            return Response(
+                {"Success": False, "Error": "teamlead_id must be provided."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Filter agents based on teamlead_id
+        agents = UserProfile.objects.filter(teamlead_id=teamlead_id)
+        
+        # Serialize the result and return the response
+        serializer = UserProfileSerializer(agents, many=True)
+        return Response(
+            {"Success": True, "Data": {"Agents": serializer.data}},
+            status=status.HTTP_200_OK
+        )
+    
+
+class AgentListByManagerAPIView(APIView):
+    """
+    Returns the list of agents for a specific manager.
+    Accepts 'manager_id' as a query parameter.
+    """
+    def get(self, request, *args, **kwargs):
+        manager_id = request.query_params.get('manager_id', None)
+        
+        # Ensure that manager_id is provided
+        if not manager_id:
+            return Response(
+                {"Success": False, "Error": "manager_id must be provided."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Filter agents based on manager_id
+        agents = UserProfile.objects.filter(manager_id=manager_id)
+        
+        # Serialize the result and return the response
+        serializer = UserProfileSerializer(agents, many=True)
+        return Response(
+            {"Success": True, "Data": {"Agents": serializer.data}},
+            status=status.HTTP_200_OK
         )
