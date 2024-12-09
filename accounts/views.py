@@ -1021,17 +1021,32 @@ class AssignRole(APIView):
             {"Success": True, "Data": {"Updated Agents": updated_profiles}},
             status=status.HTTP_200_OK,
         )
-# team lead list and manager list view 
- 
+# team lead list and manager list view     
 class TeamleadViewSet(APIView):
-    """
-    Returns a list of all distinct teamlead users.
-    """
+   
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
     
     def get(self, request, *args, **kwargs):
-        # Query to get distinct teamlead values
-        teamleads = UserProfile.objects.exclude(teamlead=None).values('teamlead').distinct()
+        # Get company_id and branch_id from the request query parameters
+        company_id = request.query_params.get('company_id', None)
+        branch_id = request.query_params.get('branch_id', None)
+        
+        # Ensure that either company_id or branch_id is provided
+        if not company_id and not branch_id:
+            return Response(
+                {"Success": False, "Message": "Either company_id or branch_id is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Query to get distinct teamlead values, filtered by company_id and branch_id
+        teamleads = UserProfile.objects.exclude(teamlead=None)
+        
+        if company_id:
+            teamleads = teamleads.filter(company=company_id)
+        if branch_id:
+            teamleads = teamleads.filter(branch=branch_id)
+
+        teamleads = teamleads.values('teamlead').distinct()
 
         # Fetching the teamlead users based on the distinct IDs
         teamlead_users = UserProfile.objects.filter(user__in=[teamlead['teamlead'] for teamlead in teamleads])
@@ -1044,17 +1059,32 @@ class TeamleadViewSet(APIView):
             {"Success": True, "Data":  serializer.data},
             status=status.HTTP_200_OK
         )
-
     
-
 class ManagerViewSet(APIView):
    
-
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
     
     def get(self, request, *args, **kwargs):
-        # Query to get distinct manager values
-        managers = UserProfile.objects.exclude(manager=None).values('manager').distinct()
+        # Get company_id and branch_id from the request query parameters
+        company_id = request.query_params.get('company_id', None)
+        branch_id = request.query_params.get('branch_id', None)
+        
+        # Ensure that either company_id or branch_id is provided
+        if not company_id and not branch_id:
+            return Response(
+                {"Success": False, "Message": "Either company_id or branch_id is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Query to get distinct manager values, filtered by company_id and branch_id
+        managers = UserProfile.objects.exclude(manager=None)
+        
+        if company_id:
+            managers = managers.filter(company_id=company_id)
+        if branch_id:
+            managers = managers.filter(branch_id=branch_id)
+
+        managers = managers.values('manager').distinct()
 
         # Fetching the manager users based on the distinct IDs
         manager_users = UserProfile.objects.filter(user__in=[manager['manager'] for manager in managers])
@@ -1067,6 +1097,7 @@ class ManagerViewSet(APIView):
             {"Success": True, "Data":  serializer.data},
             status=status.HTTP_200_OK
         )
+
 
 
 class AgentListByTeamleadAPIView(APIView):

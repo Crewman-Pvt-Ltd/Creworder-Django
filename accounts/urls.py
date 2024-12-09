@@ -55,7 +55,7 @@ urlpatterns = [
     path('assign-role/', AssignRole.as_view(), name='assign-role'),
     path('agents/by_manager/', AgentListByManagerAPIView.as_view(), name='agent-list-by-manager'),
     path('agents/by_teamlead/', AgentListByTeamleadAPIView.as_view(), name='agent-list-by-teamlead'),
-    path('teamleads/', TeamleadViewSet.as_view(), name='get_all_teamleads'),
-    path('managers/', ManagerViewSet.as_view(), name='get_all_managers'),
+    path('teamlead-users/', TeamleadViewSet.as_view(), name='teamlead_users'),
+    path('manager-users/', ManagerViewSet.as_view(), name='manager_users'),
 
 ]
