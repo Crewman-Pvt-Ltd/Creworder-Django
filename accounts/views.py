@@ -1129,10 +1129,7 @@ class AgentListByTeamleadAPIView(APIView):
     
 
 class AgentListByManagerAPIView(APIView):
-    """
-    Returns the list of agents for a specific manager.
-    Accepts 'manager_id' as a query parameter.
-    """
+   
     def get(self, request, *args, **kwargs):
         manager_id = request.query_params.get('manager_id', None)
         
