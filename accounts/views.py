@@ -20,7 +20,7 @@ from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
     PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer,AdminBankDetailsSerializers,\
-    AllowedIPSerializers,QcSerialiazer
+    AllowedIPSerializers,QcSerialiazer,TeamUserProfile
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -1052,7 +1052,7 @@ class TeamleadViewSet(APIView):
         teamlead_users = UserProfile.objects.filter(user__in=[teamlead['teamlead'] for teamlead in teamleads])
         
         # Serialize the teamlead users
-        serializer = UserProfileSerializer(teamlead_users, many=True)
+        serializer = TeamUserProfile(teamlead_users, many=True)
         
         # Return the response with the serialized data
         return Response(
@@ -1090,7 +1090,7 @@ class ManagerViewSet(APIView):
         manager_users = UserProfile.objects.filter(user__in=[manager['manager'] for manager in managers])
         
         # Serialize the manager users
-        serializer = UserProfileSerializer(manager_users, many=True)
+        serializer = TeamUserProfile(manager_users, many=True)
         
         # Return the response with the serialized data
         return Response(
@@ -1121,7 +1121,7 @@ class AgentListByTeamleadAPIView(APIView):
         agents = UserProfile.objects.filter(teamlead_id=teamlead_id)
         
         # Serialize the result and return the response
-        serializer = UserProfileSerializer(agents, many=True)
+        serializer = TeamUserProfile(agents, many=True)
         return Response(
             {"Success": True, "Data": {"Agents": serializer.data}},
             status=status.HTTP_200_OK
@@ -1143,7 +1143,7 @@ class AgentListByManagerAPIView(APIView):
         agents = UserProfile.objects.filter(manager_id=manager_id)
         
         # Serialize the result and return the response
-        serializer = UserProfileSerializer(agents, many=True)
+        serializer = TeamUserProfile(agents, many=True)
         return Response(
             {"Success": True, "Data": {"Agents": serializer.data}},
             status=status.HTTP_200_OK

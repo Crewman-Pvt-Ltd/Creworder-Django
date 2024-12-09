@@ -96,6 +96,26 @@ class UserProfileCreateSerializer(serializers.ModelSerializer):
         model = UserProfile
         exclude = ['user']
 
+class TeamUserProfile(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        exclude = ['user']  # Excluding 'user' field from the serializer
+
+    def get_first_name(self, obj):
+        return obj.user.first_name if obj.user else None
+
+    def get_last_name(self, obj):
+        return obj.user.last_name if obj.user else None
+
+    def get_email(self, obj):
+        return obj.user.email if obj.user else None
+
+    def get_username(self, obj):
+        return obj.user.username if obj.user else Non
 
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
