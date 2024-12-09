@@ -42,7 +42,7 @@ class Package(models.Model):
     max_admin = models.IntegerField(blank=True, null=True)
     setup_fees = models.IntegerField(blank=True, null=True)
     def save(self, *args, **kwargs):
-        if self.created_by.profile.branch != 'superadmin':
+        if self.created_by.profile.user_type != 'superadmin':
             raise PermissionDenied("Only superadmins can create packages.")
         super().save(*args, **kwargs)
 

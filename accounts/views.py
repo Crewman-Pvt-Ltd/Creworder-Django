@@ -86,10 +86,12 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         queryset = User.objects.all()
-        # pdb.set_trace()
         if user.profile.user_type == "superadmin":
             queryset = User.objects.filter(profile__user_type=user.profile.user_type)
-        elif user.profile.user_type == "admin" or user.profile.user_type== "agent":
+        elif user.profile.user_type == "admin":
+            company = user.profile.company
+            queryset = User.objects.filter(profile__company=company).exclude(id=user.id)
+        elif user.profile.user_type== "agent":
             branch = user.profile.branch
             queryset = User.objects.filter(profile__branch=branch).exclude(id=user.id)
         return queryset
