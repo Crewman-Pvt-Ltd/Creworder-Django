@@ -1002,7 +1002,6 @@ class AssignRole(APIView):
         # List to hold updated agents
         updated_profiles = []
 
-        # Update the users in the agent_list
         for agent_id in agent_list:
             try:
                 agent_profile = UserProfile.objects.get(user_id=agent_id)
