@@ -199,7 +199,45 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = '__all__'
 
+class DepartmentSerializerNew(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = ['id', 'name', 'branch']
 
+    def __init__(self, *args, **kwargs):
+        # Ensure to call the base class initializer first
+        super().__init__(*args, **kwargs)
+        
+        # Check if the request is passed through the context
+        request = self.context.get('request', None)
+        
+        if request and request.user.is_superuser:
+            # If the user is a superuser, make 'branch' field not required
+            self.fields['branch'].required = False
+        else:
+            # For regular users, ensure the 'branch' field is required
+            self.fields['branch'].required = True
+
+
+class DesignationSerializerNew(serializers.ModelSerializer):
+    class Meta:
+        model = Designation
+        fields = ['id', 'name', 'branch']
+
+    def __init__(self, *args, **kwargs):
+        # Ensure to call the base class initializer first
+        super().__init__(*args, **kwargs)
+        
+        # Check if the request is passed through the context
+        request = self.context.get('request', None)
+        
+        if request and request.user.is_superuser:
+            # If the user is a superuser, make 'branch' field not required
+            self.fields['branch'].required = False
+        else:
+            # For regular users, ensure the 'branch' field is required
+            self.fields['branch'].required = True
+            
 class DesignationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Designation
