@@ -100,7 +100,7 @@ class TeamUserProfile(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
-
+    manager_name = serializers.SerializerMethodField()
     class Meta:
         model = UserProfile
         exclude = ['user']  # Excluding 'user' field from the serializer
@@ -115,7 +115,13 @@ class TeamUserProfile(serializers.ModelSerializer):
         return obj.user.email if obj.user else None
 
     def get_username(self, obj):
-        return obj.user.username if obj.user else Non
+        return obj.user.username if obj.user else None
+    
+    def get_manager_name(self, obj):
+        # Check if the manager exists and return their full name
+        if obj.manager:
+            return f"{obj.manager.first_name} {obj.manager.last_name}"
+        return None
 
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
