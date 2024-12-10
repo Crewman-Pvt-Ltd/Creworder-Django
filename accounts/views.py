@@ -1028,9 +1028,10 @@ class TeamleadViewSet(APIView):
     
     def get(self, request, *args, **kwargs):
         # Get company_id and branch_id from the request query parameters
-        company_id = request.query_params.get('company_id', None)
-        branch_id = request.query_params.get('branch_id', None)
-        
+        user = request.user
+        branch_id = user.profile.branch.id
+        company_id = user.profile.company.id
+
         # Ensure that either company_id or branch_id is provided
         if not company_id and not branch_id:
             return Response(
@@ -1066,9 +1067,11 @@ class ManagerViewSet(APIView):
     
     def get(self, request, *args, **kwargs):
         # Get company_id and branch_id from the request query parameters
-        company_id = request.query_params.get('company_id', None)
-        branch_id = request.query_params.get('branch_id', None)
-        
+        # company_id = request.query_params.get('company_id', None)
+        # branch_id = request.query_params.get('branch_id', None)
+        user = request.user
+        branch_id = user.profile.branch.id
+        company_id = user.profile.company.id
         # Ensure that either company_id or branch_id is provided
         if not company_id and not branch_id:
             return Response(
@@ -1080,9 +1083,9 @@ class ManagerViewSet(APIView):
         managers = UserProfile.objects.exclude(manager=None)
         
         if company_id:
-            managers = managers.filter(company_id=company_id)
+            managers = managers.filter(company=company_id)
         if branch_id:
-            managers = managers.filter(branch_id=branch_id)
+            managers = managers.filter(branch=branch_id)
 
         managers = managers.values('manager').distinct()
 
