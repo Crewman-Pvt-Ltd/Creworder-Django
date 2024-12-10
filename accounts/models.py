@@ -307,7 +307,7 @@ class SupportTicket(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False, unique=True)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="departments")
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="departments",null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -315,7 +315,7 @@ class Department(models.Model):
 
 class Designation(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False, unique=True)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=False, blank=False, related_name="designations")
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, null=True, blank=True, related_name="designations")
 
     def __str__(self):
         return self.name

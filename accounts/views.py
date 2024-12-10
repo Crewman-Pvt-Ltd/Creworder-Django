@@ -15,12 +15,12 @@ from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
     UserTargetsDelails,AdminBankDetails,QcTable
-from .serializers import UserSerializer, CompanySerializer, PackageSerializer, \
+from .serializers import DesignationSerializerNew, UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
     PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer,AdminBankDetailsSerializers,\
-    AllowedIPSerializers,QcSerialiazer,TeamUserProfile
+    AllowedIPSerializers,QcSerialiazer,TeamUserProfile,DepartmentSerializerNew
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
@@ -307,17 +307,28 @@ class GetNoticesForUser(APIView):
         return Response({"results": serialized_data})
 
 
+# class DepartmentViewSet(viewsets.ModelViewSet):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Department.objects.all()
+#     serializer_class = DepartmentSerializer
+
+
 class DepartmentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
+    serializer_class = DepartmentSerializerNew
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        # Pass the request explicitly to the context
+        context['request'] = self.request
+        return context
 
 class DesignationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Designation.objects.all()
-    serializer_class = DesignationSerializer
-
+    serializer_class = DesignationSerializerNew
+    
     def get_queryset(self):
         user = self.request.user
         if user.profile.user_type == "admin" or user.profile.user_type == "agent":
