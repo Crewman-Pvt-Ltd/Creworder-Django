@@ -95,8 +95,8 @@ class LeadSourceModelViewSet(viewsets.ModelViewSet):
         print(branch,company,"-----------------------------")
         # Add the branch and company to the data before creating
         request_data = request.data.copy()  # Make a mutable copy of the request data
-        request_data['branch'] = branch.get('id') if branch else None
-        request_data['company'] = company.get('id') if company else None
+        request_data['branch'] = branch.id if branch else None
+        request_data['company'] = company.id if company else None
 
         # Use the modified data to create a new LeadSource entry
         serializer = self.get_serializer(data=request_data)
@@ -143,8 +143,8 @@ class LeadSourceModelViewSet(viewsets.ModelViewSet):
         print(branch,company,"-----------------------------")
         # Add the branch and company to the request data
         request_data = request.data.copy()  # Make a mutable copy of the request data
-        request_data['branch'] = branch.get('id') if branch else None
-        request_data['company'] = company.get('id') if company else None
+        request_data['branch'] = branch.id if branch else None
+        request_data['company'] = company.id if company else None
 
         # Get the lead source instance to update
         lead_source = self.get_object()
@@ -178,8 +178,8 @@ class LeadSourceModelViewSet(viewsets.ModelViewSet):
 
         # Add the branch and company to the request data
         request_data = request.data.copy()  # Make a mutable copy of the request data
-        request_data['branch'] = branch.get('id') if branch else None
-        request_data['company'] = company.get('id') if company else None
+        request_data['branch'] = branch.id if branch else None
+        request_data['company'] = company.id if company else None
 
         # Get the lead source instance to update
         lead_source = self.get_object()
