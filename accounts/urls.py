@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import AssignRole,AgentListByManagerAPIView, AgentListByTeamleadAPIView, ManagerViewSet, TeamleadViewSet, UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsView, \
+from .views import AssignRole,AgentListByManagerAPIView, AgentListByTeamleadAPIView, ManagerViewSet, TeamleadViewSet, UpdateTeamLeadManagerAPIView, UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsView, \
     UserProfileViewSet, \
     NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, \
     GetSpecificUsers, \
@@ -57,5 +57,6 @@ urlpatterns = [
     path('agents/by_teamlead/', AgentListByTeamleadAPIView.as_view(), name='agent-list-by-teamlead'),
     path('teamlead-users/', TeamleadViewSet.as_view(), name='teamlead_users'),
     path('manager-users/', ManagerViewSet.as_view(), name='manager_users'),
+    path('api/update-teamlead-manager/', UpdateTeamLeadManagerAPIView.as_view(), name='update-teamlead-manager')
 
 ]

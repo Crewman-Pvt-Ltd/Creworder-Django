@@ -15,7 +15,7 @@ from rest_framework.decorators import action
 from .models import User, Company, Package, UserProfile, Notice, Branch, FormEnquiry, SupportTicket, Module, \
     Department, Designation, Leave, Holiday, Award, Appreciation, Shift, Attendance, AllowedIP,ShiftRoster,CustomAuthGroup,PickUpPoint,\
     UserTargetsDelails,AdminBankDetails,QcTable
-from .serializers import DesignationSerializerNew, UserSerializer, CompanySerializer, PackageSerializer, \
+from .serializers import DesignationSerializerNew, UpdateTeamLeadManagerSerializer, UserSerializer, CompanySerializer, PackageSerializer, \
     UserProfileSerializer, NoticeSerializer, BranchSerializer, UserSignupSerializer, FormEnquirySerializer, \
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
@@ -1160,5 +1160,44 @@ class AgentListByManagerAPIView(APIView):
         serializer = TeamUserProfile(agents, many=True)
         return Response(
             {"Success": True, "Data": {"Agents": serializer.data}},
+            status=status.HTTP_200_OK
+        )
+
+
+class UpdateTeamLeadManagerAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user_id')  # Get the user_id from the request data
+
+        if not user_id:
+            return Response(
+                {"Success": False, "Message": "user_id is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user_profile = UserProfile.objects.get(user_id=user_id)  # Get the UserProfile by user_id
+        except UserProfile.DoesNotExist:
+            return Response(
+                {"Success": False, "Message": "UserProfile not found for the given user_id"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Update the teamlead and manager to None
+        user_profile.teamlead = None
+        user_profile.manager = None
+        user_profile.save()
+
+        # Prepare the response
+        serializer = UpdateTeamLeadManagerSerializer(user_profile)
+
+        return Response(
+            {
+                "Success": True,
+                "Data": {
+                    "Agents": serializer.data
+                }
+            },
             status=status.HTTP_200_OK
         )

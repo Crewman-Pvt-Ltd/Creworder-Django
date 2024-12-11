@@ -211,7 +211,7 @@ class DepartmentSerializerNew(serializers.ModelSerializer):
         # Check if the request is passed through the context
         request = self.context.get('request', None)
         
-        if request and request.user.is_superuser:
+        if request and request.user.profile.user_type == "superadmin":
             # If the user is a superuser, make 'branch' field not required
             self.fields['branch'].required = False
         else:
@@ -231,7 +231,7 @@ class DesignationSerializerNew(serializers.ModelSerializer):
         # Check if the request is passed through the context
         request = self.context.get('request', None)
         
-        if request and request.user.is_superuser:
+        if request and request.user.profile.user_type == "superadmin":
             # If the user is a superuser, make 'branch' field not required
             self.fields['branch'].required = False
         else:
@@ -422,3 +422,9 @@ class QcSerialiazer(serializers.ModelSerializer):
     class Meta:
         model =QcTable
         fields='__all__'
+
+
+class UpdateTeamLeadManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['teamlead', 'manager']
