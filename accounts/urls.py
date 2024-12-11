@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsView, \
+from .views import AssignRole,AgentListByManagerAPIView, AgentListByTeamleadAPIView, ManagerViewSet, TeamleadViewSet, UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsView, \
     UserProfileViewSet, \
     NoticeViewSet, BranchViewSet, AdminSelfSignUp, FormEnquiryViewSet, SupportTicketViewSet, ModuleViewSet, \
     GetSpecificUsers, \
@@ -8,7 +8,7 @@ from .views import UserViewSet, CompanyViewSet, PackageViewSet, UserPermissionsV
     AppreciationViewSet, ShiftViewSet, AttendanceViewSet, Testing, GetUsernameSuggestions, AttendanceView, \
     IPRestrictedLoginView,ShiftRosterViewSet,GetPackageModule,CustomAuthGroupViewSet,UserGroupViewSet,\
     GroupPermissionViewSet,PermmisionViewSet,FetchPermissionView,PickUpPointView,TargetView,AdminBankDetailsViewSet,\
-    AddAllowIpViewSet,QcViewSet,AssignRole
+    AddAllowIpViewSet,QcViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -50,6 +50,12 @@ urlpatterns = [
     path('get-attendance/', AttendanceView.as_view(), name='get-attendance'),
     path('get-permission-ids/', FetchPermissionView.as_view(), name='fetch-permissions'),
     path('testing/', Testing.as_view(), name="testing"),
-    path('assign-role',AssignRole.as_view(),name ='assign-role'),
+    #path('update-agent-teamlead-manager/',UpdateTeamleadManagerAPIView.as_view(),name ='update-teamlead-manager'),
+    # get manager and teamlead under all agent
+    path('assign-role/', AssignRole.as_view(), name='assign-role'),
+    path('agents/by_manager/', AgentListByManagerAPIView.as_view(), name='agent-list-by-manager'),
+    path('agents/by_teamlead/', AgentListByTeamleadAPIView.as_view(), name='agent-list-by-teamlead'),
+    path('teamlead-users/', TeamleadViewSet.as_view(), name='teamlead_users'),
+    path('manager-users/', ManagerViewSet.as_view(), name='manager_users'),
 
 ]
