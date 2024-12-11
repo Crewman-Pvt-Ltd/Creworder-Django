@@ -27,7 +27,7 @@ class LeadModel(models.Model):
 class LeadSourceModel(models.Model):
     branch = models.ForeignKey(Branch, related_name="custom_models", on_delete=models.CASCADE)
     company = models.ForeignKey(Company, related_name="custom_models", on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=200, null=False, blank=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
