@@ -1177,7 +1177,7 @@ class UpdateTeamLeadManagerAPIView(APIView):
             )
 
         try:
-            user_profile = UserProfile.objects.get(user_id=user_id)  # Get the UserProfile by user_id
+            user_profile = UserProfile.objects.get(id=user_id)  # Get the UserProfile by user_id
         except UserProfile.DoesNotExist:
             return Response(
                 {"Success": False, "Message": "UserProfile not found for the given user_id"},
