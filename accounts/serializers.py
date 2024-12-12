@@ -197,26 +197,13 @@ class SupportTicketSerializer(serializers.ModelSerializer):
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = '__all__'
+        fields = ['id', 'name', 'company', 'created_by', 'updated_by', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at', 'created_by']
 
-class DepartmentSerializerNew(serializers.ModelSerializer):
-    class Meta:
-        model = Department
-        fields = ['id', 'name', 'branch']
 
-    def __init__(self, *args, **kwargs):
-        # Ensure to call the base class initializer first
-        super().__init__(*args, **kwargs)
-        
-        # Check if the request is passed through the context
-        request = self.context.get('request', None)
-        
-        if request and request.user.profile.user_type == "superadmin":
-            # If the user is a superuser, make 'branch' field not required
-            self.fields['branch'].required = False
-        else:
-            # For regular users, ensure the 'branch' field is required
-            self.fields['branch'].required = True
+
+
+
 
 
 class DesignationSerializerNew(serializers.ModelSerializer):

@@ -307,8 +307,11 @@ class SupportTicket(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False, unique=True)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name="departments",null=True, blank=True)
-
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="departments", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically sets the time when the object is first created
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    created_by = models.ForeignKey(User, related_name="department_created_by", on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name="department_updated_by", on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self):
         return self.name
 
