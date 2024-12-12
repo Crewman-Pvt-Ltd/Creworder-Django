@@ -11,3 +11,19 @@ class CanChangeCompanyStatusPermission(BasePermission):
 class CanLeaveApproveAndDisapprove(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.has_perm('accounts.can_approve_disapprove_leave')
+
+
+
+class IsAdminOrSuperAdmin(BasePermission):
+    """
+    Custom permission to allow only admin or superadmin to create, update, or delete departments.
+    """
+    def has_permission(self, request, view):
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            return False
+        
+        # Check for user type (admin or superadmin)
+        if request.user.profile.user_type == 'superadmin' or request.user.profile.user_type == 'admin':
+            return True
+        return False

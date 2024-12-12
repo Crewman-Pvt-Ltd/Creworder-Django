@@ -20,13 +20,13 @@ from .serializers import DesignationSerializerNew, UpdateTeamLeadManagerSerializ
     SupportTicketSerializer, ModuleSerializer, DepartmentSerializer, DesignationSerializer, LeaveSerializer, \
     HolidaySerializer, AwardSerializer, AppreciationSerializer, ShiftSerializer, AttendanceSerializer,ShiftRosterSerializer, \
     PackageDetailsSerializer,CustomAuthGroupSerializer,PermissionSerializer,PickUpPointSerializer,UserTargetSerializer,AdminBankDetailsSerializers,\
-    AllowedIPSerializers,QcSerialiazer,TeamUserProfile,DepartmentSerializerNew
+    AllowedIPSerializers,QcSerialiazer,TeamUserProfile
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoObjectPermissions
 from django.db.models import Q, Count
 from datetime import datetime, time
 from dj_rest_auth.views import LoginView
-from .permissions import CanChangeCompanyStatusPermission,CanLeaveApproveAndDisapprove
+from .permissions import CanChangeCompanyStatusPermission,CanLeaveApproveAndDisapprove,IsAdminOrSuperAdmin
 
 class IPRestrictedLoginView(LoginView):
     def post(self, request, *args, **kwargs):
@@ -314,15 +314,42 @@ class GetNoticesForUser(APIView):
 
 
 class DepartmentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     queryset = Department.objects.all()
-    serializer_class = DepartmentSerializerNew
+    serializer_class = DepartmentSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrSuperAdmin]  # Only admin or superadmin can modify
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        # Pass the request explicitly to the context
-        context['request'] = self.request
-        return context
+    def perform_create(self, serializer):
+        """
+        Sets the user who created the department and optionally associates it with the user's company.
+        """
+        user = self.request.user
+        
+        # Set the user who created the department (creator)
+        department = serializer.save(created_by=user)
+
+        # Assuming the user has a related company (through the user profile)
+        if user.profile.company:
+            department.company = user.profile.company
+            department.save()
+
+    def perform_update(self, serializer):
+        """
+        Sets the user who updated the department.
+        """
+        serializer.save(updated_by=self.request.user)
+
+    def get_queryset(self):
+        """
+        Optionally filter departments based on the user role.
+        Superadmins and admins can view all departments. Others can view only departments they've created.
+        """
+        user = self.request.user
+        if user.profile.user_type == 'superadmin' or user.profile.user_type == 'admin':
+            # Admin and superadmin see all departments
+            # return Department.objects.all()
+            return Department.objects.filter(created_by=user.id)
+        # Users with other profiles (if any) should see only their company's departments
+        return Department.objects.filter(created_by=user.id)
 
 class DesignationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
